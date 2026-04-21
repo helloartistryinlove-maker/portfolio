@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --background: #090909;
+  --foreground: #f2efe8;
+  --panel: #121212;
+  --muted: #c7c2b6;
+  --line: rgba(255, 255, 255, 0.11);
+  --accent: #e9ddc6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+  background-image: radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.08), transparent 34%),
+    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.04), transparent 38%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  transition: color 180ms ease;
+}
+
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid #f2efe8;
+    background: #f2efe8;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111111;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  .btn-primary:hover {
+    background: transparent;
+    color: #f2efe8;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #f2efe8;
+    transition: border-color 180ms ease, background-color 180ms ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .surface {
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #0f0f0f;
+  }
+
+  .fade-rise {
+    animation: fade-rise 700ms ease both;
+  }
+
+  .media-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.08) 49%,
+      transparent 63%
+    );
+    transform: translateX(-100%);
+    animation: shimmer 2.6s linear infinite;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
