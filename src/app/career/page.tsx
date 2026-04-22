@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/ui/section-heading";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 const values = [
   {
@@ -111,8 +112,8 @@ export default function CareerPage() {
       >
         {/* Values */}
         <div className="value-grid">
-          {values.map((v) => (
-            <div key={v.title} className="surface" style={{ padding: "1.375rem" }}>
+          {values.map((v, idx) => (
+            <RevealOnScroll key={v.title} className="surface" delayMs={idx * 90} style={{ padding: "1.375rem" }}>
               <span
                 style={{
                   display: "block",
@@ -137,12 +138,12 @@ export default function CareerPage() {
               <p style={{ fontSize: ".8125rem", lineHeight: 1.6, color: "var(--text-3)" }}>
                 {v.desc}
               </p>
-            </div>
+            </RevealOnScroll>
           ))}
         </div>
 
         {/* Application form */}
-        <section
+        <RevealOnScroll
           style={{
             borderRadius: "1.125rem",
             padding: "clamp(1.5rem,4vw,2.5rem)",
@@ -240,7 +241,7 @@ export default function CareerPage() {
               </button>
             </div>
           </form>
-        </section>
+        </RevealOnScroll>
       </div>
     </>
   );

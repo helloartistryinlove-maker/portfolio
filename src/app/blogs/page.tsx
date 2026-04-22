@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CtaStrip } from "@/components/ui/cta-strip";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 const cards = Array.from({ length: 6 }, (_, i) => ({
@@ -81,10 +82,11 @@ export default function BlogsPage() {
         }}
       >
         <section className="blog-grid">
-          {cards.map((card) => (
-            <article
+          {cards.map((card, idx) => (
+            <RevealOnScroll
               key={card.id}
               className="surface card-lift"
+              delayMs={idx * 70}
               style={{ overflow: "hidden" }}
             >
               <MediaPlaceholder ratio="wide" label="Story Cover" />
@@ -149,18 +151,20 @@ export default function BlogsPage() {
                   </span>
                 </div>
               </div>
-            </article>
+            </RevealOnScroll>
           ))}
         </section>
 
-        <CtaStrip
+        <RevealOnScroll>
+          <CtaStrip
           title="Planning your own story chapter?"
           text="Share your date, city, and moodboard to receive tailored availability and collections."
           primaryLabel="Check Availability"
           primaryHref="/contact-us"
           secondaryLabel="View Films"
           secondaryHref="/films"
-        />
+          />
+        </RevealOnScroll>
 
         <div style={{ textAlign: "center", paddingBottom: ".5rem" }}>
           <Link href="/contact-us" className="btn-secondary sheen">

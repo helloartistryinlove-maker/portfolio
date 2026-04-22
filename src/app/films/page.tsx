@@ -1,5 +1,6 @@
 import { CtaStrip } from "@/components/ui/cta-strip";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 const films = Array.from({ length: 4 }, (_, i) => ({
@@ -81,10 +82,11 @@ export default function FilmsPage() {
           paddingBlock: "2.5rem clamp(3.5rem,8vw,7rem)",
         }}
       >
-        {films.map((film) => (
-          <article
+        {films.map((film, idx) => (
+          <RevealOnScroll
             key={film.id}
             className="surface card-lift"
+            delayMs={idx * 80}
             style={{ overflow: "hidden" }}
           >
             <MediaPlaceholder ratio="video" label={`Film ${film.slug}`} />
@@ -118,17 +120,19 @@ export default function FilmsPage() {
               </div>
               <span className="tag">{film.duration}</span>
             </div>
-          </article>
+          </RevealOnScroll>
         ))}
 
-        <CtaStrip
+        <RevealOnScroll>
+          <CtaStrip
           title="Ready for your own timeless film?"
           text="Inquire with your event date, location, and mood direction for a custom film proposal."
           primaryLabel="Inquire Now"
           primaryHref="/contact-us"
           secondaryLabel="Read Journal"
           secondaryHref="/blogs"
-        />
+          />
+        </RevealOnScroll>
       </div>
     </>
   );

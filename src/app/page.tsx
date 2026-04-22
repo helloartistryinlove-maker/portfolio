@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CtaStrip } from "@/components/ui/cta-strip";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 const featuredWork = [
@@ -52,6 +53,8 @@ const quickLinks = [
   },
 ];
 
+const reelBlocks = ["BTS Moment 01", "BTS Moment 02", "BTS Moment 03", "BTS Moment 04"];
+
 export default function Home() {
   return (
     <>
@@ -93,11 +96,17 @@ export default function Home() {
           grid-template-columns: repeat(3, 1fr);
           gap: 1rem;
         }
+        .reel-strip {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: .8rem;
+        }
 
         @media (max-width: 900px) {
           .work-grid { grid-template-columns: 1fr; }
           .pillar-grid { grid-template-columns: repeat(2, 1fr); }
           .quick-grid { grid-template-columns: repeat(2, 1fr); }
+          .reel-strip { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 600px) {
           .hero-inner { padding-block: 3.5rem 3rem; }
@@ -105,6 +114,7 @@ export default function Home() {
           .pillar-grid { grid-template-columns: 1fr; }
           .quick-grid { grid-template-columns: 1fr; }
           .intro-grid { grid-template-columns: 1fr; }
+          .reel-strip { grid-template-columns: 1fr 1fr; }
         }
         @media (min-width: 760px) {
           .hero-inner { grid-template-columns: 1.1fr 1fr; }
@@ -140,7 +150,7 @@ export default function Home() {
 
         <div className="page-wrap hero-inner">
           {/* ── Text col ── */}
-          <div>
+          <RevealOnScroll>
             <span className="tag" style={{ marginBottom: "1.25rem" }}>
               Premium Wedding Storytelling
             </span>
@@ -219,12 +229,12 @@ export default function Home() {
                 <span key={logo} className="trust-logo">{logo}</span>
               ))}
             </div>
-          </div>
+          </RevealOnScroll>
 
           {/* ── Media col (desktop only) ── */}
-          <div className="hero-media-col">
+          <RevealOnScroll className="hero-media-col" delayMs={120}>
             <MediaPlaceholder ratio="video" label="Hero Film Loop" />
-          </div>
+          </RevealOnScroll>
         </div>
 
         {/* Bottom fade */}
@@ -253,9 +263,9 @@ export default function Home() {
         }}
       >
         {/* ── Intro split ── */}
-        <section className="intro-grid">
-          <div
-            className="surface"
+        <section className="bento-grid">
+          <RevealOnScroll
+            className="surface bento-span-7"
             style={{ padding: "clamp(1.5rem,4vw,2.25rem)" }}
           >
             <SectionHeading
@@ -263,9 +273,10 @@ export default function Home() {
               title="No props. No cliches. Just real moments with editorial polish."
               description="Our approach combines authentic emotion with cinematic framing, helping you relive the feeling instead of just viewing photos."
             />
-          </div>
-          <div
-            className="surface"
+          </RevealOnScroll>
+          <RevealOnScroll
+            className="surface bento-span-5"
+            delayMs={120}
             style={{
               padding: "clamp(1.5rem,4vw,2.25rem)",
               background: "var(--surface-2)",
@@ -297,21 +308,22 @@ export default function Home() {
             >
               Build Your Moodboard
             </Link>
-          </div>
+          </RevealOnScroll>
         </section>
 
         {/* ── Featured Work ── */}
-        <section>
+        <RevealOnScroll>
           <SectionHeading
             eyebrow="Signature Work"
             title="A portfolio built like a film sequence"
             description="From monochrome opening scenes to warm emotional payoffs, each gallery is curated as a complete visual arc."
           />
           <div className="work-grid" style={{ marginTop: "1.75rem" }}>
-            {featuredWork.map((item) => (
-              <article
+            {featuredWork.map((item, idx) => (
+              <RevealOnScroll
                 key={item.id}
                 className="surface card-lift"
+                delayMs={idx * 90}
                 style={{ overflow: "hidden" }}
               >
                 <MediaPlaceholder ratio={item.ratio} label={item.label} />
@@ -343,13 +355,26 @@ export default function Home() {
                     Curated highlight
                   </p>
                 </div>
-              </article>
+              </RevealOnScroll>
             ))}
           </div>
-        </section>
+        </RevealOnScroll>
+
+        <RevealOnScroll>
+          <div className="reel-strip">
+            {reelBlocks.map((item, idx) => (
+              <div key={item} className="surface card-lift" style={{ overflow: "hidden" }}>
+                <MediaPlaceholder ratio="portrait" label={item} />
+                <div style={{ padding: ".8rem .9rem 1rem" }}>
+                  <p className="eyebrow">{`Reel ${String(idx + 1).padStart(2, "0")}`}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </RevealOnScroll>
 
         {/* ── Why Artistry In Love ── */}
-        <section
+        <RevealOnScroll
           className="cinema"
           style={{
             position: "relative",
@@ -383,9 +408,10 @@ export default function Home() {
             description="We blend high-fashion visual language with emotionally honest documentation for modern couples."
           />
           <div className="pillar-grid">
-            {trustPillars.map((p) => (
-              <div
+            {trustPillars.map((p, idx) => (
+              <RevealOnScroll
                 key={p.title}
+                delayMs={idx * 100}
                 style={{
                   borderRadius: ".875rem",
                   padding: "1.25rem",
@@ -424,17 +450,18 @@ export default function Home() {
                 >
                   {p.desc}
                 </p>
-              </div>
+              </RevealOnScroll>
             ))}
           </div>
-        </section>
+        </RevealOnScroll>
 
         {/* ── Quick Links ── */}
         <section className="quick-grid">
-          {quickLinks.map((item) => (
-            <article
+          {quickLinks.map((item, idx) => (
+            <RevealOnScroll
               key={item.eyebrow}
               className="surface card-lift"
+              delayMs={idx * 90}
               style={{
                 padding: "clamp(1.25rem,3vw,1.75rem)",
                 display: "flex",
@@ -472,19 +499,21 @@ export default function Home() {
               >
                 {item.cta}
               </Link>
-            </article>
+            </RevealOnScroll>
           ))}
         </section>
 
         {/* ── CTA ── */}
-        <CtaStrip
+        <RevealOnScroll>
+          <CtaStrip
           title="If your story deserves cinematic care, start your inquiry."
           text="Share date, location, and moodboard inspiration to receive availability, collections, and next steps."
           primaryLabel="Check Availability"
           primaryHref="/contact-us"
           secondaryLabel="Join The Team"
           secondaryHref="/career"
-        />
+          />
+        </RevealOnScroll>
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CtaStrip } from "@/components/ui/cta-strip";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 const reviews = [
@@ -78,7 +79,7 @@ export default function TestimonialsPage() {
         }}
       >
         {/* Stars banner */}
-        <div
+        <RevealOnScroll
           className="surface"
           style={{
             padding: "clamp(1.75rem,4vw,2.5rem)",
@@ -112,14 +113,15 @@ export default function TestimonialsPage() {
             Every client who has trusted us with their story has felt the
             difference that intentional direction makes.
           </p>
-        </div>
+        </RevealOnScroll>
 
         {/* Review cards */}
         <section className="review-grid">
           {reviews.map((review, i) => (
-            <article
+            <RevealOnScroll
               key={i}
               className="surface card-lift"
+              delayMs={i * 90}
               style={{ padding: "clamp(1.25rem,3vw,1.75rem)" }}
             >
               <span
@@ -197,12 +199,12 @@ export default function TestimonialsPage() {
                   ★★★★★
                 </span>
               </div>
-            </article>
+            </RevealOnScroll>
           ))}
         </section>
 
         {/* Note strip */}
-        <div
+        <RevealOnScroll
           className="surface"
           style={{
             padding: "clamp(1.25rem,3vw,1.875rem)",
@@ -227,14 +229,16 @@ export default function TestimonialsPage() {
           <Link href="/contact-us" className="btn-secondary sheen">
             Start Inquiry
           </Link>
-        </div>
+        </RevealOnScroll>
 
-        <CtaStrip
+        <RevealOnScroll>
+          <CtaStrip
           title="Ready to begin your experience?"
           text="Send your details and receive the next steps within our response window."
           primaryLabel="Check Availability"
           primaryHref="/contact-us"
-        />
+          />
+        </RevealOnScroll>
       </div>
     </>
   );

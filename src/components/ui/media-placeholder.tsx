@@ -29,14 +29,21 @@ export function MediaPlaceholder({
         border: "1px solid var(--line)",
       }}
     >
-      {/* Subtle warm glow */}
+      <div
+        className="media-zoom"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(165deg, rgba(0,0,0,0.06), transparent 55%), var(--surface-2)",
+        }}
+      />
       <div
         aria-hidden
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse 70% 60% at 30% 25%, rgba(180,123,67,0.16), transparent 70%)",
+            "radial-gradient(ellipse 70% 60% at 30% 25%, rgba(183,133,79,0.16), transparent 70%)",
           pointerEvents: "none",
         }}
       />

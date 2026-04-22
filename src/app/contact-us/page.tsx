@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/ui/section-heading";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 const formRow: {
   id: string;
@@ -93,7 +94,7 @@ export default function ContactUsPage() {
         }}
       >
         {/* Promise strip */}
-        <div
+        <RevealOnScroll
           className="surface promise-strip"
           style={{
             padding: "1rem 1.375rem",
@@ -119,10 +120,10 @@ export default function ContactUsPage() {
               {item.text}
             </span>
           ))}
-        </div>
+        </RevealOnScroll>
 
         {/* Form card */}
-        <section
+        <RevealOnScroll
           style={{
             borderRadius: "1.125rem",
             padding: "clamp(1.5rem,4vw,2.5rem)",
@@ -241,7 +242,7 @@ export default function ContactUsPage() {
               </a>
             </div>
           </form>
-        </section>
+        </RevealOnScroll>
       </div>
     </>
   );
