@@ -1,13 +1,14 @@
 type MediaPlaceholderProps = {
-  ratio?: "wide" | "video" | "square" | "portrait";
+  ratio?: "wide" | "video" | "square" | "portrait" | "ultrawide";
   label?: string;
 };
 
-const ratioClassMap = {
-  wide: "aspect-[16/9]",
-  video: "aspect-[21/9]",
-  square: "aspect-square",
-  portrait: "aspect-[3/4]",
+const aspectMap = {
+  wide: "16 / 9",
+  video: "21 / 9",
+  square: "1 / 1",
+  portrait: "3 / 4",
+  ultrawide: "32 / 9",
 };
 
 export function MediaPlaceholder({
@@ -16,11 +17,48 @@ export function MediaPlaceholder({
 }: MediaPlaceholderProps) {
   return (
     <div
-      className={`media-skeleton ${ratioClassMap[ratio]} relative overflow-hidden rounded-2xl border border-white/10 bg-[#121212]`}
+      className="media-skeleton"
       aria-label={label}
+      style={{
+        aspectRatio: aspectMap[ratio],
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "inherit",
+        background:
+          "linear-gradient(180deg, rgba(29,22,18,0.08), transparent 55%), var(--surface-2)",
+        border: "1px solid var(--line)",
+      }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.08),transparent_55%)]" />
-      <div className="absolute bottom-3 left-3 rounded-full border border-white/20 bg-black/30 px-3 py-1 text-[10px] tracking-[0.18em] text-[#c9c4b8] uppercase">
+      {/* Subtle warm glow */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse 70% 60% at 30% 25%, rgba(180,123,67,0.16), transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+      {/* Label */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "0.75rem",
+          left: "0.75rem",
+          borderRadius: "50px",
+          border: "1px solid rgba(180,123,67,0.28)",
+          background: "rgba(255,255,255,0.58)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          padding: "0.2rem 0.7rem",
+          fontSize: "0.625rem",
+          fontWeight: 700,
+          letterSpacing: "0.22em",
+          textTransform: "uppercase",
+          color: "var(--gold)",
+        }}
+      >
         {label}
       </div>
     </div>

@@ -18,18 +18,71 @@ export function CtaStrip({
   secondaryHref,
 }: CtaStripProps) {
   return (
-    <section className="rounded-3xl border border-white/10 bg-[linear-gradient(140deg,#1a1a1a,#0f0f0f)] p-6 sm:p-10">
-      <h3 className="font-display text-3xl text-[#f4f1ea] sm:text-4xl">{title}</h3>
-      <p className="mt-3 max-w-2xl text-sm leading-7 text-[#c7c2b6] sm:text-base">{text}</p>
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <Link href={primaryHref} className="btn-primary text-center">
-          {primaryLabel}
-        </Link>
-        {secondaryLabel && secondaryHref ? (
-          <Link href={secondaryHref} className="btn-secondary text-center">
-            {secondaryLabel}
+    <section
+      className="cinema"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "1.25rem",
+        padding: "clamp(1.75rem,5vw,3rem)",
+        background:
+          "linear-gradient(145deg, rgba(20,18,14,1) 0%, rgba(11,10,8,1) 55%, rgba(18,16,12,1) 100%)",
+        border: "1px solid rgba(233,223,204,0.14)",
+      }}
+    >
+      {/* Glow */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          top: "-4rem",
+          right: "-4rem",
+          width: "18rem",
+          height: "18rem",
+          borderRadius: "50%",
+          background: "radial-gradient(circle,rgba(185,154,107,.48) 0%,transparent 70%)",
+          filter: "blur(45px)",
+          opacity: .18,
+          pointerEvents: "none",
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <p className="eyebrow" style={{ marginBottom: "1rem" }}>Ready to Begin?</p>
+        <h3
+          className="display-md"
+          style={{ maxWidth: "540px" }}
+        >
+          {title}
+        </h3>
+        <p
+          style={{
+            marginTop: ".875rem",
+            maxWidth: "480px",
+            fontSize: ".9375rem",
+            lineHeight: 1.65,
+            color: "var(--text-2)",
+          }}
+        >
+          {text}
+        </p>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: ".75rem",
+            marginTop: "1.75rem",
+          }}
+        >
+          <Link href={primaryHref} className="btn-primary sheen">
+            {primaryLabel}
           </Link>
-        ) : null}
+          {secondaryLabel && secondaryHref ? (
+            <Link href={secondaryHref} className="btn-secondary sheen">
+              {secondaryLabel}
+            </Link>
+          ) : null}
+        </div>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ type SectionHeadingProps = {
   title: string;
   description?: string;
   center?: boolean;
+  size?: "sm" | "md" | "lg";
 };
 
 export function SectionHeading({
@@ -10,18 +11,40 @@ export function SectionHeading({
   title,
   description,
   center = false,
+  size = "md",
 }: SectionHeadingProps) {
+  const titleClass =
+    size === "lg" ? "display-lg" : "display-md";
+
   return (
-    <div className={center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
-      {eyebrow ? (
-        <p className="mb-3 text-xs tracking-[0.28em] text-[#afab9f] uppercase">{eyebrow}</p>
-      ) : null}
-      <h2 className="font-display text-3xl leading-tight text-[#f4f1ea] sm:text-4xl">
-        {title}
-      </h2>
-      {description ? (
-        <p className="mt-3 text-sm leading-7 text-[#c7c2b6] sm:text-base">{description}</p>
-      ) : null}
+    <div
+      style={{
+        maxWidth: "640px",
+        marginInline: center ? "auto" : undefined,
+        textAlign: center ? "center" : undefined,
+      }}
+    >
+      {eyebrow && (
+        <p className="eyebrow" style={{ marginBottom: ".75rem" }}>
+          {eyebrow}
+        </p>
+      )}
+      <h2 className={titleClass}>{title}</h2>
+      {!center && (
+        <span className="gold-line" />
+      )}
+      {description && (
+        <p
+          style={{
+            fontSize: ".9375rem",
+            lineHeight: 1.65,
+            color: "var(--text-2)",
+            marginTop: center ? ".875rem" : 0,
+          }}
+        >
+          {description}
+        </p>
+      )}
     </div>
   );
 }

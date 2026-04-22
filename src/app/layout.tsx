@@ -7,18 +7,22 @@ import "./globals.css";
 const displayFont = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 const bodyFont = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "artistryinlove.com",
-  description: "Artistry In Love portfolio",
+  title: "Artistry In Love | Cinematic Photography & Films",
+  description:
+    "Premium cinematic photography and films for couples and brands who value emotion, craft, and timeless direction.",
 };
 
 export default function RootLayout({
@@ -27,11 +31,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} h-full antialiased`}>
-      <body className="min-h-full bg-[#090909] text-[#f2efe8]">
+    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} h-full`}>
+      <body className="min-h-full">
         <div className="relative flex min-h-screen flex-col">
           <Navigation />
-          <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8 sm:px-6 sm:py-10">
+          {/* main has NO padding — each page section controls its own width via .page-wrap */}
+          <main className="flex-1">
             {children}
           </main>
           <Footer />
