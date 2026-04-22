@@ -1,28 +1,28 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Manrope, Noto_Serif } from "next/font/google";
 import { Footer } from "@/components/site/footer";
 import { Navigation } from "@/components/site/navigation";
 import "./globals.css";
 
-const displayFont = Cormorant_Garamond({
-  variable: "--font-display",
+const serifFont = Noto_Serif({
+  variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-const bodyFont = Manrope({
-  variable: "--font-body",
+const sansFont = Manrope({
+  variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Artistry In Love | Cinematic Photography & Films",
+  title: "Artistry In Love | Editorial Wedding Cinema",
   description:
-    "Premium cinematic photography and films for couples and brands who value emotion, craft, and timeless direction.",
+    "We specialize in editorial wedding cinema for those who value the intentional, the understated, and the timeless.",
 };
 
 export default function RootLayout({
@@ -31,16 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} h-full`}>
-      <body className="min-h-full">
-        <div className="relative flex min-h-screen flex-col">
-          <Navigation />
-          {/* main has NO padding — each page section controls its own width via .page-wrap */}
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </div>
+    <html lang="en" className={`${serifFont.variable} ${sansFont.variable}`}>
+      <body>
+        <Navigation />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

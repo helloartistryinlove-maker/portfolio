@@ -1,133 +1,167 @@
 import Link from "next/link";
 
-const footerLinks = [
-  { href: "/",             label: "Home" },
-  { href: "/films",        label: "Films" },
-  { href: "/blogs",        label: "Blogs" },
-  { href: "/testimonials", label: "Testimonials" },
-  { href: "/contact-us",   label: "Contact" },
-  { href: "/career",       label: "Career" },
-];
-
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer style={{ background: "var(--surface)", borderTop: "1px solid var(--line)" }}>
-      {/* Pre-footer CTA band */}
+    <footer
+      style={{
+        background: "var(--bg-surface)",
+        borderTop: "1px solid var(--border)",
+        paddingInline: "5vw",
+        paddingTop: "80px",
+        paddingBottom: "40px",
+        marginTop: "var(--stack-lg)",
+      }}
+    >
+      {/* Top row */}
       <div
-        className="cinema"
         style={{
-          background: "linear-gradient(135deg, rgba(20,18,14,1) 0%, var(--bg) 100%)",
-          borderBottom: "1px solid var(--line)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          gap: "40px",
+          marginBottom: "80px",
         }}
       >
+        {/* Brand */}
+        <div>
+          <p
+            style={{
+              fontFamily: "var(--font-serif, 'Noto Serif', serif)",
+              fontSize: "20px",
+              fontStyle: "italic",
+              color: "var(--text-primary)",
+              marginBottom: "8px",
+            }}
+          >
+            Artistry in Love
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
+              fontSize: "11px",
+              fontWeight: 600,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+            }}
+          >
+            Editorial Wedding Cinema
+          </p>
+        </div>
+
+        {/* Links */}
         <div
-          className="page-wrap"
           style={{
-            paddingBlock: "clamp(2.5rem,6vw,4rem)",
             display: "flex",
-            flexWrap: "wrap",
-            gap: "2rem",
-            alignItems: "center",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            gap: "16px",
           }}
         >
-          <div style={{ maxWidth: "480px" }}>
-            <p className="eyebrow" style={{ marginBottom: ".625rem" }}>Begin Your Story</p>
-            <p
+          {[
+            { href: "/films",        label: "Films" },
+            { href: "/blogs",        label: "Journal" },
+            { href: "/testimonials", label: "Testimonials" },
+            { href: "/contact-us",   label: "Contact" },
+            { href: "/career",       label: "Careers" },
+          ].map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
               style={{
-                fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
-                fontSize: "clamp(1.6rem,3.5vw,2.5rem)",
-                fontWeight: 500,
-                lineHeight: 1.1,
-                letterSpacing: "-.02em",
-                color: "var(--text-1)",
+                fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
+                fontSize: "11px",
+                fontWeight: 600,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--text-muted)",
+                textDecoration: "none",
+                transition: "color 0.3s",
               }}
             >
-              Every unforgettable story deserves{" "}
-              <em style={{ fontStyle: "italic", color: "var(--gold)" }}>intentional</em>{" "}
-              cinematic direction.
-            </p>
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: ".75rem" }}>
-            <Link href="/contact-us" className="btn-primary sheen">
-              Get In Touch
+              {label}
             </Link>
-            <Link href="/films" className="btn-secondary sheen">
-              View Films
+          ))}
+        </div>
+
+        {/* Legal links */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+          }}
+        >
+          {[
+            { href: "/", label: "Studio" },
+            { href: "/", label: "Terms of Service" },
+            { href: "/", label: "Privacy Policy" },
+          ].map(({ href, label }) => (
+            <Link
+              key={label}
+              href={href}
+              style={{
+                fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
+                fontSize: "11px",
+                fontWeight: 600,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--text-muted)",
+                textDecoration: "none",
+              }}
+            >
+              {label}
             </Link>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Bottom strip */}
-      <div className="page-wrap" style={{ paddingBlock: "2rem" }}>
-        <div
+      {/* Bottom row */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+          borderTop: "1px solid var(--border)",
+          paddingTop: "32px",
+        }}
+      >
+        <p
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "1.25rem",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
+            fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
+            fontSize: "11px",
+            fontWeight: 600,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: "var(--text-muted)",
           }}
         >
-          {/* Brand */}
-          <div>
-            <p
+          © {year} Artistry in Love. All Rights Reserved.
+        </p>
+
+        <div style={{ display: "flex", gap: "24px" }}>
+          {["Instagram", "Vimeo", "Pinterest"].map((sn) => (
+            <a
+              key={sn}
+              href="#"
               style={{
-                fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
-                fontSize: "1.125rem",
-                fontWeight: 500,
-                letterSpacing: ".18em",
+                fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
+                fontSize: "11px",
+                fontWeight: 600,
+                letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: "var(--text-1)",
+                color: "var(--text-muted)",
+                textDecoration: "none",
+                transition: "color 0.4s",
               }}
             >
-              Artistry In Love
-            </p>
-            <p style={{ fontSize: ".75rem", color: "var(--text-4)", marginTop: ".2rem" }}>
-              Cinematic Photography &amp; Films
-            </p>
-          </div>
-
-          {/* Links */}
-          <nav style={{ display: "flex", flexWrap: "wrap", gap: ".35rem .875rem" }}>
-            {footerLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="hover-underline"
-                style={{
-                  fontSize: ".75rem",
-                  color: "var(--text-3)",
-                  transition: "color .2s",
-                }}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div
-          style={{
-            marginTop: "1.25rem",
-            paddingTop: "1.125rem",
-            borderTop: "1px solid var(--line)",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: ".5rem",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <p style={{ fontSize: ".6875rem", color: "var(--text-4)" }}>
-            © {year} artistryinlove.com — All rights reserved.
-          </p>
-          <p style={{ fontSize: ".6875rem", color: "var(--gold)", opacity: 0.55 }}>
-            where love becomes cinema
-          </p>
+              {sn}
+            </a>
+          ))}
         </div>
       </div>
     </footer>
