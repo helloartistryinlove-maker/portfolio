@@ -1,7 +1,7 @@
-@import "tailwindcss";
-
 /* ── Google Fonts: Noto Serif + Manrope ─────── */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Noto+Serif:ital,wght@0,400;1,400&display=swap');
+
+@import "tailwindcss";
 
 /* ── Design Tokens (Artistry in Love – Light Editorial) ─── */
 :root {
