@@ -63,11 +63,22 @@ export default function Home() {
         .hero-inner {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 2.5rem;
-          align-items: center;
-          padding-block: 5rem 3.5rem;
+          gap: 2rem;
+          align-items: start;
+          padding-block: 4.5rem 3rem;
         }
-        .hero-media-col { display: none; }
+        .hero-media-col { display: block; }
+        .hero-stage {
+          display: grid;
+          grid-template-columns: repeat(12, minmax(0, 1fr));
+          gap: 1rem;
+          align-items: end;
+        }
+        .hero-copy { grid-column: span 12; }
+        .hero-media-stack { grid-column: span 12; position: relative; min-height: 300px; }
+        .hero-main-media { width: 72%; margin-left: auto; }
+        .hero-overlay-a { position: absolute; left: 0; bottom: 2.8rem; width: 35%; }
+        .hero-overlay-b { position: absolute; left: 20%; bottom: -1.2rem; width: 34%; }
 
         .intro-grid {
           display: grid;
@@ -101,25 +112,55 @@ export default function Home() {
           grid-template-columns: repeat(4, 1fr);
           gap: .8rem;
         }
+        .editorial-masonry {
+          columns: 2;
+          column-gap: 1rem;
+        }
+        .editorial-masonry > article {
+          break-inside: avoid;
+          margin-bottom: 1rem;
+        }
+        .split-composition {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1rem;
+          align-items: stretch;
+        }
+        .side-quick-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
 
         @media (max-width: 900px) {
           .work-grid { grid-template-columns: 1fr; }
           .pillar-grid { grid-template-columns: repeat(2, 1fr); }
           .quick-grid { grid-template-columns: repeat(2, 1fr); }
           .reel-strip { grid-template-columns: repeat(2, 1fr); }
+          .editorial-masonry { columns: 1; }
         }
         @media (max-width: 600px) {
-          .hero-inner { padding-block: 3.5rem 3rem; }
+          .hero-inner { padding-block: 3.25rem 2.6rem; }
           .work-grid { grid-template-columns: 1fr; }
           .pillar-grid { grid-template-columns: 1fr; }
           .quick-grid { grid-template-columns: 1fr; }
           .intro-grid { grid-template-columns: 1fr; }
           .reel-strip { grid-template-columns: 1fr 1fr; }
+          .hero-main-media { width: 78%; }
+          .hero-overlay-a { width: 44%; }
+          .hero-overlay-b { width: 40%; left: 26%; }
         }
         @media (min-width: 760px) {
-          .hero-inner { grid-template-columns: 1.1fr 1fr; }
-          .hero-media-col { display: block; }
+          .hero-inner { grid-template-columns: 1fr; }
           .intro-grid { grid-template-columns: 1fr 1fr; }
+          .split-composition { grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); }
+        }
+        @media (min-width: 980px) {
+          .hero-copy { grid-column: span 5; }
+          .hero-media-stack { grid-column: span 7; min-height: 520px; }
+          .hero-main-media { width: 78%; }
+          .hero-overlay-a { width: 30%; left: 2%; bottom: 3rem; }
+          .hero-overlay-b { width: 28%; left: 22%; bottom: -1.4rem; }
         }
       `}</style>
 
@@ -149,8 +190,9 @@ export default function Home() {
         />
 
         <div className="page-wrap hero-inner">
+          <div className="hero-stage">
           {/* ── Text col ── */}
-          <RevealOnScroll>
+          <RevealOnScroll className="hero-copy">
             <span className="tag" style={{ marginBottom: "1.25rem" }}>
               Premium Wedding Storytelling
             </span>
@@ -231,10 +273,19 @@ export default function Home() {
             </div>
           </RevealOnScroll>
 
-          {/* ── Media col (desktop only) ── */}
-          <RevealOnScroll className="hero-media-col" delayMs={120}>
-            <MediaPlaceholder ratio="video" label="Hero Film Loop" />
+          {/* ── Layered media col ── */}
+          <RevealOnScroll className="hero-media-col hero-media-stack" delayMs={120}>
+            <div className="surface card-lift hero-main-media" style={{ overflow: "hidden" }}>
+              <MediaPlaceholder ratio="portrait" label="Signature Portrait" />
+            </div>
+            <div className="surface card-lift hero-overlay-a" style={{ overflow: "hidden" }}>
+              <MediaPlaceholder ratio="square" label="Editorial Detail" />
+            </div>
+            <div className="surface card-lift hero-overlay-b" style={{ overflow: "hidden" }}>
+              <MediaPlaceholder ratio="portrait" label="BTS Reel Frame" />
+            </div>
           </RevealOnScroll>
+          </div>
         </div>
 
         {/* Bottom fade */}
@@ -318,12 +369,11 @@ export default function Home() {
             title="A portfolio built like a film sequence"
             description="From monochrome opening scenes to warm emotional payoffs, each gallery is curated as a complete visual arc."
           />
-          <div className="work-grid" style={{ marginTop: "1.75rem" }}>
-            {featuredWork.map((item, idx) => (
-              <RevealOnScroll
+          <div className="editorial-masonry" style={{ marginTop: "1.75rem" }}>
+            {featuredWork.map((item) => (
+              <article
                 key={item.id}
                 className="surface card-lift"
-                delayMs={idx * 90}
                 style={{ overflow: "hidden" }}
               >
                 <MediaPlaceholder ratio={item.ratio} label={item.label} />
@@ -355,18 +405,18 @@ export default function Home() {
                     Curated highlight
                   </p>
                 </div>
-              </RevealOnScroll>
+              </article>
             ))}
           </div>
         </RevealOnScroll>
 
         <RevealOnScroll>
           <div className="reel-strip">
-            {reelBlocks.map((item, idx) => (
+            {reelBlocks.map((item) => (
               <div key={item} className="surface card-lift" style={{ overflow: "hidden" }}>
                 <MediaPlaceholder ratio="portrait" label={item} />
                 <div style={{ padding: ".8rem .9rem 1rem" }}>
-                  <p className="eyebrow">{`Reel ${String(idx + 1).padStart(2, "0")}`}</p>
+                  <p className="eyebrow">{item}</p>
                 </div>
               </div>
             ))}
@@ -455,52 +505,81 @@ export default function Home() {
           </div>
         </RevealOnScroll>
 
-        {/* ── Quick Links ── */}
-        <section className="quick-grid">
-          {quickLinks.map((item, idx) => (
-            <RevealOnScroll
-              key={item.eyebrow}
-              className="surface card-lift"
-              delayMs={idx * 90}
-              style={{
-                padding: "clamp(1.25rem,3vw,1.75rem)",
-                display: "flex",
-                flexDirection: "column",
-                gap: ".7rem",
-              }}
-            >
-              <p className="eyebrow">{item.eyebrow}</p>
+        {/* ── Split Composition ── */}
+        <section className="split-composition">
+          <RevealOnScroll
+            className="surface card-lift"
+            style={{
+              overflow: "hidden",
+              display: "grid",
+              gridTemplateColumns: "minmax(0,1fr)",
+            }}
+          >
+            <MediaPlaceholder ratio="video" label="Signature Story Trailer" />
+            <div style={{ padding: "1.25rem 1.4rem 1.6rem" }}>
+              <p className="eyebrow">Featured Narrative</p>
               <p
                 style={{
-                  fontFamily:
-                    "var(--font-display,'Cormorant Garamond'),serif",
-                  fontSize: "1.35rem",
-                  fontWeight: 500,
+                  marginTop: ".5rem",
+                  fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
+                  fontSize: "clamp(1.45rem,2.4vw,2rem)",
                   lineHeight: 1.15,
                   color: "var(--text-1)",
                 }}
               >
-                {item.title}
+                A complete wedding story in one cinematic chapter.
               </p>
-              <p
+              <p style={{ marginTop: ".55rem", fontSize: ".86rem", color: "var(--text-3)", lineHeight: 1.65 }}>
+                Entry sequence, vows, family moments, and afterparty edits arranged like an editorial film spread.
+              </p>
+            </div>
+          </RevealOnScroll>
+          <div className="side-quick-grid">
+            {quickLinks.map((item, idx) => (
+              <RevealOnScroll
+                key={item.eyebrow}
+                className="surface card-lift"
+                delayMs={idx * 90}
                 style={{
-                  fontSize: ".875rem",
-                  lineHeight: 1.6,
-                  color: "var(--text-3)",
-                  flex: 1,
+                  padding: "clamp(1.25rem,3vw,1.75rem)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: ".7rem",
                 }}
               >
-                {item.desc}
-              </p>
-              <Link
-                href={item.href}
-                className="btn-secondary sheen"
-                style={{ alignSelf: "flex-start", fontSize: ".7rem" }}
-              >
-                {item.cta}
-              </Link>
-            </RevealOnScroll>
-          ))}
+                <p className="eyebrow">{item.eyebrow}</p>
+                <p
+                  style={{
+                    fontFamily:
+                      "var(--font-display,'Cormorant Garamond'),serif",
+                    fontSize: "1.35rem",
+                    fontWeight: 500,
+                    lineHeight: 1.15,
+                    color: "var(--text-1)",
+                  }}
+                >
+                  {item.title}
+                </p>
+                <p
+                  style={{
+                    fontSize: ".875rem",
+                    lineHeight: 1.6,
+                    color: "var(--text-3)",
+                    flex: 1,
+                  }}
+                >
+                  {item.desc}
+                </p>
+                <Link
+                  href={item.href}
+                  className="btn-secondary sheen"
+                  style={{ alignSelf: "flex-start", fontSize: ".7rem" }}
+                >
+                  {item.cta}
+                </Link>
+              </RevealOnScroll>
+            ))}
+          </div>
         </section>
 
         {/* ── CTA ── */}

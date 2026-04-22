@@ -15,13 +15,23 @@ export default function FilmsPage() {
   return (
     <>
       <style>{`
-        .film-card-inner {
-          display: flex;
-          flex-wrap: wrap;
+        .featured-film-layout {
+          display: grid;
+          grid-template-columns: minmax(0,2.1fr) minmax(0,1.4fr);
+          gap: 1.25rem;
+          align-items: stretch;
+        }
+        .film-supporting-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 1rem;
-          align-items: flex-end;
-          justify-content: space-between;
-          padding: clamp(1.25rem, 3vw, 2rem);
+        }
+        @media (max-width: 980px) {
+          .featured-film-layout { grid-template-columns: 1fr; }
+          .film-supporting-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 640px) {
+          .film-supporting-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -83,14 +93,7 @@ export default function FilmsPage() {
         }}
       >
         {/* Featured film row */}
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0,2.1fr) minmax(0,1.4fr)",
-            gap: "1.25rem",
-            alignItems: "stretch",
-          }}
-        >
+        <section className="featured-film-layout">
           <RevealOnScroll className="surface card-lift" style={{ overflow: "hidden" }}>
             <MediaPlaceholder ratio="video" label="Featured Film" />
           </RevealOnScroll>
@@ -156,13 +159,7 @@ export default function FilmsPage() {
         </section>
 
         {/* Supporting films strip */}
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-            gap: "1rem",
-          }}
-        >
+        <section className="film-supporting-grid">
           {films.map((film, idx) => (
             <RevealOnScroll
               key={film.id}

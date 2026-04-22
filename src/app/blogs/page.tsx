@@ -18,10 +18,17 @@ export default function BlogsPage() {
       <style>{`
         .blog-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.125rem;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
         }
-        @media (max-width: 900px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+        .featured-blog-layout {
+          display: grid;
+          grid-template-columns: minmax(0,2.2fr) minmax(0,1.6fr);
+          gap: 1.25rem;
+        }
+        @media (max-width: 980px) {
+          .featured-blog-layout { grid-template-columns: 1fr; }
+        }
         @media (max-width: 560px) { .blog-grid { grid-template-columns: 1fr; } }
       `}</style>
 
@@ -82,13 +89,7 @@ export default function BlogsPage() {
         }}
       >
         {/* Featured + grid */}
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0,2.2fr) minmax(0,1.6fr)",
-            gap: "1.25rem",
-          }}
-        >
+        <section className="featured-blog-layout">
           <RevealOnScroll className="surface card-lift" style={{ overflow: "hidden" }}>
             <MediaPlaceholder ratio="wide" label="Featured Story" />
             <div style={{ padding: "1.25rem 1.5rem 1.75rem" }}>
