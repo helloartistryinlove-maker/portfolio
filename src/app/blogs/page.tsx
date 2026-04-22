@@ -81,78 +81,131 @@ export default function BlogsPage() {
           paddingBlock: "2.5rem clamp(3.5rem,8vw,7rem)",
         }}
       >
-        <section className="blog-grid">
-          {cards.map((card, idx) => (
-            <RevealOnScroll
-              key={card.id}
-              className="surface card-lift"
-              delayMs={idx * 70}
-              style={{ overflow: "hidden" }}
-            >
-              <MediaPlaceholder ratio="wide" label="Story Cover" />
-              <div style={{ padding: "1.125rem 1.25rem 1.5rem" }}>
-                <div
+        {/* Featured + grid */}
+        <section
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(0,2.2fr) minmax(0,1.6fr)",
+            gap: "1.25rem",
+          }}
+        >
+          <RevealOnScroll className="surface card-lift" style={{ overflow: "hidden" }}>
+            <MediaPlaceholder ratio="wide" label="Featured Story" />
+            <div style={{ padding: "1.25rem 1.5rem 1.75rem" }}>
+              <span className="tag">Featured Chapter</span>
+              <h2
+                style={{
+                  marginTop: ".9rem",
+                  fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
+                  fontSize: "1.7rem",
+                  fontWeight: 500,
+                  lineHeight: 1.15,
+                  color: "var(--text-1)",
+                }}
+              >
+                A day that moved like cinema
+              </h2>
+              <p
+                style={{
+                  marginTop: ".6rem",
+                  fontSize: ".9rem",
+                  lineHeight: 1.7,
+                  color: "var(--text-2)",
+                  maxWidth: "30rem",
+                }}
+              >
+                A full wedding story layout placeholder for a hero editorial piece, with room
+                for behind-the-scenes and stills in a single scroll.
+              </p>
+              <div
+                style={{
+                  marginTop: "1.15rem",
+                  paddingTop: ".85rem",
+                  borderTop: "1px solid var(--line)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: ".75rem",
+                    fontSize: ".75rem",
+                    letterSpacing: ".12em",
+                    textTransform: "uppercase",
+                    color: "var(--gold)",
+                    fontWeight: 700,
                   }}
                 >
-                  <span className="tag">{card.category}</span>
-                  <span
-                    style={{
-                      fontSize: ".625rem",
-                      letterSpacing: ".1em",
-                      color: "var(--text-4)",
-                    }}
-                  >
-                    {card.date}
-                  </span>
-                </div>
-                <h2
+                  Read Featured Story →
+                </span>
+                <span
                   style={{
-                    fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
-                    fontSize: "1.35rem",
-                    fontWeight: 500,
-                    lineHeight: 1.15,
-                    color: "var(--text-1)",
+                    fontSize: ".7rem",
+                    color: "var(--text-4)",
+                    letterSpacing: ".08em",
+                    textTransform: "uppercase",
                   }}
                 >
-                  {card.title}
-                </h2>
-                <p
-                  style={{
-                    marginTop: ".5rem",
-                    fontSize: ".8125rem",
-                    lineHeight: 1.6,
-                    color: "var(--text-3)",
-                  }}
-                >
-                  {card.summary}
-                </p>
-                <div
-                  style={{
-                    marginTop: "1rem",
-                    paddingTop: ".75rem",
-                    borderTop: "1px solid var(--line)",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: ".75rem",
-                      fontWeight: 700,
-                      letterSpacing: ".1em",
-                      textTransform: "uppercase",
-                      color: "var(--gold)",
-                    }}
-                  >
-                    Read Story →
-                  </span>
-                </div>
+                  Long-form · Photo + Film
+                </span>
               </div>
-            </RevealOnScroll>
-          ))}
+            </div>
+          </RevealOnScroll>
+
+          <div className="blog-grid">
+            {cards.slice(0, 4).map((card, idx) => (
+              <RevealOnScroll
+                key={card.id}
+                className="surface card-lift"
+                delayMs={idx * 70}
+                style={{ overflow: "hidden" }}
+              >
+                <MediaPlaceholder ratio="wide" label="Story Cover" />
+                <div style={{ padding: "1rem 1.1rem 1.4rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: ".6rem",
+                    }}
+                  >
+                    <span className="tag">{card.category}</span>
+                    <span
+                      style={{
+                        fontSize: ".625rem",
+                        letterSpacing: ".1em",
+                        color: "var(--text-4)",
+                      }}
+                    >
+                      {card.date}
+                    </span>
+                  </div>
+                  <h2
+                    style={{
+                      fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
+                      fontSize: "1.25rem",
+                      fontWeight: 500,
+                      lineHeight: 1.15,
+                      color: "var(--text-1)",
+                    }}
+                  >
+                    {card.title}
+                  </h2>
+                  <p
+                    style={{
+                      marginTop: ".45rem",
+                      fontSize: ".8rem",
+                      lineHeight: 1.6,
+                      color: "var(--text-3)",
+                    }}
+                  >
+                    {card.summary}
+                  </p>
+                </div>
+              </RevealOnScroll>
+            ))}
+          </div>
         </section>
 
         <RevealOnScroll>

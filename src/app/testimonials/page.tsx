@@ -115,92 +115,112 @@ export default function TestimonialsPage() {
           </p>
         </RevealOnScroll>
 
-        {/* Review cards */}
-        <section className="review-grid">
-          {reviews.map((review, i) => (
-            <RevealOnScroll
-              key={i}
-              className="surface card-lift"
-              delayMs={i * 90}
-              style={{ padding: "clamp(1.25rem,3vw,1.75rem)" }}
-            >
-              <span
+        {/* Horizontal story rail */}
+        <section
+          style={{
+            position: "relative",
+            overflowX: "auto",
+            paddingBottom: "0.5rem",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              gap: "1rem",
+              minWidth: "max-content",
+            }}
+          >
+            {reviews.map((review, i) => (
+              <RevealOnScroll
+                key={i}
+                delayMs={i * 90}
+                className="surface card-lift"
                 style={{
-                  display: "block",
-                  fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
-                  fontSize: "3.5rem",
-                  lineHeight: 0.8,
-                  color: "var(--gold)",
-                  opacity: 0.3,
-                  marginBottom: ".75rem",
-                }}
-              >&ldquo;</span>
-              <p
-                style={{
-                  fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
-                  fontSize: "1.125rem",
-                  fontStyle: "italic",
-                  lineHeight: 1.65,
-                  color: "var(--text-2)",
+                  padding: "clamp(1.25rem,3vw,1.75rem)",
+                  minWidth: "min(360px, 80vw)",
+                  maxWidth: "420px",
                 }}
               >
-                {review}
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: ".75rem",
-                  marginTop: "1.25rem",
-                  paddingTop: "1rem",
-                  borderTop: "1px solid var(--line)",
-                }}
-              >
-                <div
-                  style={{
-                    width: "2.125rem",
-                    height: "2.125rem",
-                    borderRadius: "50%",
-                    background: "var(--surface-3)",
-                    border: "1px solid var(--line-md)",
-                    flexShrink: 0,
-                  }}
-                />
-                <div>
-                  <p
-                    style={{
-                      fontSize: ".8125rem",
-                      fontWeight: 600,
-                      color: "var(--text-1)",
-                    }}
-                  >
-                    Couple Story
-                  </p>
-                  <p
-                    style={{
-                      fontSize: ".625rem",
-                      letterSpacing: ".18em",
-                      textTransform: "uppercase",
-                      color: "var(--text-4)",
-                      marginTop: ".12rem",
-                    }}
-                  >
-                    Verified Review
-                  </p>
-                </div>
                 <span
                   style={{
-                    marginLeft: "auto",
-                    fontSize: ".875rem",
-                    letterSpacing: ".12em",
+                    display: "block",
+                    fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
+                    fontSize: "3.5rem",
+                    lineHeight: 0.8,
                     color: "var(--gold)",
+                    opacity: 0.3,
+                    marginBottom: ".75rem",
                   }}
                 >
-                  ★★★★★
+                  &ldquo;
                 </span>
-              </div>
-            </RevealOnScroll>
-          ))}
+                <p
+                  style={{
+                    fontFamily: "var(--font-display,'Cormorant Garamond'),serif",
+                    fontSize: "1.125rem",
+                    fontStyle: "italic",
+                    lineHeight: 1.65,
+                    color: "var(--text-2)",
+                  }}
+                >
+                  {review}
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: ".75rem",
+                    marginTop: "1.25rem",
+                    paddingTop: "1rem",
+                    borderTop: "1px solid var(--line)",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "2.125rem",
+                      height: "2.125rem",
+                      borderRadius: "50%",
+                      background: "var(--surface-3)",
+                      border: "1px solid var(--line-md)",
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div>
+                    <p
+                      style={{
+                        fontSize: ".8125rem",
+                        fontWeight: 600,
+                        color: "var(--text-1)",
+                      }}
+                    >
+                      Couple Story
+                    </p>
+                    <p
+                      style={{
+                        fontSize: ".625rem",
+                        letterSpacing: ".18em",
+                        textTransform: "uppercase",
+                        color: "var(--text-4)",
+                        marginTop: ".12rem",
+                      }}
+                    >
+                      Verified Review
+                    </p>
+                  </div>
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontSize: ".875rem",
+                      letterSpacing: ".12em",
+                      color: "var(--gold)",
+                    }}
+                  >
+                    ★★★★★
+                  </span>
+                </div>
+              </RevealOnScroll>
+            ))}
+          </div>
         </section>
 
         {/* Note strip */}
