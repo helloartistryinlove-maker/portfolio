@@ -79,7 +79,7 @@ export default function ContactUsPage() {
           border: none;
           border-bottom: 1px solid var(--text-primary, #1b1c19);
           background: transparent;
-          padding: 12px 0;
+          padding: clamp(10px, 2vw, 12px) 0;
           border-radius: 0;
           font-family: var(--font-sans, 'Manrope', sans-serif);
           font-size: 16px;
@@ -102,17 +102,21 @@ export default function ContactUsPage() {
         /* Form grid */
         .contact-form-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 48px 64px;
+          grid-template-columns: 1fr;
+          gap: clamp(24px, 5vw, 32px);
         }
-        @media (max-width: 768px) {
-          .contact-form-grid { grid-template-columns: 1fr; gap: 32px; }
+
+        @media (min-width: 640px) {
+          .contact-form-grid { 
+            grid-template-columns: 1fr 1fr; 
+            gap: clamp(24px, 5vw, 32px) clamp(32px, 6vw, 64px);
+          }
         }
 
         /* Submit button with fill wipe */
         .btn-submit {
           position: relative;
-          padding: 20px 48px;
+          padding: clamp(14px, 2.5vw, 20px) clamp(32px, 6vw, 48px);
           border: 1px solid var(--text-primary, #1b1c19);
           background: transparent;
           color: var(--text-primary, #1b1c19);
@@ -125,6 +129,7 @@ export default function ContactUsPage() {
           border-radius: 0;
           overflow: hidden;
           transition: color 0.5s;
+          -webkit-tap-highlight-color: transparent;
         }
         .btn-submit:hover { color: var(--bg, #fbf9f4); }
         .btn-submit .btn-fill {
@@ -147,46 +152,69 @@ export default function ContactUsPage() {
         /* Hero grid */
         .hero-grid {
           display: grid;
-          grid-template-columns: 5fr 7fr;
-          gap: 24px;
+          grid-template-columns: 1fr;
+          gap: clamp(24px, 5vw, 24px);
           align-items: end;
         }
-        @media (max-width: 768px) {
-          .hero-grid { grid-template-columns: 1fr; }
-          .hero-text-col { order: 2; }
-          .hero-img-col  { order: 1; }
+
+        @media (min-width: 768px) {
+          .hero-grid { 
+            grid-template-columns: 5fr 7fr; 
+            gap: 24px;
+          }
+          .hero-text-col { order: 1; }
+          .hero-img-col  { order: 2; }
         }
+
+        .hero-text-col { order: 2; }
+        .hero-img-col  { order: 1; }
 
         /* What to expect grid */
         .expect-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: 1fr;
           gap: 1px;
           background: var(--border, #e4e2dd);
         }
-        @media (max-width: 1024px) { .expect-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px)  { .expect-grid { grid-template-columns: 1fr; } }
+
+        @media (min-width: 640px) { 
+          .expect-grid { 
+            grid-template-columns: repeat(2, 1fr); 
+          } 
+        }
+
+        @media (min-width: 1024px) { 
+          .expect-grid { 
+            grid-template-columns: repeat(4, 1fr); 
+          } 
+        }
 
         .expect-cell {
           background: var(--bg, #fbf9f4);
-          padding: 48px 40px;
+          padding: clamp(32px, 5vw, 48px) clamp(20px, 4vw, 40px);
         }
 
         /* Contact cards */
         .contact-cards {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
+          grid-template-columns: 1fr;
+          gap: clamp(16px, 3vw, 24px);
+          padding-inline: clamp(16px, 5vw, 40px);
         }
-        @media (max-width: 768px) { .contact-cards { grid-template-columns: 1fr; } }
+
+        @media (min-width: 768px) { 
+          .contact-cards { 
+            grid-template-columns: repeat(3, 1fr); 
+          } 
+        }
 
         .contact-card {
           background: var(--bg-surface, #f5f3ee);
           border: 1px solid var(--bg-container-high, #eae8e3);
-          padding: 48px;
+          padding: clamp(32px, 5vw, 48px);
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: clamp(16px, 3vw, 24px);
           transition: background 0.4s;
           text-decoration: none;
           color: inherit;
@@ -219,12 +247,12 @@ export default function ContactUsPage() {
       <div className="contact-page">
 
         {/* ── 1. HERO: CINEMATIC ASYMMETRY ────────────────────── */}
-        <section style={{ paddingInline: "5vw", marginBottom: 160 }}>
+        <section style={{ paddingInline: "clamp(16px, 5vw, 40px)", marginBottom: "clamp(80px, 12vw, 160px)" }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
             <div className="hero-grid">
 
               {/* Left: Text */}
-              <div className="hero-text-col" style={{ paddingBottom: 40 }}>
+              <div className="hero-text-col" style={{ paddingBottom: clamp(24, 5, 40) }}>
                 <span
                   className="c-reveal"
                   style={{
@@ -235,7 +263,7 @@ export default function ContactUsPage() {
                     textTransform: "uppercase",
                     color: "var(--text-muted,#747878)",
                     display: "block",
-                    marginBottom: 20,
+                    marginBottom: "clamp(12px, 2vw, 20px)",
                   }}
                 >
                   Connections
@@ -245,11 +273,11 @@ export default function ContactUsPage() {
                   className="c-reveal c-reveal-d1"
                   style={{
                     fontFamily: "var(--font-serif,'Noto Serif',serif)",
-                    fontSize: "clamp(2.5rem,6vw,64px)",
+                    fontSize: "clamp(2rem, 6vw, 64px)",
                     fontWeight: 400,
                     lineHeight: 1.1,
                     letterSpacing: "-0.02em",
-                    marginBottom: 32,
+                    marginBottom: "clamp(16px, 4vw, 32px)",
                   }}
                 >
                   Tell Your<br /><em>Story.</em>
@@ -259,11 +287,11 @@ export default function ContactUsPage() {
                   className="c-reveal c-reveal-d2"
                   style={{
                     fontFamily: "var(--font-sans,'Manrope',sans-serif)",
-                    fontSize: 18,
+                    fontSize: "clamp(1rem, 2.5vw, 18px)",
                     lineHeight: 1.6,
                     color: "var(--text-secondary,#5e5e5e)",
                     maxWidth: 380,
-                    marginBottom: 48,
+                    marginBottom: "clamp(24px, 5vw, 48px)",
                   }}
                 >
                   We capture the quiet glances and the grand gestures. To begin
@@ -276,9 +304,9 @@ export default function ContactUsPage() {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: 12,
+                    gap: clamp(8, 2, 12),
                     borderTop: "1px solid var(--border,#e4e2dd)",
-                    paddingTop: 32,
+                    paddingTop: "clamp(24px, 4vw, 32px)",
                   }}
                 >
                   {[
@@ -375,9 +403,9 @@ export default function ContactUsPage() {
         </section>
 
         {/* ── 2. INQUIRY FORM ─────────────────────────────────── */}
-        <section style={{ paddingInline: "5vw", marginBottom: 160 }}>
+        <section style={{ paddingInline: "clamp(16px, 5vw, 40px)", marginBottom: "clamp(80px, 12vw, 160px)" }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, minmax(0,1fr))", gap: 24 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, minmax(0,1fr))", gap: "clamp(12px, 3vw, 24px)" }}>
               <div style={{ gridColumn: "1 / -1" }}>
 
                 {/* Section label */}
@@ -386,15 +414,17 @@ export default function ContactUsPage() {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "baseline",
-                    marginBottom: 80,
+                    marginBottom: "clamp(40px, 8vw, 80px)",
                     borderBottom: "1px solid var(--border,#e4e2dd)",
-                    paddingBottom: 24,
+                    paddingBottom: "clamp(12px, 3vw, 24px)",
+                    gap: "clamp(12px, 3vw, 24px)",
+                    flexWrap: "wrap",
                   }}
                 >
                   <h2
                     style={{
                       fontFamily: "var(--font-serif,'Noto Serif',serif)",
-                      fontSize: "clamp(1.75rem,4vw,40px)",
+                      fontSize: "clamp(1.5rem, 5vw, 40px)",
                       fontWeight: 400,
                       lineHeight: 1.2,
                     }}
@@ -409,6 +439,7 @@ export default function ContactUsPage() {
                       letterSpacing: "0.15em",
                       textTransform: "uppercase",
                       color: "var(--text-muted,#747878)",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     All fields optional except email

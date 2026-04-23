@@ -111,32 +111,46 @@ export default function CareerPage() {
         }
 
         .career-section {
-          padding-block: var(--stack-xl);
+          padding-block: clamp(60px, 12vw, 160px);
         }
 
         .career-section-tight {
-          padding-block: var(--stack-lg);
+          padding-block: clamp(40px, 8vw, 80px);
         }
 
         .career-hero-grid {
           display: grid;
-          grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-          gap: clamp(2rem, 6vw, 5rem);
+          grid-template-columns: 1fr;
+          gap: clamp(20px, 5vw, 80px);
           align-items: end;
+          padding-inline: clamp(16px, 5vw, 40px);
+        }
+
+        @media (min-width: 768px) {
+          .career-hero-grid {
+            grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+          }
         }
 
         .career-kicker {
-          margin-bottom: 1rem;
+          margin-bottom: clamp(.75rem, 2vw, 1rem);
         }
 
         .career-title {
-          max-width: 10ch;
-          margin-bottom: 1.25rem;
+          max-width: 100%;
+          margin-bottom: clamp(.9rem, 3vw, 1.25rem);
+          font-size: clamp(1.75rem, 5vw, 64px);
+        }
+
+        @media (min-width: 768px) {
+          .career-title {
+            max-width: 10ch;
+          }
         }
 
         .career-lead {
           max-width: 36rem;
-          font-size: 1.125rem;
+          font-size: clamp(1rem, 2.5vw, 1.125rem);
           line-height: 1.7;
           color: var(--text-secondary);
         }
@@ -144,31 +158,37 @@ export default function CareerPage() {
         .career-hero-actions {
           display: flex;
           flex-wrap: wrap;
-          gap: 1rem 1.25rem;
-          margin-top: 2rem;
+          gap: clamp(12px, 3vw, 1.25rem);
+          margin-top: clamp(1.25rem, 4vw, 2rem);
           align-items: center;
         }
 
         .career-stat-row {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: var(--gutter);
-          margin-top: 2.5rem;
-          padding-top: 1.25rem;
+          grid-template-columns: 1fr;
+          gap: clamp(1rem, 3vw, 24px);
+          margin-top: clamp(1.5rem, 4vw, 2.5rem);
+          padding-top: clamp(.9rem, 2vw, 1.25rem);
           border-top: 1px solid var(--border);
+        }
+
+        @media (min-width: 640px) {
+          .career-stat-row {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
         }
 
         .career-stat strong {
           display: block;
           font-family: var(--font-serif);
-          font-size: clamp(1.4rem, 2vw, 1.8rem);
+          font-size: clamp(1.2rem, 2.5vw, 1.8rem);
           font-weight: 400;
           margin-bottom: .35rem;
         }
 
         .career-stat span {
           display: block;
-          font-size: .875rem;
+          font-size: clamp(.8rem, 1.5vw, .875rem);
           color: var(--text-secondary);
         }
 
@@ -191,36 +211,67 @@ export default function CareerPage() {
 
         .career-copy-grid {
           display: grid;
-          grid-template-columns: repeat(12, minmax(0, 1fr));
-          gap: var(--gutter);
+          grid-template-columns: 1fr;
+          gap: clamp(16px, 3vw, 24px);
+          padding-inline: clamp(16px, 5vw, 40px);
+        }
+
+        @media (min-width: 768px) {
+          .career-copy-grid {
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: var(--gutter);
+          }
         }
 
         .career-copy-wide {
-          grid-column: span 7;
+          grid-column: 1 / -1;
         }
 
         .career-copy-side {
-          grid-column: span 5;
+          grid-column: 1 / -1;
+        }
+
+        @media (min-width: 768px) {
+          .career-copy-wide {
+            grid-column: span 7;
+          }
+
+          .career-copy-side {
+            grid-column: span 5;
+          }
         }
 
         .career-values-grid {
           display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: var(--gutter);
+          grid-template-columns: 1fr;
+          gap: clamp(12px, 3vw, 24px);
+          padding-inline: clamp(16px, 5vw, 40px);
+        }
+
+        @media (min-width: 640px) {
+          .career-values-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (min-width: 1080px) {
+          .career-values-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+          }
         }
 
         .career-value-card {
-          padding: 1.5rem;
+          padding: clamp(1rem, 3vw, 1.5rem);
           border: 1px solid var(--border);
           background: var(--bg-surface);
-          min-height: 14rem;
+          min-height: clamp(12rem, 30vw, 14rem);
           display: flex;
           flex-direction: column;
           justify-content: space-between;
         }
 
         .career-value-card p {
-          font-size: .9375rem;
+          font-size: clamp(.9rem, 1.5vw, .9375rem);
           line-height: 1.7;
           color: var(--text-secondary);
         }
@@ -228,15 +279,23 @@ export default function CareerPage() {
         .career-roles {
           border-top: 1px solid var(--border);
           border-bottom: 1px solid var(--border);
+          padding-inline: clamp(16px, 5vw, 40px);
         }
 
         .career-role-row {
           display: grid;
-          grid-template-columns: minmax(0, 2fr) minmax(0, 4fr) minmax(0, 1fr);
-          gap: var(--gutter);
-          padding: 1.5rem 0;
+          grid-template-columns: 1fr;
+          gap: clamp(12px, 3vw, 24px);
+          padding: clamp(1rem, 2vw, 1.5rem) 0;
           border-top: 1px solid var(--border);
           align-items: start;
+        }
+
+        @media (min-width: 768px) {
+          .career-role-row {
+            grid-template-columns: minmax(0, 2fr) minmax(0, 4fr) minmax(0, 1fr);
+            gap: var(--gutter);
+          }
         }
 
         .career-role-row:first-child {
@@ -244,7 +303,7 @@ export default function CareerPage() {
         }
 
         .career-role-title {
-          font-size: 1.5rem;
+          font-size: clamp(1.2rem, 2.5vw, 1.5rem);
           line-height: 1.2;
           margin-bottom: .5rem;
         }
@@ -252,20 +311,33 @@ export default function CareerPage() {
         .career-role-meta,
         .career-role-summary {
           color: var(--text-secondary);
-          font-size: .9375rem;
+          font-size: clamp(.9rem, 1.5vw, .9375rem);
           line-height: 1.7;
         }
 
         .career-role-action {
-          justify-self: end;
+          justify-self: start;
           align-self: center;
+        }
+
+        @media (min-width: 768px) {
+          .career-role-action {
+            justify-self: end;
+          }
         }
 
         .career-values-2col {
           display: grid;
-          grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
-          gap: clamp(2rem, 6vw, 5rem);
+          grid-template-columns: 1fr;
+          gap: clamp(24px, 6vw, 80px);
           align-items: start;
+          padding-inline: clamp(16px, 5vw, 40px);
+        }
+
+        @media (min-width: 768px) {
+          .career-values-2col {
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+          }
         }
 
         .career-manifesto {
@@ -274,10 +346,10 @@ export default function CareerPage() {
 
         .career-manifesto blockquote {
           font-family: var(--font-serif);
-          font-size: clamp(1.8rem, 4vw, 3.4rem);
+          font-size: clamp(1.4rem, 4vw, 3.4rem);
           line-height: 1.18;
           font-style: italic;
-          margin: 0 0 1.5rem;
+          margin: 0 0 clamp(1rem, 2vw, 1.5rem);
           max-width: 16ch;
         }
 
@@ -286,7 +358,7 @@ export default function CareerPage() {
         }
 
         .career-trait {
-          padding: 1rem 0;
+          padding: clamp(.75rem, 2vw, 1rem) 0;
           border-top: 1px solid var(--border);
         }
 
@@ -298,29 +370,43 @@ export default function CareerPage() {
         .career-trait strong {
           display: block;
           font-family: var(--font-serif);
-          font-size: 1.1rem;
+          font-size: clamp(1rem, 2vw, 1.1rem);
           font-weight: 400;
           margin-bottom: .3rem;
         }
 
         .career-form-shell {
           display: grid;
-          grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
-          gap: clamp(2rem, 5vw, 4rem);
+          grid-template-columns: 1fr;
+          gap: clamp(24px, 5vw, 80px);
           align-items: start;
-          padding-top: 1.5rem;
+          padding-inline: clamp(16px, 5vw, 40px);
+          padding-top: clamp(1rem, 2vw, 1.5rem);
+        }
+
+        @media (min-width: 768px) {
+          .career-form-shell {
+            grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+          }
         }
 
         .career-form-panel {
           border: 1px solid var(--border);
           background: var(--bg-surface);
-          padding: clamp(1.5rem, 3vw, 2rem);
+          padding: clamp(1.2rem, 3vw, 2rem);
+          width: 100%;
         }
 
         .career-form-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 1.25rem;
+          grid-template-columns: 1fr;
+          gap: clamp(12px, 2vw, 1.25rem);
+        }
+
+        @media (min-width: 640px) {
+          .career-form-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
         }
 
         .career-field-stack {
@@ -336,25 +422,40 @@ export default function CareerPage() {
         .career-final-cta {
           text-align: center;
           border-top: 1px solid var(--border);
+          padding-inline: clamp(16px, 5vw, 40px);
         }
 
         .career-gallery-grid {
           display: grid;
-          grid-template-columns: 1.05fr .95fr .8fr;
-          gap: var(--gutter);
+          grid-template-columns: 1fr;
+          gap: clamp(1rem, 3vw, 24px);
+          padding-inline: clamp(16px, 5vw, 40px);
+        }
+
+        @media (min-width: 640px) {
+          .career-gallery-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (min-width: 1080px) {
+          .career-gallery-grid {
+            grid-template-columns: 1.05fr .95fr .8fr;
+          }
         }
 
         .career-gallery-card {
           display: flex;
           flex-direction: column;
-          gap: .875rem;
+          gap: clamp(.6rem, 2vw, .875rem);
         }
 
         .career-gallery-caption {
           display: flex;
           justify-content: space-between;
-          gap: 1rem;
+          gap: clamp(12px, 3vw, 1rem);
           align-items: baseline;
+          flex-wrap: wrap;
         }
 
         @media (max-width: 1080px) {
@@ -366,42 +467,13 @@ export default function CareerPage() {
 
           .career-copy-wide,
           .career-copy-side {
-            grid-column: span 12;
-          }
-
-          .career-values-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-
-          .career-gallery-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-        }
-
-        @media (max-width: 760px) {
-          .career-stat-row,
-          .career-values-grid,
-          .career-form-grid,
-          .career-gallery-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .career-role-row {
-            grid-template-columns: 1fr;
-          }
-
-          .career-role-action {
-            justify-self: start;
-          }
-
-          .career-title {
-            max-width: 100%;
+            grid-column: span 1;
           }
         }
       `}</style>
 
       <div className="career-page">
-        <section className="career-section" style={{ paddingTop: "calc(var(--stack-lg) + 80px)" }}>
+        <section className="career-section" style={{ paddingTop: "calc(var(--stack-lg) + 60px)" }}>
           <div className="page-wrap">
             <div className="career-hero-grid">
               <div>
@@ -449,9 +521,9 @@ export default function CareerPage() {
 
         <section className="career-section-tight" style={{ background: "var(--bg-surface)" }}>
           <div className="page-wrap">
-            <div className="career-copy-grid" style={{ marginBottom: "2rem" }}>
+            <div className="career-copy-grid" style={{ marginBottom: "clamp(1.2rem, 3vw, 2rem)" }}>
               <div className="career-copy-wide">
-                <p className="label-sm" style={{ marginBottom: "1rem" }}>
+                <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
                   Why Join Us
                 </p>
                 <h2 className="headline-lg" style={{ maxWidth: "12ch" }}>
@@ -459,7 +531,7 @@ export default function CareerPage() {
                 </h2>
               </div>
               <div className="career-copy-side" style={{ paddingTop: ".4rem" }}>
-                <p style={{ fontSize: "1rem", lineHeight: 1.7, color: "var(--text-secondary)" }}>
+                <p style={{ fontSize: "clamp(1rem, 1.5vw, 1rem)", lineHeight: 1.7, color: "var(--text-secondary)" }}>
                   Every role here contributes to an experience that feels composed, personal, and
                   high-touch. We value taste, calm execution, and the ability to make people feel seen.
                 </p>
@@ -470,7 +542,7 @@ export default function CareerPage() {
               {values.map((value) => (
                 <div key={value.number} className="career-value-card">
                   <div>
-                    <p className="label-sm" style={{ marginBottom: "1rem", color: "var(--text-muted)" }}>
+                    <p className="label-sm" style={{ marginBottom: clamp(.75, 2, 1), color: "var(--text-muted)" }}>
                       {value.number}
                     </p>
                     <h3 className="headline-md" style={{ marginBottom: ".75rem" }}>
@@ -486,9 +558,9 @@ export default function CareerPage() {
 
         <section className="career-section" id="roles">
           <div className="page-wrap">
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "end", marginBottom: "2rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "clamp(12px, 3vw, 1rem)", alignItems: "end", marginBottom: "clamp(1.2rem, 3vw, 2rem)", flexWrap: "wrap" }}>
               <div>
-                <p className="label-sm" style={{ marginBottom: "1rem" }}>
+                <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
                   Available Opportunities
                 </p>
                 <h2 className="headline-lg">Open Positions</h2>
@@ -525,13 +597,13 @@ export default function CareerPage() {
         <section className="career-section-tight" style={{ background: "var(--bg-surface)" }}>
           <div className="page-wrap career-values-2col">
             <div className="career-manifesto">
-              <p className="label-sm" style={{ marginBottom: "1rem" }}>
+              <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
                 What We Look For
               </p>
               <blockquote>
                 We hire people who can hold a room with their taste, then disappear into the work.
               </blockquote>
-              <p style={{ fontSize: "1rem", lineHeight: 1.7, color: "var(--text-secondary)", maxWidth: "34rem" }}>
+              <p style={{ fontSize: "clamp(1rem, 1.5vw, 1rem)", lineHeight: 1.7, color: "var(--text-secondary)", maxWidth: "34rem" }}>
                 The right person understands that luxury is not loud. It is precise, disciplined,
                 and deeply considered from the first client call to the final delivery.
               </p>
@@ -552,9 +624,9 @@ export default function CareerPage() {
 
         <section className="career-section-tight">
           <div className="page-wrap">
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "end", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "clamp(12px, 3vw, 1rem)", alignItems: "end", marginBottom: "clamp(1rem, 2vw, 1.5rem)", flexWrap: "wrap" }}>
               <div>
-                <p className="label-sm" style={{ marginBottom: "1rem" }}>
+                <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
                   Studio Culture
                 </p>
                 <h2 className="headline-lg">Moments In-Between</h2>
@@ -593,10 +665,10 @@ export default function CareerPage() {
         <section className="career-section" id="application">
           <div className="page-wrap career-form-shell">
             <div>
-              <p className="label-sm" style={{ marginBottom: "1rem" }}>
+              <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
                 Application Form
               </p>
-              <h2 className="headline-lg" style={{ marginBottom: "1.5rem", maxWidth: "11ch" }}>
+              <h2 className="headline-lg" style={{ marginBottom: "clamp(1rem, 2vw, 1.5rem)", maxWidth: "11ch" }}>
                 Begin your journey with us.
               </h2>
               <p style={{ fontSize: "1rem", lineHeight: 1.7, color: "var(--text-secondary)", maxWidth: "33rem" }}>

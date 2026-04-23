@@ -201,8 +201,8 @@ export default function FilmsPage() {
         .cin-scroll {
           display: flex;
           overflow-x: auto;
-          gap: 24px;
-          padding-inline: 5vw;
+          gap: clamp(12px, 3vw, 24px);
+          padding-inline: clamp(16px, 5vw, 40px);
           scroll-snap-type: x mandatory;
           -ms-overflow-style: none;
           scrollbar-width: none;
@@ -210,12 +210,16 @@ export default function FilmsPage() {
         .cin-scroll::-webkit-scrollbar { display: none; }
 
         .cin-card {
-          flex: 0 0 80vw;
-          max-width: 640px;
+          flex: 0 0 clamp(85vw, 90vw, 640px);
           scroll-snap-align: start;
           cursor: pointer;
         }
-        @media (min-width: 640px) { .cin-card { flex: 0 0 45vw; } }
+        @media (min-width: 640px) { 
+          .cin-card { flex: 0 0 45vw; } 
+        }
+        @media (min-width: 1024px) { 
+          .cin-card { flex: 0 0 45vw; max-width: 640px; } 
+        }
 
         /* Play hover */
         .film-thumb { position: relative; overflow: hidden; }
@@ -266,28 +270,45 @@ export default function FilmsPage() {
 
         /* Arrow nav buttons */
         .arrow-btn {
-          width: 48px; height: 48px;
-          display: flex; align-items: center; justify-content: center;
+          width: clamp(36px, 8vw, 48px); 
+          height: clamp(36px, 8vw, 48px);
+          display: flex; 
+          align-items: center; 
+          justify-content: center;
           border: 1px solid var(--outline, #747878);
           background: transparent;
           cursor: pointer;
           transition: background 0.3s;
           border-radius: 0;
+          -webkit-tap-highlight-color: transparent;
+          min-width: 36px;
+          min-height: 36px;
         }
         .arrow-btn:hover { background: var(--bg-container, #f0eee9); }
-        .arrow-btn svg { width: 20px; height: 20px; stroke: var(--text-primary, #1b1c19); fill: none; }
+        .arrow-btn svg { width: clamp(16px, 4vw, 20px); height: clamp(16px, 4vw, 20px); stroke: var(--text-primary, #1b1c19); fill: none; }
 
         /* Archive grid */
         .archive-grid {
           display: grid;
-          grid-template-columns: repeat(12, minmax(0, 1fr));
-          gap: 24px;
-          row-gap: 80px;
+          grid-template-columns: 1fr;
+          gap: clamp(24px, 4vw, 24px);
+          row-gap: clamp(40px, 8vw, 80px);
           align-items: start;
         }
-        @media (max-width: 768px) {
-          .archive-grid { grid-template-columns: 1fr; row-gap: 48px; }
-          .archive-grid > * { grid-column: 1 / -1 !important; grid-column-start: auto !important; margin-top: 0 !important; }
+        @media (min-width: 768px) {
+          .archive-grid {
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 24px;
+            row-gap: 80px;
+          }
+        }
+        .archive-grid > * { grid-column: 1 / -1 !important; grid-column-start: auto !important; margin-top: 0 !important; }
+        @media (min-width: 768px) {
+          .gc-7  { grid-column: span 7 !important; }
+          .gc-4  { grid-column: 9 / span 4 !important; }
+          .gc-12 { grid-column: span 12 !important; }
+          .gc-5  { grid-column: span 5 !important; }
+          .gc-6  { grid-column: 7 / span 6 !important; }
         }
 
         /* Grid column helpers */
@@ -301,15 +322,15 @@ export default function FilmsPage() {
         .cta-border-box {
           border: 1px solid var(--outline, #747878);
           text-align: center;
-          padding: 80px 40px;
+          padding: clamp(40px, 8vw, 80px) clamp(20px, 5vw, 40px);
           background: var(--bg, #fbf9f4);
         }
 
         /* Section spacing */
-        .stack-xl { margin-bottom: 160px; }
-        .stack-lg { margin-bottom: 80px; }
-        .stack-md { margin-bottom: 40px; }
-        .stack-sm { margin-bottom: 20px; }
+        .stack-xl { margin-bottom: clamp(80px, 12vw, 160px); }
+        .stack-lg { margin-bottom: clamp(40px, 8vw, 80px); }
+        .stack-md { margin-bottom: clamp(24px, 4vw, 40px); }
+        .stack-sm { margin-bottom: clamp(12px, 2vw, 20px); }
 
         /* Film reel strip accent */
         .reel-strip {
@@ -341,17 +362,17 @@ export default function FilmsPage() {
       <div className="films-page">
 
         {/* ── 1. HERO ──────────────────────────────────────────── */}
-        <section style={{ paddingInline: "5vw", marginBottom: 160 }}>
+        <section style={{ paddingInline: "clamp(16px, 5vw, 40px)", marginBottom: "clamp(80px, 12vw, 160px)" }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
 
             {/* Film reel accent */}
-            <div className="reel-strip" style={{ marginBottom: 28 }} aria-hidden="true">
+            <div className="reel-strip" style={{ marginBottom: "clamp(16px, 3vw, 28px)" }} aria-hidden="true">
               {Array.from({ length: 18 }).map((_, i) => (
                 <span key={i} className="reel-hole" />
               ))}
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, minmax(0,1fr))", gap: 24 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, minmax(0,1fr))", gap: "clamp(12px, 3vw, 24px)" }}>
               <div
                 className="reveal"
                 style={{ gridColumn: "span 12" }}
@@ -365,7 +386,7 @@ export default function FilmsPage() {
                     textTransform: "uppercase",
                     color: "var(--text-muted,#747878)",
                     display: "block",
-                    marginBottom: 20,
+                    marginBottom: "clamp(12px, 2vw, 20px)",
                   }}
                 >
                   Our Portfolio
@@ -374,12 +395,12 @@ export default function FilmsPage() {
                 <h1
                   style={{
                     fontFamily: "var(--font-serif,'Noto Serif',serif)",
-                    fontSize: "clamp(2.5rem,6vw,64px)",
+                    fontSize: "clamp(2rem, 6vw, 64px)",
                     fontWeight: 400,
                     lineHeight: 1.1,
                     letterSpacing: "-0.02em",
                     color: "var(--text-primary,#1b1c19)",
-                    marginBottom: 40,
+                    marginBottom: "clamp(24px, 4vw, 40px)",
                     maxWidth: 760,
                   }}
                 >
@@ -391,7 +412,7 @@ export default function FilmsPage() {
                 <p
                   style={{
                     fontFamily: "var(--font-sans,'Manrope',sans-serif)",
-                    fontSize: 18,
+                    fontSize: "clamp(1rem, 2.5vw, 18px)",
                     lineHeight: 1.6,
                     color: "var(--text-secondary,#5e5e5e)",
                     maxWidth: 540,
@@ -407,24 +428,26 @@ export default function FilmsPage() {
         </section>
 
         {/* ── 2. FEATURED COLLECTIONS SCROLLER ────────────────── */}
-        <section style={{ marginBottom: 160 }}>
+        <section style={{ marginBottom: "clamp(80px, 12vw, 160px)" }}>
 
           {/* Header */}
           <div
             style={{
-              paddingInline: "5vw",
+              paddingInline: "clamp(16px, 5vw, 40px)",
               maxWidth: 1320,
               marginInline: "auto",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-end",
-              marginBottom: 40,
+              marginBottom: "clamp(24px, 4vw, 40px)",
+              flexWrap: "wrap",
+              gap: "clamp(12px, 2vw, 16px)",
             }}
           >
             <h2
               style={{
                 fontFamily: "var(--font-serif,'Noto Serif',serif)",
-                fontSize: "clamp(1.75rem,4vw,40px)",
+                fontSize: "clamp(1.5rem, 4vw, 40px)",
                 fontWeight: 400,
                 lineHeight: 1.2,
                 fontStyle: "italic",
@@ -432,7 +455,7 @@ export default function FilmsPage() {
             >
               Featured Collections
             </h2>
-            <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ display: "flex", gap: "clamp(8px, 2vw, 12px)" }}>
               <button className="arrow-btn" onClick={scrollLeft} aria-label="Scroll left">
                 <svg viewBox="0 0 24 24" strokeWidth="1.5"><polyline points="15 18 9 12 15 6" /></svg>
               </button>

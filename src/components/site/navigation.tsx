@@ -33,20 +33,21 @@ export function Navigation() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 28px 5vw;
+          padding: clamp(16px, 4vw, 28px) clamp(16px, 5vw, 40px);
         }
         .nav-brand {
           font-family: var(--font-serif, "Noto Serif", serif);
-          font-size: 22px;
+          font-size: clamp(18px, 4vw, 22px);
           font-weight: 400;
           letter-spacing: -0.01em;
           color: #1b1c19;
           text-decoration: none;
+          white-space: nowrap;
         }
         .nav-links {
           display: flex;
           align-items: center;
-          gap: 48px;
+          gap: clamp(24px, 6vw, 48px);
         }
         .nav-link {
           font-family: var(--font-sans, "Manrope", sans-serif);
@@ -59,6 +60,7 @@ export function Navigation() {
           padding-bottom: 4px;
           border-bottom: 1px solid transparent;
           transition: color 0.4s, border-color 0.4s;
+          white-space: nowrap;
         }
         .nav-link.active,
         .nav-link:hover { color: #1b1c19; border-bottom-color: #1b1c19; }
@@ -68,7 +70,7 @@ export function Navigation() {
           font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          padding: 10px 24px;
+          padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
           border: 1px solid #1b1c19;
           color: #1b1c19;
           background: transparent;
@@ -76,6 +78,7 @@ export function Navigation() {
           transition: background 0.5s, color 0.5s;
           cursor: pointer;
           border-radius: 0;
+          white-space: nowrap;
         }
         .nav-cta:hover { background: #1b1c19; color: #fbf9f4; }
         .nav-ham {
@@ -85,7 +88,8 @@ export function Navigation() {
           cursor: pointer;
           background: none;
           border: none;
-          padding: 4px;
+          padding: 8px;
+          -webkit-tap-highlight-color: transparent;
         }
         .nav-ham span {
           display: block;
@@ -94,7 +98,7 @@ export function Navigation() {
           background: #1b1c19;
           transition: transform 0.3s;
         }
-        @media (max-width: 860px) {
+        @media (max-width: 768px) {
           .nav-links { display: none; }
           .nav-cta   { display: none; }
           .nav-ham   { display: flex; }
@@ -108,8 +112,11 @@ export function Navigation() {
           flex-direction: column;
           align-items: flex-start;
           justify-content: center;
-          padding: 0 5vw;
-          gap: 32px;
+          padding: 0 clamp(16px, 5vw, 40px);
+          gap: clamp(20px, 6vw, 32px);
+          overflow-y: auto;
+          padding-top: 80px;
+          padding-bottom: 60px;
         }
         .mobile-menu.open { display: flex; }
         .mobile-menu a {
@@ -120,13 +127,14 @@ export function Navigation() {
           text-decoration: none;
           opacity: 0.45;
           transition: opacity 0.3s;
+          line-height: 1.1;
         }
         .mobile-menu a.active,
         .mobile-menu a:hover { opacity: 1; }
         .mobile-close {
           position: absolute;
-          top: 28px;
-          right: 5vw;
+          top: clamp(16px, 4vw, 28px);
+          right: clamp(16px, 5vw, 40px);
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 11px;
           letter-spacing: 0.2em;
@@ -135,6 +143,8 @@ export function Navigation() {
           background: none;
           border: none;
           cursor: pointer;
+          padding: 8px;
+          -webkit-tap-highlight-color: transparent;
         }
       `}</style>
 
@@ -164,8 +174,8 @@ export function Navigation() {
         </button>
       </nav>
 
-      {/* Spacer */}
-      <div style={{ height: "89px" }} />
+      {/* Spacer - responsive height */}
+      <div style={{ height: "clamp(60px, 12vw, 89px)" }} />
 
       {/* Mobile menu */}
       <div className={`mobile-menu${open ? " open" : ""}`} role="dialog" aria-modal="true">

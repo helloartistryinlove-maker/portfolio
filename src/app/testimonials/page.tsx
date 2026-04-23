@@ -1,54 +1,30 @@
 import Link from "next/link";
-import { CtaStrip } from "@/components/ui/cta-strip";
-import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
-function placeholderSrc(label: string) {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-label="${label}">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#111111" />
-          <stop offset="55%" stop-color="#1b1b1b" />
-          <stop offset="100%" stop-color="#2a2a2a" />
-        </linearGradient>
-        <radialGradient id="glow" cx="50%" cy="42%" r="55%">
-          <stop offset="0%" stop-color="#4a4a4a" stop-opacity="0.22" />
-          <stop offset="60%" stop-color="#4a4a4a" stop-opacity="0.08" />
-          <stop offset="100%" stop-color="#4a4a4a" stop-opacity="0" />
-        </radialGradient>
-      </defs>
-      <rect width="1600" height="1200" fill="url(#bg)" />
-      <rect width="1600" height="1200" fill="url(#glow)" />
-      <rect x="160" y="120" width="1280" height="960" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2" />
-      <line x1="160" y1="180" x2="1440" y2="180" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1" />
-      <text x="800" y="610" text-anchor="middle" fill="#f4f0ef" fill-opacity="0.72" font-family="Arial, sans-serif" font-size="58" letter-spacing="8">${label}</text>
-    </svg>`;
-
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+function placeholderSvg(text: string): string {
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect width="1920" height="1080" fill="#1c1b1b"/><text x="50%" y="50%" font-family="Noto Serif" font-size="24" fill="#ffffff" text-anchor="middle" dominant-baseline="middle" opacity="0.3">${text}</text></svg>`
+  )}`;
 }
 
 const filmStories = [
   {
     eyebrow: "THE ARCHIVE FILMS",
     title: "Elena & David",
-    image: placeholderSrc("Cinematic testimonial placeholder"),
     alt: "Cinematic close-up of a bride laughing during her speech with soft focus guests in the background",
   },
   {
     eyebrow: "STORYTELLING SESSION",
     title: "Sophie & James",
-    image: placeholderSrc("Editorial testimonial placeholder"),
     alt: "Black and white portrait of a couple dancing in a grand ballroom under a single spotlight",
   },
   {
     eyebrow: "THE DOCUMENTARY",
     title: "Aria & Theo",
-    image: placeholderSrc("Documentary testimonial placeholder"),
     alt: "Candid shot of a groom wiping a tear away during the vows at an outdoor mountain ceremony",
   },
 ];
 
-const reviewWall = [
+const testimonials = [
   {
     quote:
       "Beyond the technical perfection, they have an eye for the human connection. We didn't just get a photographer, we got a storyteller who understood our rhythm.",
@@ -57,7 +33,7 @@ const reviewWall = [
   },
   {
     quote:
-      "Artistry in Love captures the moments you didn't even know were happening. The look on my father's face, the way the light hit the cathedral - simply breathtaking.",
+      "Artistry in Love captures the moments you didn't even know were happening. The look on my father's face, the way the light hit the cathedral—simply breathtaking.",
     name: "Rebecca & Simon",
     location: "Oxfordshire",
   },
@@ -95,156 +71,232 @@ const recognition = [
   { title: "Wedding Film", subtitle: "Of the Year" },
 ];
 
-function StoryImage({ src, alt }: { src: string; alt: string }) {
-  return <img src={src} alt={alt} loading="lazy" decoding="async" className="story-image" />;
-}
 
 export default function TestimonialsPage() {
   return (
     <>
       <style>{`
-        .testimonials-page {
-          background: var(--bg);
-          color: var(--text-primary);
+        :root {
+          --charcoal: #1c1b1b;
+          --off-white: #fdf8f8;
+          --soft-beige: #e5e2e1;
+          --muted-gold: #a68b67;
+          --secondary-text: #5e5e5b;
+          --text-secondary: #5e5e5b;
         }
 
-        .testimonials-section {
-          padding-block: var(--stack-xl);
-        }
+        /* ── Section spacing ────────── */
+        .section-xl { padding-block: clamp(80px, 15vw, 160px); }
+        .section-lg { padding-block: clamp(60px, 12vw, 120px); }
+        .section-base { padding-inline: clamp(16px, 5vw, 64px); }
 
-        .testimonials-section-tight {
-          padding-block: var(--stack-lg);
-        }
-
-        .hero-copy {
-          max-width: 64rem;
+        /* ── Hero section ──────────── */
+        .hero-wrapper {
+          max-width: 1320px;
           margin-inline: auto;
         }
 
-        .hero-title {
-          max-width: 13ch;
-          margin-top: .75rem;
+        .hero-kicker {
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          display: block;
+          margin-bottom: clamp(12px, 2vw, 16px);
         }
 
-        .hero-lead {
-          max-width: 44rem;
-          margin-top: 1.5rem;
-          font-size: 1.125rem;
-          line-height: 1.75;
+        .hero-title {
+          font-family: "Noto Serif";
+          font-size: clamp(1.8rem, 4vw, 48px);
+          font-weight: 600;
+          line-height: 1.2;
+          letter-spacing: -0.01em;
+          color: var(--charcoal);
+          margin-bottom: clamp(20px, 4vw, 32px);
+          max-width: 16ch;
+        }
+
+        .hero-description {
+          font-family: Inter;
+          font-size: clamp(1rem, 2vw, 16px);
+          line-height: 1.7;
           color: var(--text-secondary);
+          margin-bottom: clamp(24px, 5vw, 40px);
+          max-width: 680px;
         }
 
         .hero-meta {
           display: flex;
           flex-wrap: wrap;
-          gap: 1rem 1.5rem;
-          margin-top: 2rem;
-          padding-top: 1.25rem;
-          border-top: 1px solid rgba(28, 27, 27, 0.12);
+          gap: clamp(20px, 4vw, 40px);
+          padding-top: clamp(16px, 3vw, 24px);
+          border-top: 0.5px solid rgba(28,27,27,0.1);
         }
 
-        .hero-meta span {
-          font-size: .875rem;
-          letter-spacing: .16em;
-          text-transform: uppercase;
-          color: var(--text-muted);
+        .hero-meta-item {
+          font-family: Inter;
+          font-size: clamp(0.85rem, 1.5vw, 14px);
+          line-height: 1.4;
+          color: var(--text-secondary);
+          letter-spacing: 0.03em;
         }
 
+        /* ── Story bleed sections ────── */
         .story-bleed {
           position: relative;
-          min-height: min(819px, 80vh);
-          overflow: hidden;
+          width: 100%;
+          min-height: clamp(400px, 70vh, 80vh);
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-block: 0;
-          background: #111111;
+          overflow: hidden;
+          background: var(--charcoal);
         }
 
-        .story-bleed::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.2));
-          z-index: 1;
-        }
-
-        .story-image {
+        .story-bg {
           position: absolute;
           inset: 0;
           width: 100%;
           height: 100%;
           object-fit: cover;
+          z-index: 0;
         }
 
-        .story-bleed-content {
+        .story-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to bottom, rgba(28,27,27,0.4) 0%, rgba(28,27,27,0.2) 50%, rgba(28,27,27,0.3) 100%);
+          z-index: 1;
+        }
+
+        .story-content {
           position: relative;
           z-index: 2;
           text-align: center;
-          color: #fdf8f8;
-          max-width: 62rem;
-          padding-inline: clamp(1.5rem, 4vw, 3rem);
+          color: #ffffff;
+          max-width: 900px;
+          padding-inline: clamp(16px, 5vw, 64px);
         }
 
         .story-eyebrow {
-          margin-bottom: 1.25rem;
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          color: rgba(255,255,255,0.65);
+          text-transform: uppercase;
+          display: block;
+          margin-bottom: clamp(16px, 3vw, 24px);
         }
 
         .story-quote {
-          font-family: var(--font-serif);
-          font-size: clamp(1.8rem, 4vw, 3.15rem);
+          font-family: "Noto Serif";
+          font-size: clamp(1.6rem, 4vw, 44px);
+          font-weight: 600;
           line-height: 1.18;
+          letter-spacing: -0.01em;
           font-style: italic;
-          letter-spacing: -0.02em;
-          margin: 0 auto 2rem;
-          max-width: 24ch;
-        }
-
-        .story-divider {
-          width: 3rem;
-          height: 1px;
-          background: rgba(255,255,255,.45);
+          margin-bottom: clamp(20px, 4vw, 32px);
+          max-width: 840px;
           margin-inline: auto;
         }
 
-        .film-section-header,
-        .wall-header,
-        .trust-header {
+        .story-divider {
+          width: clamp(2rem, 4vw, 3rem);
+          height: 0.5px;
+          background: rgba(255,255,255,0.3);
+          margin-inline: auto;
+        }
+
+        /* ── Film section ──────────── */
+        .film-section-header {
           display: flex;
-          align-items: end;
           justify-content: space-between;
-          gap: 1rem;
-          margin-bottom: 1.75rem;
+          align-items: flex-end;
+          gap: clamp(16px, 3vw, 24px);
           flex-wrap: wrap;
+          margin-bottom: clamp(40px, 8vw, 80px);
+          padding-bottom: clamp(32px, 6vw, 48px);
+          border-bottom: 0.5px solid var(--soft-beige);
+        }
+
+        .film-kicker {
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        .film-title {
+          font-family: "Noto Serif";
+          font-size: clamp(1.6rem, 3.5vw, 36px);
+          font-weight: 600;
+          line-height: 1.2;
+          letter-spacing: -0.01em;
+          color: var(--charcoal);
+        }
+
+        .film-subtitle {
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          white-space: nowrap;
         }
 
         .film-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 2rem;
+          grid-template-columns: 1fr;
+          gap: clamp(16px, 3vw, 32px);
+        }
+
+        @media (min-width: 640px) {
+          .film-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .film-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
         }
 
         .film-card {
           position: relative;
           overflow: hidden;
-          background: #ece7df;
+          aspect-ratio: 3 / 4;
+          background: var(--charcoal);
+          cursor: pointer;
         }
 
-        .film-card .story-image {
-          transition: transform .8s cubic-bezier(.22,1,.36,1);
+        .film-card img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+          display: block;
         }
 
-        .film-card:hover .story-image {
-          transform: scale(1.045);
+        .film-card:hover img {
+          transform: scale(1.05);
         }
 
-        .film-card-overlay {
+        .film-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.4));
+          background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 100%);
         }
 
-        .film-card-play {
+        .film-play {
           position: absolute;
           inset: 0;
           display: flex;
@@ -252,157 +304,93 @@ export default function TestimonialsPage() {
           justify-content: center;
         }
 
-        .film-card-play span {
-          width: 4rem;
-          height: 4rem;
-          border: 1px solid rgba(255,255,255,.5);
+        .film-play-btn {
+          width: clamp(3.5rem, 8vw, 4.5rem);
+          height: clamp(3.5rem, 8vw, 4.5rem);
+          border: 0.5px solid rgba(255,255,255,0.5);
           border-radius: 999px;
-          display: inline-flex;
+          display: flex;
           align-items: center;
           justify-content: center;
           color: #ffffff;
-          font-size: 1.3rem;
+          font-size: 20px;
           backdrop-filter: blur(2px);
+          transition: scale 0.3s;
         }
 
-        .film-card-caption {
+        .film-card:hover .film-play-btn {
+          scale: 1.1;
+        }
+
+        .film-caption {
           position: absolute;
-          left: 1.5rem;
-          bottom: 1.25rem;
-          right: 1.5rem;
+          left: clamp(16px, 4vw, 28px);
+          bottom: clamp(16px, 4vw, 28px);
+          right: clamp(16px, 4vw, 28px);
           color: #ffffff;
+          z-index: 2;
         }
 
-        .film-card-caption p:last-child {
-          margin-top: .25rem;
-          font-family: var(--font-serif);
-          font-size: 1.25rem;
+        .film-caption-label {
+          font-family: Inter;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.7);
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        .film-caption-title {
+          font-family: "Noto Serif";
+          font-size: clamp(1.1rem, 2vw, 16px);
+          font-weight: 600;
           font-style: italic;
+        }
+
+        /* ── Testimonials wall ──────── */
+        .wall-section-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: clamp(16px, 3vw, 24px);
+          flex-wrap: wrap;
+          margin-bottom: clamp(40px, 8vw, 80px);
+          padding-bottom: clamp(32px, 6vw, 48px);
+          border-bottom: 0.5px solid var(--soft-beige);
+        }
+
+        .wall-header-content h2 {
+          font-family: "Noto Serif";
+          font-size: clamp(1.6rem, 3.5vw, 36px);
+          font-weight: 600;
+          line-height: 1.2;
+          letter-spacing: -0.01em;
+          color: var(--charcoal);
+          margin-bottom: 8px;
+        }
+
+        .wall-header-content p {
+          font-family: Inter;
+          font-size: clamp(0.9rem, 1.5vw, 14px);
+          line-height: 1.5;
+          color: var(--text-secondary);
+        }
+
+        .wall-subtitle {
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          white-space: nowrap;
         }
 
         .wall-grid {
           columns: 1;
-          column-gap: 1.5rem;
-        }
-
-        .wall-card {
-          break-inside: avoid;
-          margin-bottom: 1.5rem;
-          padding: 2rem;
-          border: 1px solid rgba(28, 27, 27, 0.08);
-          background: var(--bg-surface);
-        }
-
-        .wall-card.alt {
-          background: var(--bg-container-low, #f7f3f2);
-        }
-
-        .wall-card .quote-mark {
-          display: block;
-          font-family: var(--font-serif);
-          font-size: 3rem;
-          line-height: .8;
-          color: #a68b67;
-          opacity: .35;
-          margin-bottom: 1rem;
-        }
-
-        .wall-card p {
-          font-size: .98rem;
-          line-height: 1.75;
-          color: var(--text-secondary);
-          font-style: italic;
-        }
-
-        .wall-card footer {
-          border-top: 1px solid rgba(28, 27, 27, 0.1);
-          margin-top: 1.5rem;
-          padding-top: 1.1rem;
-        }
-
-        .wall-card footer p:first-child {
-          font-size: .7rem;
-          letter-spacing: .18em;
-          text-transform: uppercase;
-          font-weight: 600;
-          color: var(--text-primary);
-        }
-
-        .wall-card footer p:last-child {
-          font-family: var(--font-serif);
-          font-size: .95rem;
-          color: var(--text-secondary);
-          margin-top: .25rem;
-        }
-
-        .trust-grid {
-          display: grid;
-          grid-template-columns: repeat(5, minmax(0, 1fr));
-          gap: 1.25rem;
-          align-items: stretch;
-        }
-
-        .trust-item {
-          padding: 1.5rem 1rem;
-          text-align: center;
-          border: 1px solid rgba(28, 27, 27, 0.08);
-          background: var(--bg-surface);
-          min-height: 10rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          gap: .85rem;
-        }
-
-        .trust-badge {
-          width: 3rem;
-          height: 3rem;
-          border: 1px solid rgba(28, 27, 27, 0.14);
-          border-radius: 999px;
-          margin-inline: auto;
-          display: grid;
-          place-items: center;
-          color: var(--text-secondary);
-          font-size: 1rem;
-        }
-
-        .trust-item p:first-of-type {
-          font-family: var(--font-serif);
-          font-size: 1rem;
-          letter-spacing: .01em;
-        }
-
-        .trust-item p:last-of-type {
-          font-size: .68rem;
-          letter-spacing: .18em;
-          text-transform: uppercase;
-          color: var(--text-muted);
-        }
-
-        .testimonial-cta {
-          margin-top: var(--stack-lg);
-        }
-
-        @media (max-width: 1100px) {
-          .film-grid,
-          .trust-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-        }
-
-        @media (max-width: 720px) {
-          .film-grid,
-          .trust-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .story-bleed {
-            min-height: 36rem;
-          }
-
-          .story-quote {
-            max-width: 18ch;
-          }
+          column-gap: clamp(20px, 4vw, 32px);
         }
 
         @media (min-width: 768px) {
@@ -416,178 +404,335 @@ export default function TestimonialsPage() {
             columns: 3;
           }
         }
+
+        .wall-card {
+          break-inside: avoid;
+          margin-bottom: clamp(20px, 4vw, 32px);
+          padding: clamp(20px, 4vw, 32px);
+          border: 0.5px solid rgba(28,27,27,0.1);
+          background: var(--off-white);
+        }
+
+        .wall-card.alt {
+          background: var(--soft-beige);
+        }
+
+        .wall-quote-mark {
+          font-family: "Noto Serif";
+          font-size: clamp(2rem, 5vw, 3.5rem);
+          font-weight: 700;
+          line-height: 0.8;
+          color: var(--muted-gold);
+          opacity: 0.2;
+          margin-bottom: 12px;
+          display: block;
+        }
+
+        .wall-quote-text {
+          font-family: Inter;
+          font-size: clamp(0.95rem, 1.8vw, 14px);
+          line-height: 1.75;
+          color: var(--text-secondary);
+          font-style: italic;
+          margin-bottom: 16px;
+        }
+
+        .wall-card-divider {
+          height: 0.5px;
+          background: rgba(28,27,27,0.1);
+          margin-bottom: 12px;
+        }
+
+        .wall-card-name {
+          font-family: Inter;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: var(--charcoal);
+          margin-bottom: 4px;
+        }
+
+        .wall-card-location {
+          font-family: "Noto Serif";
+          font-size: clamp(0.85rem, 1.5vw, 13px);
+          font-style: italic;
+          color: var(--text-secondary);
+        }
+
+        /* ── Trust grid ────────────── */
+        .trust-section-header {
+          margin-bottom: clamp(40px, 8vw, 80px);
+          padding-bottom: clamp(32px, 6vw, 48px);
+          border-bottom: 0.5px solid var(--soft-beige);
+        }
+
+        .trust-kicker {
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          display: block;
+          margin-bottom: 12px;
+        }
+
+        .trust-title {
+          font-family: "Noto Serif";
+          font-size: clamp(1.6rem, 3.5vw, 36px);
+          font-weight: 600;
+          line-height: 1.2;
+          letter-spacing: -0.01em;
+          color: var(--charcoal);
+        }
+
+        .trust-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: clamp(16px, 3vw, 24px);
+        }
+
+        @media (min-width: 640px) {
+          .trust-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .trust-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+          }
+        }
+
+        .trust-item {
+          padding: clamp(20px, 3vw, 28px);
+          border: 0.5px solid rgba(28,27,27,0.1);
+          background: var(--off-white);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          gap: clamp(12px, 2vw, 16px);
+          min-height: clamp(9rem, 25vw, 11rem);
+        }
+
+        .trust-badge {
+          width: clamp(2.5rem, 5vw, 3.25rem);
+          height: clamp(2.5rem, 5vw, 3.25rem);
+          border: 0.5px solid rgba(28,27,27,0.15);
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: "Noto Serif";
+          font-size: clamp(1rem, 2vw, 1.25rem);
+          color: var(--text-secondary);
+          font-weight: 600;
+        }
+
+        .trust-name {
+          font-family: "Noto Serif";
+          font-size: clamp(0.95rem, 2vw, 14px);
+          font-weight: 600;
+          color: var(--charcoal);
+          line-height: 1.3;
+        }
+
+        .trust-subtitle {
+          font-family: Inter;
+          font-size: clamp(0.7rem, 1vw, 11px);
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: var(--text-secondary);
+        }
+
+        /* ── CTA section ──────────── */
+        .cta-wrapper {
+          text-align: center;
+          max-width: 700px;
+          margin-inline: auto;
+        }
+
+        .cta-title {
+          font-family: "Noto Serif";
+          font-size: clamp(1.6rem, 3.5vw, 36px);
+          font-weight: 600;
+          line-height: 1.2;
+          letter-spacing: -0.01em;
+          color: var(--charcoal);
+          margin-bottom: clamp(16px, 3vw, 24px);
+        }
+
+        .cta-description {
+          font-family: Inter;
+          font-size: clamp(1rem, 2vw, 16px);
+          line-height: 1.7;
+          color: var(--text-secondary);
+          margin-bottom: clamp(32px, 6vw, 48px);
+        }
+
+        .cta-button {
+          display: inline-block;
+          padding: clamp(12px, 2.5vw, 16px) clamp(28px, 5vw, 48px);
+          border: 0.5px solid var(--charcoal);
+          background: transparent;
+          color: var(--charcoal);
+          font-family: Inter;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          text-decoration: none;
+          cursor: pointer;
+          transition: background 0.4s, color 0.4s;
+        }
+
+        .cta-button:hover {
+          background: var(--charcoal);
+          color: #ffffff;
+        }
+      `}
       `}</style>
 
       <div className="testimonials-page">
-        <header className="testimonials-section">
-          <div className="page-wrap">
-            <RevealOnScroll>
-              <div className="hero-copy">
-                <p className="label-sm" style={{ color: "var(--text-muted)" }}>
-                  Kind Words &amp; Kindred Souls
-                </p>
-                <h1 className="display-xl hero-title">A collection of reflections from the couples who trusted us.</h1>
-                <div className="hero-meta">
-                  <span>Calm direction</span>
-                  <span>Editorial storytelling</span>
-                  <span>Emotionally true</span>
-                </div>
-                <p className="hero-lead">
-                  These stories remain long after the day fades. They speak to the steadiness,
-                  discretion, and emotional clarity behind every film and gallery.
-                </p>
-              </div>
-            </RevealOnScroll>
-          </div>
-        </header>
-
-        <section className="story-bleed">
-          <StoryImage
-            src={placeholderSrc("Featured client story placeholder")}
-            alt="Premium charcoal placeholder for the featured client story image"
-          />
-          <div className="story-bleed-content">
-            <RevealOnScroll>
-              <p className="label-sm story-eyebrow" style={{ color: "rgba(255,255,255,.82)" }}>
-                JULIANNE &amp; MARCUS — LAKE COMO
-              </p>
-              <h2 className="story-quote">
-                “To say they captured the day is an understatement. They captured the feeling - the nerves, the quiet sighs, the roar of the celebration.”
-              </h2>
-              <div className="story-divider" />
-            </RevealOnScroll>
+        <section className="section-xl section-base">
+          <div className="hero-wrapper">
+            <span className="hero-kicker">Kind Words & Kindred Souls</span>
+            <h1 className="hero-title">A collection of reflections from the couples who trusted us.</h1>
+            <p className="hero-description">
+              These stories remain long after the day fades. They speak to the steadiness, discretion, and emotional clarity behind every film and gallery.
+            </p>
+            <div className="hero-meta">
+              <span className="hero-meta-item">Calm direction</span>
+              <span className="hero-meta-item">Editorial storytelling</span>
+              <span className="hero-meta-item">Emotionally true</span>
+            </div>
           </div>
         </section>
 
-        <section className="testimonials-section">
-          <div className="page-wrap">
+        <section className="story-bleed">
+          <img
+            src={placeholderSvg("Featured testimonial #1")}
+            alt="Julianne and Marcus wedding at Lake Como, Italy"
+            className="story-bg"
+          />
+          <div className="story-overlay" />
+          <div className="story-content">
+            <span className="story-eyebrow">Julianne & Marcus — Lake Como</span>
+            <blockquote className="story-quote">
+              &ldquo;To say they captured the day is an understatement. They captured the feeling—the nerves, the quiet sighs, the roar of the celebration. Looking back at these photos is like reliving the soul of our wedding.&rdquo;
+            </blockquote>
+            <div className="story-divider" />
+          </div>
+        </section>
+
+        <section className="section-lg section-base">
+          <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
             <div className="film-section-header">
               <div>
-                <h2 className="headline-md">Moving Moments</h2>
+                <span className="film-kicker">Moving Moments</span>
+                <h2 className="film-title">Cinematic Reflections</h2>
               </div>
-              <span className="label-sm" style={{ color: "var(--text-muted)" }}>
-                Cinematic Reflections
-              </span>
+              <span className="film-subtitle">Filmed Stories</span>
             </div>
 
             <div className="film-grid">
               {filmStories.map((story, index) => (
-                <RevealOnScroll key={story.title} delayMs={index * 80}>
-                  <article className="film-card" style={{ aspectRatio: "4 / 5" }}>
-                    <StoryImage src={story.image} alt={story.alt} />
-                    <div className="film-card-overlay" />
-                    <div className="film-card-play" aria-hidden>
-                      <span>▶</span>
-                    </div>
-                    <div className="film-card-caption">
-                      <p className="label-sm" style={{ color: "rgba(255,255,255,.8)" }}>
-                        {story.eyebrow}
-                      </p>
-                      <p>{story.title}</p>
-                    </div>
-                  </article>
-                </RevealOnScroll>
+                <article key={story.title} className="film-card">
+                  <img
+                    src={placeholderSvg(story.title)}
+                    alt={story.alt}
+                  />
+                  <div className="film-overlay" />
+                  <div className="film-play" aria-hidden="true">
+                    <div className="film-play-btn">▶</div>
+                  </div>
+                  <div className="film-caption">
+                    <span className="film-caption-label">{story.eyebrow}</span>
+                    <div className="film-caption-title">{story.title}</div>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
         <section className="story-bleed">
-          <StoryImage
-            src={placeholderSrc("Featured client story placeholder")}
-            alt="Premium charcoal placeholder for the second featured client story image"
+          <img
+            src={placeholderSvg("Featured testimonial #2")}
+            alt="Claire and Samuel wedding in Provence, France"
+            className="story-bg"
           />
-          <div className="story-bleed-content">
-            <RevealOnScroll>
-              <p className="label-sm story-eyebrow" style={{ color: "rgba(255,255,255,.82)" }}>
-                CLAIRE &amp; SAMUEL — PROVENCE
-              </p>
-              <h2 className="story-quote" style={{ maxWidth: "22ch" }}>
-                “Their presence was like a calm breeze on a chaotic day. They found the magic in the mundane and the art in the expected.”
-              </h2>
-              <div className="story-divider" />
-            </RevealOnScroll>
+          <div className="story-overlay" />
+          <div className="story-content">
+            <span className="story-eyebrow">Claire & Samuel — Provence</span>
+            <blockquote className="story-quote">
+              &ldquo;Their presence was like a calm breeze on a chaotic day. They found the magic in the mundane and the art in the expected.&rdquo;
+            </blockquote>
+            <div className="story-divider" />
           </div>
         </section>
 
-        <section className="testimonials-section">
-          <div className="page-wrap">
-            <div className="wall-header">
-              <div>
-                <h2 className="headline-md" style={{ marginBottom: ".4rem" }}>
-                  The Collective Memory
-                </h2>
-                <p className="body-md" style={{ color: "var(--text-secondary)" }}>
-                  A curated wall of trust and emotion.
-                </p>
+        <section className="section-xl section-base">
+          <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
+            <div className="wall-section-header">
+              <div className="wall-header-content">
+                <h2>The Collective Memory</h2>
+                <p>A curated wall of trust and emotion</p>
               </div>
-              <span className="label-sm" style={{ color: "var(--text-muted)" }}>
-                Verified client stories
-              </span>
+              <span className="wall-subtitle">Verified Client Stories</span>
             </div>
 
             <div className="wall-grid">
-              {reviewWall.map((item, index) => (
-                <RevealOnScroll key={item.name} delayMs={index * 60}>
-                  <article className={`wall-card ${index % 2 === 1 ? "alt" : ""}`}>
-                    <span className="quote-mark">“</span>
-                    <p>{item.quote}</p>
-                    <footer>
-                      <p>{item.name}</p>
-                      <p>{item.location}</p>
-                    </footer>
-                  </article>
-                </RevealOnScroll>
+              {testimonials.map((item, index) => (
+                <article
+                  key={item.name}
+                  className={`wall-card ${index % 2 === 1 ? "alt" : ""}`}
+                >
+                  <span className="wall-quote-mark">&ldquo;</span>
+                  <p className="wall-quote-text">{item.quote}</p>
+                  <div className="wall-card-divider" />
+                  <p className="wall-card-name">{item.name}</p>
+                  <p className="wall-card-location">{item.location}</p>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="testimonials-section-tight">
-          <div className="page-wrap">
-            <div className="trust-header">
-              <div>
-                <p className="label-sm" style={{ marginBottom: "1rem", color: "var(--text-muted)" }}>
-                  Recognition
-                </p>
-                <h2 className="headline-md">Accolades &amp; Recognition</h2>
-              </div>
+        <section className="section-lg section-base">
+          <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
+            <div className="trust-section-header">
+              <span className="trust-kicker">Recognition</span>
+              <h2 className="trust-title">Accolades & Recognition</h2>
             </div>
 
             <div className="trust-grid">
-              {recognition.map((item, index) => (
-                <RevealOnScroll key={item.title} delayMs={index * 60}>
-                  <div className="trust-item">
-                    <div className="trust-badge" aria-hidden>
-                      {index + 1}
-                    </div>
-                    <p>{item.title}</p>
-                    <p>{item.subtitle}</p>
+              {accolades.map((item, index) => (
+                <div key={item.title} className="trust-item">
+                  <div className="trust-badge" aria-hidden="true">
+                    {index + 1}
                   </div>
-                </RevealOnScroll>
+                  <p className="trust-name">{item.title}</p>
+                  <p className="trust-subtitle">{item.subtitle}</p>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="testimonials-section testimonial-cta">
-          <div className="page-wrap">
-            <RevealOnScroll>
-              <CtaStrip
-                title="Ready to begin your experience?"
-                text="Send your details and receive the next steps within our response window."
-                primaryLabel="Check Availability"
-                primaryHref="/contact-us"
-                secondaryLabel="Start Inquiry"
-                secondaryHref="/contact-us"
-              />
-            </RevealOnScroll>
-
-            <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
-              <Link href="/contact-us" className="link-underline">
-                Start Inquiry
-              </Link>
-            </div>
+        <section className="section-xl section-base">
+          <div className="cta-wrapper">
+            <h2 className="cta-title">Ready to begin your experience?</h2>
+            <p className="cta-description">
+              Send your details and receive the next steps within our response window.
+            </p>
+            <Link href="/contact-us" className="cta-button">
+              Check Availability
+            </Link>
           </div>
         </section>
       </div>
