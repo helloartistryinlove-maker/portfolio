@@ -542,7 +542,7 @@ export default function CareerPage() {
               {values.map((value) => (
                 <div key={value.number} className="career-value-card">
                   <div>
-                    <p className="label-sm" style={{ marginBottom: clamp(.75, 2, 1), color: "var(--text-muted)" }}>
+                    <p className="label-sm" style={{ marginBottom: "clamp(0.75rem, 2vw, 1rem)", color: "var(--text-muted)" }}>
                       {value.number}
                     </p>
                     <h3 className="headline-md" style={{ marginBottom: ".75rem" }}>

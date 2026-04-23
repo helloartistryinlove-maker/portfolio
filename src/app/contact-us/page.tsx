@@ -252,7 +252,7 @@ export default function ContactUsPage() {
             <div className="hero-grid">
 
               {/* Left: Text */}
-              <div className="hero-text-col" style={{ paddingBottom: clamp(24, 5, 40) }}>
+              <div className="hero-text-col" style={{ paddingBottom: "clamp(24px, 5vw, 40px)" }}>
                 <span
                   className="c-reveal"
                   style={{
@@ -304,7 +304,7 @@ export default function ContactUsPage() {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: clamp(8, 2, 12),
+                    gap: "clamp(8px, 2vw, 12px)",
                     borderTop: "1px solid var(--border,#e4e2dd)",
                     paddingTop: "clamp(24px, 4vw, 32px)",
                   }}

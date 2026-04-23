@@ -63,7 +63,7 @@ const testimonials = [
   },
 ];
 
-const recognition = [
+const accolades = [
   { title: "Vogue Weddings", subtitle: "Top 10" },
   { title: "Brides Magazine", subtitle: "Editor's Choice" },
   { title: "Juniper Ridge", subtitle: "Best Storyteller" },
@@ -594,7 +594,6 @@ export default function TestimonialsPage() {
           background: var(--charcoal);
           color: #ffffff;
         }
-      `}
       `}</style>
 
       <div className="testimonials-page">
