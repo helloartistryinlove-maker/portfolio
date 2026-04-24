@@ -144,13 +144,12 @@ export default function Home() {
 
         @media (min-width: 768px) {
           .intro-text {
-            grid-column: span 5;
+            grid-column: 1 / span 5;
             order: 1;
           }
 
           .intro-image {
-            grid-column: span 6;
-            grid-column-start: 7;
+            grid-column: 7 / span 6;
             order: 2;
           }
         }
