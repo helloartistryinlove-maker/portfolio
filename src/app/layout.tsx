@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Noto_Serif } from "next/font/google";
+import { Manrope, Noto_Serif, Great_Vibes } from "next/font/google";
 import { Footer } from "@/components/site/footer";
 import { Navigation } from "@/components/site/navigation";
 import "./globals.css";
@@ -19,6 +19,13 @@ const sansFont = Manrope({
   display: "swap",
 });
 
+const scriptFont = Great_Vibes({
+  variable: "--font-script",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Artistry In Love | Editorial Wedding Cinema",
   description:
@@ -31,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${serifFont.variable} ${sansFont.variable}`}>
+    <html lang="en" className={`${serifFont.variable} ${sansFont.variable} ${scriptFont.variable}`}>
       <body>
         <Navigation />
         <main>{children}</main>

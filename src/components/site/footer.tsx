@@ -1,169 +1,188 @@
+"use client";
+
 import Link from "next/link";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
+  const images = [
+    "/footer1.jpg", "/footer2.jpg", "/footer3.jpg", "/footer4.jpg",
+    "/footer5.jpg", "/footer6.jpg", "/footer7.jpg", "/footer8.jpg",
+    "/footer9.jpg", "/footer10.jpg", "/foooter11.jpg", "/footer12.jpg",
+    "/footer13.jpg", "/footer14.jpg", "/footer15.jpg", "/footter16.jpg", "/footer17.jpg"
+  ];
+
   return (
-    <footer
-      style={{
-        background: "var(--bg-surface)",
-        borderTop: "1px solid var(--border)",
-        paddingInline: "5vw",
-        paddingTop: "80px",
-        paddingBottom: "40px",
-        marginTop: "var(--stack-lg)",
-      }}
-    >
-      {/* Top row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          gap: "40px",
-          marginBottom: "80px",
-        }}
-      >
-        {/* Brand */}
-        <div>
-          <p
-            style={{
-              fontFamily: "var(--font-serif, 'Noto Serif', serif)",
-              fontSize: "20px",
-              fontStyle: "italic",
-              color: "var(--text-primary)",
-              marginBottom: "8px",
-            }}
-          >
-            Artistry in Love
-          </p>
-          <p
-            style={{
-              fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
-              fontSize: "11px",
-              fontWeight: 600,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "var(--text-muted)",
-            }}
-          >
-            Editorial Wedding Cinema
-          </p>
+    <>
+      <style>{`
+        .footer-root {
+          background: #fdf8f8;
+          padding-top: 100px;
+          padding-bottom: 60px;
+          text-align: center;
+          overflow: hidden;
+        }
+
+        .footer-instagram-header {
+          font-family: var(--font-sans, "Manrope", sans-serif);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: #1c1b1b;
+          margin-bottom: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 24px;
+          padding-inline: clamp(16px, 5vw, 64px);
+        }
+
+        .header-line {
+          flex-grow: 1;
+          height: 1px;
+          background: rgba(28,27,27,0.1);
+          display: block;
+        }
+
+        .instagram-script {
+          font-family: var(--font-script, "Great Vibes", cursive);
+          font-size: 42px;
+          text-transform: none;
+          letter-spacing: -0.01em;
+          color: #1c1b1b;
+          font-weight: 400;
+          line-height: 1;
+        }
+
+        .footer-scroll-container {
+          width: 100%;
+          overflow: hidden;
+          margin-bottom: 100px;
+          position: relative;
+        }
+
+        .footer-scroll-content {
+          display: flex;
+          gap: 20px;
+          width: max-content;
+          animation: footer-ticker 80s linear infinite;
+        }
+
+        .footer-scroll-content:hover {
+          animation-play-state: paused;
+        }
+
+        @keyframes footer-ticker {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(calc(-50% - 10px)); }
+        }
+
+        .footer-img {
+          width: clamp(250px, 20vw, 350px);
+          aspect-ratio: 1;
+          object-fit: cover;
+          flex-shrink: 0;
+          background: #e5e2e1;
+          border: none;
+        }
+
+        .footer-brand-section {
+          padding-top: 40px;
+        }
+
+        .footer-brand-name {
+          font-family: var(--font-serif, "Noto Serif", serif);
+          font-size: clamp(28px, 6vw, 40px);
+          font-weight: 400;
+          font-style: italic;
+          color: #1c1b1b;
+          margin-bottom: 12px;
+          letter-spacing: -0.02em;
+        }
+
+        .footer-brand-subtext {
+          font-family: var(--font-sans, "Manrope", sans-serif);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: #5e5e5b;
+        }
+
+        .footer-bottom-links {
+          margin-top: 80px;
+          display: flex;
+          justify-content: center;
+          gap: clamp(24px, 5vw, 48px);
+          flex-wrap: wrap;
+        }
+
+        .footer-link {
+          font-family: var(--font-sans, "Manrope", sans-serif);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: #747878;
+          text-decoration: none;
+          transition: color 0.4s;
+        }
+
+        .footer-link:hover {
+          color: #1c1b1b;
+        }
+
+        .footer-copyright {
+          margin-top: 60px;
+          font-family: var(--font-sans, "Manrope", sans-serif);
+          font-size: 9px;
+          letter-spacing: 0.15em;
+          color: #a0a09d;
+          text-transform: uppercase;
+        }
+      `}</style>
+
+      <footer className="footer-root">
+        <div className="footer-instagram-header">
+          <span className="header-line" />
+          <span style={{ whiteSpace: "nowrap" }}>
+            FOLLOW US ON <span className="instagram-script">Instagram</span>
+          </span>
+          <span className="header-line" />
         </div>
 
-        {/* Links */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
-          {[
-            { href: "/films",        label: "Films" },
-            { href: "/blogs",        label: "Journal" },
-            { href: "/testimonials", label: "Testimonials" },
-            { href: "/contact-us",   label: "Contact" },
-            { href: "/career",       label: "Careers" },
-          ].map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              style={{
-                fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
-                fontSize: "11px",
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--text-muted)",
-                textDecoration: "none",
-                transition: "color 0.3s",
-              }}
-            >
-              {label}
-            </Link>
-          ))}
+        <div className="footer-scroll-container">
+          <div className="footer-scroll-content">
+            {/* Doubling the items for seamless infinite scroll */}
+            {[...images, ...images].map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`Instagram feed item ${i}`}
+                className="footer-img"
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Legal links */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
-          {[
-            { href: "/", label: "Studio" },
-            { href: "/", label: "Terms of Service" },
-            { href: "/", label: "Privacy Policy" },
-          ].map(({ href, label }) => (
-            <Link
-              key={label}
-              href={href}
-              style={{
-                fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
-                fontSize: "11px",
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--text-muted)",
-                textDecoration: "none",
-              }}
-            >
-              {label}
-            </Link>
-          ))}
+        <div className="footer-brand-section">
+          <h2 className="footer-brand-name">Artistry in Love</h2>
+          <p className="footer-brand-subtext">Editorial Wedding Cinema</p>
         </div>
-      </div>
 
-      {/* Bottom row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "16px",
-          borderTop: "1px solid var(--border)",
-          paddingTop: "32px",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
-            fontSize: "11px",
-            fontWeight: 600,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: "var(--text-muted)",
-          }}
-        >
+        <div className="footer-bottom-links">
+          <Link href="/films" className="footer-link">Films</Link>
+          <Link href="/blogs" className="footer-link">Journal</Link>
+          <Link href="/testimonials" className="footer-link">Testimonials</Link>
+          <Link href="/contact-us" className="footer-link">Contact</Link>
+          <Link href="/career" className="footer-link">Careers</Link>
+        </div>
+
+        <p className="footer-copyright">
           © {year} Artistry in Love. All Rights Reserved.
         </p>
-
-        <div style={{ display: "flex", gap: "24px" }}>
-          {["Instagram", "Vimeo", "Pinterest"].map((sn) => (
-            <a
-              key={sn}
-              href="#"
-              style={{
-                fontFamily: "var(--font-sans, 'Manrope', sans-serif)",
-                fontSize: "11px",
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--text-muted)",
-                textDecoration: "none",
-                transition: "color 0.4s",
-              }}
-            >
-              {sn}
-            </a>
-          ))}
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }

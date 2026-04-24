@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 /* ─────────────────────────────────────────────────────────
@@ -19,6 +21,33 @@ function placeholderSvg(text: string): string {
 }
 
 export default function Home() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const isHoveredRef = useRef(false);
+
+  useEffect(() => {
+    isHoveredRef.current = isHovered;
+  }, [isHovered]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isHoveredRef.current) return;
+
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        const maxScroll = scrollWidth - clientWidth;
+
+        if (scrollLeft >= maxScroll - 10) {
+          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          scrollRef.current.scrollBy({ left: clientWidth, behavior: "smooth" });
+        }
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <style>{`
@@ -49,7 +78,8 @@ export default function Home() {
         .hero-wrapper {
           position: relative;
           width: 100%;
-          min-height: clamp(600px, 85vh, 100vh);
+          min-height: 100vh;
+          min-height: 100svh;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -62,6 +92,7 @@ export default function Home() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center 35%;
           z-index: 0;
         }
 
@@ -77,28 +108,6 @@ export default function Home() {
           z-index: 2;
           padding-inline: clamp(16px, 5vw, 64px);
           max-width: 900px;
-        }
-
-        .hero-kicker {
-          font-family: Inter;
-          font-size: 12px;
-          font-weight: 600;
-          letter-spacing: 0.15em;
-          color: rgba(255,255,255,0.6);
-          display: block;
-          margin-bottom: clamp(12px, 3vw, 24px);
-          text-transform: uppercase;
-        }
-
-        .hero-headline {
-          font-family: "Noto Serif";
-          font-size: clamp(2.2rem, 6vw, 72px);
-          font-weight: 700;
-          line-height: 1.1;
-          letter-spacing: -0.02em;
-          color: #ffffff;
-          margin-bottom: clamp(24px, 5vw, 40px);
-          max-width: 850px;
         }
 
         .hero-link {
@@ -122,29 +131,6 @@ export default function Home() {
 
         .hero-link:hover::after {
           transform: translateX(4px);
-        }
-
-        .hero-location {
-          position: absolute;
-          bottom: clamp(20px, 4vw, 40px);
-          left: clamp(16px, 5vw, 64px);
-          z-index: 2;
-          font-family: Inter;
-          font-size: 12px;
-          font-weight: 600;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-        }
-
-        .hero-location-label {
-          color: rgba(255,255,255,0.5);
-          display: block;
-          margin-bottom: 8px;
-        }
-
-        .hero-location-text {
-          color: #ffffff;
-          display: block;
         }
 
         /* ── Intro section ──────────── */
@@ -452,14 +438,42 @@ export default function Home() {
 
         /* ── Testimonial section ────── */
         .testimonial-wrapper {
-          background: var(--charcoal);
+          background-image: linear-gradient(rgba(28,27,27,0.85), rgba(28,27,27,0.85)), url('/testimonial.jpg');
+          background-size: cover;
+          background-position: center;
           color: #ffffff;
         }
 
         .testimonial-container {
-          max-width: 900px;
+          max-width: 1200px;
           margin-inline: auto;
           text-align: center;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .testimonial-scroll-wrapper {
+          display: flex;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          gap: 0;
+          cursor: grab;
+          padding-bottom: 20px;
+        }
+
+        .testimonial-scroll-wrapper::-webkit-scrollbar {
+          display: none;
+        }
+
+        .testimonial-item {
+          flex: 0 0 100%;
+          scroll-snap-align: center;
+          padding-inline: clamp(16px, 5vw, 64px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
 
         .testimonial-quote-icon {
@@ -477,6 +491,7 @@ export default function Home() {
           color: #ffffff;
           font-style: italic;
           margin-bottom: clamp(24px, 4vw, 40px);
+          max-width: 900px;
         }
 
         .testimonial-source {
@@ -551,26 +566,11 @@ export default function Home() {
           ════════════════════════════════════════════════════ */}
       <section className="hero-wrapper">
         <img
-          src={placeholderSvg("Cinematic Hero")}
+          src="/coverimg.jpg"
           alt="Cinematic wedding photography hero background"
           className="hero-bg"
         />
         <div className="hero-overlay" />
-        
-        <div className="hero-content">
-          <span className="hero-kicker">Established MMXXIV</span>
-          <h1 className="hero-headline">
-            Capturing the quiet <em>architecture</em> of emotion.
-          </h1>
-          <Link href="/films" className="hero-link">
-            View the Films
-          </Link>
-        </div>
-
-        <div className="hero-location">
-          <span className="hero-location-label">Currently Filming</span>
-          <span className="hero-location-text">Lake Como, Italy</span>
-        </div>
       </section>
 
       {/* ════════════════════════════════════════════════════
@@ -598,7 +598,7 @@ export default function Home() {
             {/* Image column — 6 cols on desktop, 7 cols start */}
             <div className="intro-image">
               <img
-                src={placeholderSvg("Portrait")}
+                src="/portfolio1.jpg"
                 alt="Editorial wedding cinematography portrait"
               />
             </div>
@@ -629,7 +629,7 @@ export default function Home() {
               <div className="portfolio-card">
                 <div className="portfolio-img-wrapper" style={{ aspectRatio: "16 / 9" }}>
                   <img
-                    src={placeholderSvg("Sienna & Alessandro")}
+                    src="/portfoli2.jpg"
                     alt="Sienna & Alessandro — Amalfi, Italy wedding film"
                   />
                 </div>
@@ -645,7 +645,7 @@ export default function Home() {
               <div className="portfolio-card">
                 <div className="portfolio-img-wrapper" style={{ aspectRatio: "3 / 4" }}>
                   <img
-                    src={placeholderSvg("Chloe & Julian")}
+                    src="/portfoli3.jpg"
                     alt="Chloe & Julian — Paris, France wedding film"
                   />
                 </div>
@@ -661,7 +661,7 @@ export default function Home() {
               <div className="portfolio-card">
                 <div className="portfolio-img-wrapper" style={{ aspectRatio: "4 / 3" }}>
                   <img
-                    src={placeholderSvg("Isabella & James")}
+                    src="/internationalsection.jpg"
                     alt="Isabella & James — Cotswolds, UK wedding film"
                   />
                 </div>
@@ -694,7 +694,7 @@ export default function Home() {
             {/* Left — image */}
             <div className="process-image-wrapper">
               <img
-                src={placeholderSvg("Process")}
+                src="/foooter11.jpg"
                 alt="The artist at work — filmmaker's cinematography process"
                 className="process-image"
               />
@@ -740,28 +740,53 @@ export default function Home() {
           ════════════════════════════════════════════════════ */}
       <section className="section-xl section-base testimonial-wrapper">
         <div className="testimonial-container">
-          {/* Quote icon */}
-          <svg
-            width="48"
-            height="48"
-            viewBox="0 0 48 48"
-            fill="none"
-            className="testimonial-quote-icon"
-            aria-hidden="true"
+          <div 
+            className="testimonial-scroll-wrapper" 
+            ref={scrollRef}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
-            <path
-              d="M8 30c0-8.616 4.848-15.84 14.4-19.2l2.4 3.6c-5.76 2.88-8.64 6.48-8.64 12H21.6v10.8H8v-7.2zm21.6 0c0-8.616 4.848-15.84 14.4-19.2l2.4 3.6c-5.76 2.88-8.64 6.48-8.64 12h7.2v10.8H29.6v-7.2z"
-              fill="currentColor"
-            />
-          </svg>
-
-          <blockquote className="testimonial-quote">
-            &ldquo;Artistry in Love created something more than a film; they created a heirloom. We watch it and feel the exact same breeze from that evening in Lake Como.&rdquo;
-          </blockquote>
-
-          <cite className="testimonial-source">
-            Mr. &amp; Mrs. Vanderbilt
-          </cite>
+            {[
+              {
+                quote: "Artistry in Love created something more than a film; they created a heirloom. We watch it and feel the exact same breeze from that evening in Lake Como.",
+                source: "Mr. & Mrs. Vanderbilt"
+              },
+              {
+                quote: "The way they captured the light during our ceremony was magical. It feels like watching a dream unfold in real-time.",
+                source: "Sophia & Liam"
+              },
+              {
+                quote: "Beyond professional. They blended into the background and caught moments we didn't even know happened until we saw the film.",
+                source: "Elena & Marcus"
+              },
+              {
+                quote: "A masterclass in cinematography. Every shot is intentional, and the editing is rhythmic and emotional.",
+                source: "Charlotte & James"
+              }
+            ].map((t, i) => (
+              <div key={i} className="testimonial-item">
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 48 48"
+                  fill="none"
+                  className="testimonial-quote-icon"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8 30c0-8.616 4.848-15.84 14.4-19.2l2.4 3.6c-5.76 2.88-8.64 6.48-8.64 12H21.6v10.8H8v-7.2zm21.6 0c0-8.616 4.848-15.84 14.4-19.2l2.4 3.6c-5.76 2.88-8.64 6.48-8.64 12h7.2v10.8H29.6v-7.2z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <blockquote className="testimonial-quote">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <cite className="testimonial-source">
+                  {t.source}
+                </cite>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

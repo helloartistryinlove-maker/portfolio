@@ -11,6 +11,7 @@ const featured = [
     location: "PROVENCE, FRANCE",
     title: "Julianne & Matteo",
     duration: "04:22",
+    videoUrl: "/wedding-trailer.mp4",
     alt: "Cinematic shot of a couple walking through a golden sunlit field at dusk, soft warm tones and lens flare",
   },
   {
@@ -18,6 +19,7 @@ const featured = [
     location: "LAKE COMO, ITALY",
     title: "Sophia & Alexander",
     duration: "05:45",
+    videoUrl: "/wedding-trailer.mp4",
     alt: "Elegant indoor wedding reception with long tables, tall candles, and soft ambient lighting in a historic European villa",
   },
   {
@@ -54,6 +56,7 @@ const archives = [
     aspect: "4/5",
     cols: "md:col-span-7",
     offset: "",
+    videoUrl: "/wedding-trailer.mp4",
     alt: "Editorial portrait of a groom in a classic tuxedo sitting in a vintage velvet chair with moody lighting",
   },
   {
@@ -74,6 +77,7 @@ const archives = [
     aspect: "21/9",
     cols: "md:col-span-12",
     offset: "",
+    videoUrl: "/wedding-trailer.mp4",
     alt: "Wide cinematic landscape of the Scottish highlands with a small white chapel in the distance under a dramatic sky",
     hasViewStory: true,
   },
@@ -115,14 +119,16 @@ function PlayIcon() {
   );
 }
 
-/* ─── Black media placeholder ────────────────────────────── */
-function BlackPlaceholder({
+/* ─── Film Media (Image/Video) ────────────────────────────── */
+function FilmMedia({
   aspect,
   alt,
+  videoUrl,
   showPlay = true,
 }: {
   aspect: string;
   alt: string;
+  videoUrl?: string;
   showPlay?: boolean;
 }) {
   return (
@@ -140,18 +146,30 @@ function BlackPlaceholder({
         width: "100%",
       }}
     >
-      {/* subtle film-grain texture */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            "radial-gradient(ellipse 80% 60% at 60% 30%, rgba(80,70,50,.13), transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      {showPlay && (
+      {videoUrl ? (
+        <video
+          src={videoUrl}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      ) : (
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage:
+              "radial-gradient(ellipse 80% 60% at 60% 30%, rgba(80,70,50,.13), transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+      )}
+      
+      {showPlay && !videoUrl && (
         <div
           style={{
             position: "relative",
@@ -291,7 +309,7 @@ export default function FilmsPage() {
         .archive-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: clamp(24px, 4vw, 24px);
+          gap: clamp(24px, 4vw, 32px);
           row-gap: clamp(40px, 8vw, 80px);
           align-items: start;
         }
@@ -302,21 +320,6 @@ export default function FilmsPage() {
             row-gap: 80px;
           }
         }
-        .archive-grid > * { grid-column: 1 / -1 !important; grid-column-start: auto !important; margin-top: 0 !important; }
-        @media (min-width: 768px) {
-          .gc-7  { grid-column: span 7 !important; }
-          .gc-4  { grid-column: 9 / span 4 !important; }
-          .gc-12 { grid-column: span 12 !important; }
-          .gc-5  { grid-column: span 5 !important; }
-          .gc-6  { grid-column: 7 / span 6 !important; }
-        }
-
-        /* Grid column helpers */
-        .gc-7  { grid-column: span 7; }
-        .gc-4  { grid-column: 9 / span 4; }
-        .gc-12 { grid-column: span 12; }
-        .gc-5  { grid-column: span 5; }
-        .gc-6  { grid-column: 7 / span 6; }
 
         /* CTA section */
         .cta-border-box {
@@ -470,8 +473,8 @@ export default function FilmsPage() {
             {featured.map((film) => (
               <div key={film.id} className="cin-card">
                 <div className="film-thumb" style={{ marginBottom: 16 }}>
-                  <BlackPlaceholder aspect="16/9" alt={film.alt} />
-                  <div className="play-overlay" aria-hidden="true"><PlayIcon /></div>
+                  <FilmMedia aspect="16/9" alt={film.alt} videoUrl={(film as any).videoUrl} />
+                  {! (film as any).videoUrl && <div className="play-overlay" aria-hidden="true"><PlayIcon /></div>}
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <div>
@@ -518,49 +521,6 @@ export default function FilmsPage() {
             ))}
           </div>
         </section>
-
-        {/* ── 3. EDITORIAL QUOTE ───────────────────────────────── */}
-        <section
-          style={{
-            background: "var(--bg-surface,#f5f3ee)",
-            paddingBlock: 160,
-            paddingInline: "5vw",
-            marginBottom: 160,
-          }}
-        >
-          <div style={{ maxWidth: 900, marginInline: "auto", textAlign: "center" }}>
-            <blockquote
-              style={{
-                fontFamily: "var(--font-serif,'Noto Serif',serif)",
-                fontSize: "clamp(1.75rem,4.5vw,48px)",
-                fontWeight: 400,
-                fontStyle: "italic",
-                lineHeight: 1.25,
-                color: "var(--text-primary,#1b1c19)",
-                marginBottom: 40,
-                letterSpacing: "-0.01em",
-              }}
-            >
-              &ldquo;A film is not just a recording of events, but a preservation of
-              the atmosphere that lived between the frames.&rdquo;
-            </blockquote>
-            <cite
-              style={{
-                fontFamily: "var(--font-sans,'Manrope',sans-serif)",
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--text-muted,#747878)",
-                fontStyle: "normal",
-              }}
-            >
-              — Elias Thorne, Creative Director
-            </cite>
-          </div>
-        </section>
-
-        {/* ── 4. ARCHIVES GRID ──────────────────────────────────── */}
         <section style={{ paddingInline: "5vw", marginBottom: 160 }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
 
@@ -621,8 +581,8 @@ export default function FilmsPage() {
                       }
                     >
                       <div className="film-thumb" style={{ marginBottom: 16 }}>
-                        <BlackPlaceholder aspect={film.aspect} alt={film.alt} />
-                        <div className="play-overlay" aria-hidden="true"><PlayIcon /></div>
+                        <FilmMedia aspect={film.aspect} alt={film.alt} videoUrl={(film as any).videoUrl} />
+                        {! (film as any).videoUrl && <div className="play-overlay" aria-hidden="true"><PlayIcon /></div>}
                       </div>
 
                       <div

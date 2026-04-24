@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const links = [
   { href: "/",             label: "Home" },
@@ -16,33 +16,46 @@ const links = [
 export function Navigation() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isHome = pathname === "/";
+
+  // Lock scroll when menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [open]);
 
   return (
     <>
       <style>{`
         .nav-root {
-          position: fixed;
+          position: absolute;
           top: 0;
           left: 0;
           right: 0;
           z-index: 100;
-          background: rgba(251, 249, 244, 0.92);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border-bottom: 1px solid #e4e2dd;
           display: flex;
           align-items: center;
           justify-content: space-between;
           padding: clamp(16px, 4vw, 28px) clamp(16px, 5vw, 40px);
+          background: ${isHome ? "transparent" : "#fbf9f4"};
+          transition: background 0.3s;
         }
         .nav-brand {
           font-family: var(--font-serif, "Noto Serif", serif);
           font-size: clamp(18px, 4vw, 22px);
           font-weight: 400;
           letter-spacing: -0.01em;
-          color: #1b1c19;
+          color: ${isHome ? "#ffffff" : "#1b1c19"};
           text-decoration: none;
           white-space: nowrap;
+          z-index: 101;
+          transition: color 0.4s;
+        }
+        .nav-brand.dark {
+          color: #1b1c19;
         }
         .nav-links {
           display: flex;
@@ -55,7 +68,7 @@ export function Navigation() {
           font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: #747878;
+          color: ${isHome ? "rgba(255,255,255,0.7)" : "#747878"};
           text-decoration: none;
           padding-bottom: 4px;
           border-bottom: 1px solid transparent;
@@ -63,7 +76,10 @@ export function Navigation() {
           white-space: nowrap;
         }
         .nav-link.active,
-        .nav-link:hover { color: #1b1c19; border-bottom-color: #1b1c19; }
+        .nav-link:hover {
+          color: ${isHome ? "#ffffff" : "#1b1c19"};
+          border-bottom-color: ${isHome ? "#ffffff" : "#1b1c19"};
+        }
         .nav-cta {
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 11px;
@@ -71,8 +87,8 @@ export function Navigation() {
           letter-spacing: 0.2em;
           text-transform: uppercase;
           padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
-          border: 1px solid #1b1c19;
-          color: #1b1c19;
+          border: 1px solid ${isHome ? "#ffffff" : "#1b1c19"};
+          color: ${isHome ? "#ffffff" : "#1b1c19"};
           background: transparent;
           text-decoration: none;
           transition: background 0.5s, color 0.5s;
@@ -80,23 +96,40 @@ export function Navigation() {
           border-radius: 0;
           white-space: nowrap;
         }
-        .nav-cta:hover { background: #1b1c19; color: #fbf9f4; }
+        .nav-cta:hover {
+          background: ${isHome ? "#ffffff" : "#1b1c19"};
+          color: ${isHome ? "#1b1c19" : "#fbf9f4"};
+        }
         .nav-ham {
           display: none;
           flex-direction: column;
-          gap: 5px;
+          gap: 6px;
           cursor: pointer;
           background: none;
           border: none;
           padding: 8px;
+          z-index: 101;
           -webkit-tap-highlight-color: transparent;
         }
         .nav-ham span {
           display: block;
           width: 24px;
           height: 1px;
-          background: #1b1c19;
-          transition: transform 0.3s;
+          background: ${isHome ? "#ffffff" : "#1b1c19"};
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s, background 0.3s;
+        }
+        .nav-ham.open span {
+          background: #1b1c19 !important;
+        }
+        .nav-ham.open span:nth-child(1) {
+          transform: translateY(7px) rotate(45deg);
+        }
+        .nav-ham.open span:nth-child(2) {
+          opacity: 0;
+          transform: translateX(10px);
+        }
+        .nav-ham.open span:nth-child(3) {
+          transform: translateY(-7px) rotate(-45deg);
         }
         @media (max-width: 768px) {
           .nav-links { display: none; }
@@ -104,52 +137,59 @@ export function Navigation() {
           .nav-ham   { display: flex; }
         }
         .mobile-menu {
-          display: none;
           position: fixed;
           inset: 0;
           z-index: 99;
           background: #fbf9f4;
+          display: flex;
           flex-direction: column;
           align-items: flex-start;
           justify-content: center;
           padding: 0 clamp(16px, 5vw, 40px);
-          gap: clamp(20px, 6vw, 32px);
-          overflow-y: auto;
-          padding-top: 80px;
-          padding-bottom: 60px;
+          gap: clamp(12px, 4vw, 20px);
+          transform: translateX(100%);
+          visibility: hidden;
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+          overflow: hidden;
         }
-        .mobile-menu.open { display: flex; }
+        .mobile-menu.open {
+          transform: translateX(0);
+          visibility: visible;
+        }
         .mobile-menu a {
           font-family: var(--font-serif, "Noto Serif", serif);
-          font-size: clamp(2rem, 6vw, 3.5rem);
+          font-size: clamp(2.5rem, 8vw, 4rem);
           font-weight: 400;
           color: #1b1c19;
           text-decoration: none;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
+          line-height: 1;
+        }
+        .mobile-menu.open a {
           opacity: 0.45;
-          transition: opacity 0.3s;
-          line-height: 1.1;
+          transform: translateY(0);
         }
         .mobile-menu a.active,
-        .mobile-menu a:hover { opacity: 1; }
-        .mobile-close {
-          position: absolute;
-          top: clamp(16px, 4vw, 28px);
-          right: clamp(16px, 5vw, 40px);
-          font-family: var(--font-sans, "Manrope", sans-serif);
-          font-size: 11px;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          color: #747878;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 8px;
-          -webkit-tap-highlight-color: transparent;
+        .mobile-menu.open a:hover {
+          opacity: 1;
         }
+        ${links.map((_, i) => `
+          .mobile-menu.open a:nth-child(${i + 1}) {
+            transition-delay: ${0.2 + i * 0.1}s;
+          }
+        `).join('')}
       `}</style>
 
       <nav className="nav-root">
-        <Link href="/" className="nav-brand">Artistry in Love</Link>
+        <Link 
+          href="/" 
+          className={`nav-brand${(open || !isHome) ? " dark" : ""}`} 
+          onClick={() => setOpen(false)}
+        >
+          Artistry in Love
+        </Link>
 
         <div className="nav-links">
           {links.map(({ href, label }) => (
@@ -166,20 +206,19 @@ export function Navigation() {
         <Link href="/contact-us" className="nav-cta">Inquire</Link>
 
         <button
-          className="nav-ham"
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
+          className={`nav-ham${open ? " open" : ""}`}
+          onClick={() => setOpen(!open)}
+          aria-label={open ? "Close menu" : "Open menu"}
         >
           <span /><span /><span />
         </button>
       </nav>
 
-      {/* Spacer - responsive height */}
-      <div style={{ height: "clamp(60px, 12vw, 89px)" }} />
+      {/* Spacer - responsive height, hidden on home page */}
+      {!isHome && <div style={{ height: "clamp(60px, 12vw, 89px)" }} />}
 
       {/* Mobile menu */}
       <div className={`mobile-menu${open ? " open" : ""}`} role="dialog" aria-modal="true">
-        <button className="mobile-close" onClick={() => setOpen(false)}>Close</button>
         {links.map(({ href, label }) => (
           <Link
             key={href}
