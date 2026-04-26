@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
@@ -76,7 +79,8 @@ const applicationFields = [
   { id: "name", label: "Full Name", name: "name", type: "text", required: true },
   { id: "email", label: "Email Address", name: "email", type: "email", required: true },
   { id: "phone", label: "Phone Number", name: "phone", type: "tel" },
-  { id: "portfolio", label: "Portfolio Link", name: "portfolio", type: "url" },
+  { id: "role", label: "Role Interested In", name: "role", type: "text", required: true },
+  { id: "portfolio-link", label: "Portfolio Link", name: "portfolioLink", type: "url" },
 ];
 
 function placeholderSrc() {
@@ -103,6 +107,59 @@ function PlaceholderImage({
 }
 
 export default function CareerPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  async function handleCareerSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setSubmitMessage("");
+
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      role: String(formData.get("role") ?? ""),
+      portfolioLink: String(formData.get("portfolioLink") ?? ""),
+      experience: String(formData.get("experience") ?? ""),
+      message: String(formData.get("message") ?? ""),
+      website: String(formData.get("website") ?? ""),
+    };
+
+    try {
+      const response = await fetch("/api/career", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = (await response.json().catch(() => null)) as { error?: string } | null;
+
+      if (!response.ok) {
+        setSubmitStatus("error");
+        setSubmitMessage(data?.error ?? "Unable to submit your application. Please try again.");
+        return;
+      }
+
+      form.reset();
+      setSubmitStatus("success");
+      setSubmitMessage("Application received. Our team will review it and respond soon.");
+    } catch {
+      setSubmitStatus("error");
+      setSubmitMessage("Unable to submit your application. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <>
       <style>{`
@@ -571,7 +628,7 @@ export default function CareerPage() {
             </div>
 
             <div className="career-form-panel">
-              <form action="#" method="post">
+              <form onSubmit={handleCareerSubmit}>
                 <div className="career-form-grid">
                   {applicationFields.map((field, index) => (
                     <label
@@ -588,39 +645,87 @@ export default function CareerPage() {
                         name={field.name}
                         type={field.type}
                         required={field.required}
+                        maxLength={
+                          field.name === "name"
+                            ? 100
+                            : field.name === "email"
+                              ? 200
+                              : field.name === "phone"
+                                ? 40
+                                : field.name === "role"
+                                  ? 120
+                                  : 300
+                        }
                         className="field"
                       />
                     </label>
                   ))}
 
-                  <label className="career-field-stack career-full" htmlFor="role">
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    style={{ display: "none" }}
+                  />
+
+                  <label className="career-field-stack career-full" htmlFor="experience">
                     <span className="label-sm" style={{ color: "var(--text-muted)" }}>
-                      Role Interested In
+                      Experience
                     </span>
-                    <input id="role" name="role" type="text" className="field" placeholder="Photographer / Editor / Film" />
+                    <textarea
+                      id="experience"
+                      name="experience"
+                      rows={4}
+                      className="field"
+                      maxLength={1500}
+                      placeholder="Tell us briefly about relevant projects, years of experience, and specializations."
+                      style={{ resize: "vertical" }}
+                    />
                   </label>
 
                   <label className="career-field-stack career-full" htmlFor="message">
                     <span className="label-sm" style={{ color: "var(--text-muted)" }}>
-                      Message
+                      Message *
                     </span>
                     <textarea
                       id="message"
                       name="message"
                       rows={6}
                       className="field"
+                      required
+                      maxLength={4000}
                       placeholder="Share your background, your approach to work, and why this studio feels right for you."
                       style={{ resize: "vertical" }}
                     />
                   </label>
                 </div>
 
+                {submitStatus !== "idle" ? (
+                  <p
+                    role="status"
+                    style={{
+                      marginTop: "1rem",
+                      fontSize: "0.9rem",
+                      color: submitStatus === "success" ? "var(--text-primary)" : "#9f2d2d",
+                    }}
+                  >
+                    {submitMessage}
+                  </p>
+                ) : null}
+
                 <div style={{ marginTop: "1.5rem", paddingTop: "1.25rem", borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
                   <p className="label-sm" style={{ color: "var(--text-muted)" }}>
                     We review applications manually.
                   </p>
-                  <button type="submit" className="btn-ghost">
-                    Submit Application
+                  <button
+                    type="submit"
+                    className="btn-ghost"
+                    disabled={isSubmitting}
+                    style={isSubmitting ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
+                  >
+                    {isSubmitting ? "Sending..." : "Submit Application"}
                   </button>
                 </div>
               </form>

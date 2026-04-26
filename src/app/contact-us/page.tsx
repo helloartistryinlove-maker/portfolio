@@ -57,11 +57,55 @@ const expectations = [
 
 /* ─── Page ───────────────────────────────────────────────── */
 export default function ContactUsPage() {
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setSubmitMessage("");
+
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      eventType: String(formData.get("eventType") ?? ""),
+      message: String(formData.get("message") ?? ""),
+      website: String(formData.get("website") ?? ""),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = (await response.json().catch(() => null)) as { error?: string } | null;
+
+      if (!response.ok) {
+        setSubmitStatus("error");
+        setSubmitMessage(data?.error ?? "Unable to send your inquiry. Please try again.");
+        return;
+      }
+
+      form.reset();
+      setSubmitStatus("success");
+      setSubmitMessage("We have received your inquiry. Expect a reply within 24-48 hours.");
+    } catch {
+      setSubmitStatus("error");
+      setSubmitMessage("Unable to send your inquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -141,6 +185,13 @@ export default function ContactUsPage() {
         }
         .btn-submit:hover .btn-fill { transform: translateY(0); }
         .btn-submit span { position: relative; z-index: 1; }
+        .btn-submit:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+        .btn-submit:disabled .btn-fill {
+          transform: translateY(100%);
+        }
 
         /* Hero image grayscale hover */
         .hero-img-wrap img {
@@ -442,89 +493,23 @@ export default function ContactUsPage() {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    All fields optional except email
+                    Required fields marked *
                   </span>
                 </div>
 
-                {submitted ? (
-                  /* ── Success state ── */
-                  <div
-                    style={{
-                      textAlign: "center",
-                      paddingBlock: 80,
-                      borderTop: "1px solid var(--border,#e4e2dd)",
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontFamily: "var(--font-serif,'Noto Serif',serif)",
-                        fontSize: "clamp(1.5rem,3vw,32px)",
-                        fontStyle: "italic",
-                        color: "var(--text-primary,#1b1c19)",
-                        marginBottom: 20,
-                      }}
-                    >
-                      We&rsquo;ve received your inquiry.
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: "var(--font-sans,'Manrope',sans-serif)",
-                        fontSize: 16,
-                        color: "var(--text-secondary,#5e5e5e)",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      Expect a thoughtful reply within 24–48 hours.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <div className="contact-form-grid" style={{ marginBottom: 48 }}>
 
-                      {/* Your Full Name */}
+                      {/* Name */}
                       <div>
-                        <label className="field-label" htmlFor="full-name">Your Full Name</label>
+                        <label className="field-label" htmlFor="contact-name">Name *</label>
                         <input
-                          id="full-name"
-                          name="full_name"
+                          id="contact-name"
+                          name="name"
                           type="text"
+                          required
+                          maxLength={100}
                           placeholder="Alexander Vance"
-                          className="field-minimal"
-                        />
-                      </div>
-
-                      {/* Partner's Name */}
-                      <div>
-                        <label className="field-label" htmlFor="partner-name">Partner&rsquo;s Name</label>
-                        <input
-                          id="partner-name"
-                          name="partner_name"
-                          type="text"
-                          placeholder="Elara Jade"
-                          className="field-minimal"
-                        />
-                      </div>
-
-                      {/* Event Date */}
-                      <div>
-                        <label className="field-label" htmlFor="event-date">Event Date</label>
-                        <input
-                          id="event-date"
-                          name="event_date"
-                          type="text"
-                          placeholder="MM / DD / YYYY"
-                          className="field-minimal"
-                        />
-                      </div>
-
-                      {/* Destination */}
-                      <div>
-                        <label className="field-label" htmlFor="destination">The Destination</label>
-                        <input
-                          id="destination"
-                          name="destination"
-                          type="text"
-                          placeholder="Lake Como, Italy"
                           className="field-minimal"
                         />
                       </div>
@@ -537,53 +522,90 @@ export default function ContactUsPage() {
                           name="email"
                           type="email"
                           required
+                          maxLength={200}
                           placeholder="studio@yourdomain.com"
                           className="field-minimal"
                         />
                       </div>
 
-                      {/* Referral */}
+                      {/* Phone */}
                       <div>
-                        <label className="field-label" htmlFor="referral">Referral Source</label>
-                        <select
-                          id="referral"
-                          name="referral"
+                        <label className="field-label" htmlFor="contact-phone">Phone</label>
+                        <input
+                          id="contact-phone"
+                          name="phone"
+                          type="tel"
+                          maxLength={40}
+                          placeholder="+1 212 555 0198"
                           className="field-minimal"
-                          defaultValue=""
-                        >
-                          <option value="" disabled>SELECT ONE</option>
-                          <option value="instagram">Instagram</option>
-                          <option value="planner">A Planner</option>
-                          <option value="friend">A Friend</option>
-                          <option value="press">Journal / Vogue</option>
-                          <option value="other">Other</option>
-                        </select>
+                        />
                       </div>
+
+                      {/* Event Type */}
+                      <div>
+                        <label className="field-label" htmlFor="event-type">Event Type</label>
+                        <input
+                          id="event-type"
+                          name="eventType"
+                          type="text"
+                          maxLength={120}
+                          placeholder="Wedding / Engagement / Other"
+                          className="field-minimal"
+                        />
+                      </div>
+
+                      <input
+                        type="text"
+                        name="website"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        aria-hidden="true"
+                        style={{ display: "none" }}
+                      />
 
                     </div>
 
-                    {/* Vision textarea — full width */}
+                    {/* Message textarea — full width */}
                     <div style={{ marginBottom: 64 }}>
-                      <label className="field-label" htmlFor="vision">Tell us about your vision</label>
+                      <label className="field-label" htmlFor="contact-message">Message *</label>
                       <textarea
-                        id="vision"
-                        name="vision"
+                        id="contact-message"
+                        name="message"
                         rows={5}
+                        required
+                        maxLength={4000}
                         placeholder="Describe the mood, the scale, and what draws you to our artistry..."
                         className="field-minimal"
                         style={{ resize: "none", display: "block" }}
                       />
                     </div>
 
+                    {submitStatus !== "idle" ? (
+                      <p
+                        role="status"
+                        style={{
+                          marginBottom: 32,
+                          textAlign: "center",
+                          fontFamily: "var(--font-sans,'Manrope',sans-serif)",
+                          fontSize: 14,
+                          color:
+                            submitStatus === "success"
+                              ? "var(--text-primary,#1b1c19)"
+                              : "#9f2d2d",
+                        }}
+                      >
+                        {submitMessage}
+                      </p>
+                    ) : null}
+
                     {/* Submit */}
                     <div style={{ display: "flex", justifyContent: "center" }}>
-                      <button type="submit" className="btn-submit">
+                      <button type="submit" className="btn-submit" disabled={isSubmitting}>
                         <div className="btn-fill" />
-                        <span>Submit Inquiry</span>
+                        <span>{isSubmitting ? "Sending..." : "Submit Inquiry"}</span>
                       </button>
                     </div>
-                  </form>
-                )}
+                </form>
               </div>
             </div>
           </div>
