@@ -16,7 +16,7 @@ const links = [
 export function Navigation() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const isHome = pathname === "/";
+  const isTransparent = pathname === "/" || pathname === "/blogs" || pathname === "/career";
 
   // Lock scroll when menu is open
   useEffect(() => {
@@ -40,7 +40,7 @@ export function Navigation() {
           align-items: center;
           justify-content: space-between;
           padding: clamp(16px, 4vw, 28px) clamp(16px, 5vw, 40px);
-          background: ${isHome ? "transparent" : "#fbf9f4"};
+          background: ${isTransparent ? "transparent" : "#fbf9f4"};
           transition: background 0.3s;
         }
         .nav-brand {
@@ -48,7 +48,7 @@ export function Navigation() {
           font-size: clamp(18px, 4vw, 22px);
           font-weight: 400;
           letter-spacing: -0.01em;
-          color: ${isHome ? "#ffffff" : "#1b1c19"};
+          color: ${isTransparent ? "#ffffff" : "#1b1c19"};
           text-decoration: none;
           white-space: nowrap;
           z-index: 101;
@@ -68,7 +68,7 @@ export function Navigation() {
           font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: ${isHome ? "rgba(255,255,255,0.7)" : "#747878"};
+          color: ${isTransparent ? "rgba(255,255,255,0.7)" : "#747878"};
           text-decoration: none;
           padding-bottom: 4px;
           border-bottom: 1px solid transparent;
@@ -77,8 +77,8 @@ export function Navigation() {
         }
         .nav-link.active,
         .nav-link:hover {
-          color: ${isHome ? "#ffffff" : "#1b1c19"};
-          border-bottom-color: ${isHome ? "#ffffff" : "#1b1c19"};
+          color: ${isTransparent ? "#ffffff" : "#1b1c19"};
+          border-bottom-color: ${isTransparent ? "#ffffff" : "#1b1c19"};
         }
         .nav-cta {
           font-family: var(--font-sans, "Manrope", sans-serif);
@@ -87,8 +87,8 @@ export function Navigation() {
           letter-spacing: 0.2em;
           text-transform: uppercase;
           padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
-          border: 1px solid ${isHome ? "#ffffff" : "#1b1c19"};
-          color: ${isHome ? "#ffffff" : "#1b1c19"};
+          border: 1px solid ${isTransparent ? "#ffffff" : "#1b1c19"};
+          color: ${isTransparent ? "#ffffff" : "#1b1c19"};
           background: transparent;
           text-decoration: none;
           transition: background 0.5s, color 0.5s;
@@ -97,8 +97,8 @@ export function Navigation() {
           white-space: nowrap;
         }
         .nav-cta:hover {
-          background: ${isHome ? "#ffffff" : "#1b1c19"};
-          color: ${isHome ? "#1b1c19" : "#fbf9f4"};
+          background: ${isTransparent ? "#ffffff" : "#1b1c19"};
+          color: ${isTransparent ? "#1b1c19" : "#fbf9f4"};
         }
         .nav-ham {
           display: none;
@@ -115,7 +115,7 @@ export function Navigation() {
           display: block;
           width: 24px;
           height: 1px;
-          background: ${isHome ? "#ffffff" : "#1b1c19"};
+          background: ${isTransparent ? "#ffffff" : "#1b1c19"};
           transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s, background 0.3s;
         }
         .nav-ham.open span {
@@ -185,7 +185,7 @@ export function Navigation() {
       <nav className="nav-root">
         <Link 
           href="/" 
-          className={`nav-brand${(open || !isHome) ? " dark" : ""}`} 
+          className={`nav-brand${(open || !isTransparent) ? " dark" : ""}`} 
           onClick={() => setOpen(false)}
         >
           Artistry in Love
@@ -214,8 +214,8 @@ export function Navigation() {
         </button>
       </nav>
 
-      {/* Spacer - responsive height, hidden on home page */}
-      {!isHome && <div style={{ height: "clamp(60px, 12vw, 89px)" }} />}
+      {/* Spacer - responsive height, hidden on transparent pages */}
+      {!isTransparent && <div style={{ height: "clamp(60px, 12vw, 89px)" }} />}
 
       {/* Mobile menu */}
       <div className={`mobile-menu${open ? " open" : ""}`} role="dialog" aria-modal="true">

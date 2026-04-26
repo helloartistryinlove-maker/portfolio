@@ -275,7 +275,6 @@ export default function BlogsPage() {
             grid-template-columns: 1fr;
           }
         }
-
         @media (max-width: 760px) {
           .story-grid,
           .newsletter-form {
@@ -287,110 +286,179 @@ export default function BlogsPage() {
             padding: 1.35rem;
           }
         }
+
+        .blog-hero-wrapper {
+          position: relative;
+          width: 100%;
+          height: 65vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          background: #000;
+        }
+
+        .blog-hero-video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: 0;
+        }
+
+        .blog-hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%);
+          z-index: 1;
+        }
+
+        .wedding-blogs-section {
+          padding: clamp(60px, 12vw, 120px) clamp(16px, 5vw, 40px);
+          text-align: center;
+          background: #fff;
+        }
+
+        .wedding-blogs-header {
+          margin-bottom: clamp(40px, 8vw, 80px);
+        }
+
+        .wedding-blogs-title {
+          font-family: var(--font-serif);
+          font-size: clamp(2.5rem, 6vw, 4.5rem);
+          font-weight: 400;
+          color: #1b1c19;
+          margin-bottom: 1.5rem;
+        }
+
+        .wedding-blogs-subtitle {
+          font-family: var(--font-serif);
+          font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+          font-style: italic;
+          color: #5e5e5b;
+          max-width: 800px;
+          margin-inline: auto;
+          line-height: 1.6;
+        }
+
+        .blogs-grid-3 {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          gap: clamp(32px, 5vw, 64px);
+          max-width: 1400px;
+          margin-inline: auto;
+        }
+
+        @media (min-width: 768px) {
+          .blogs-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        .blog-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .blog-item-img {
+          width: 100%;
+          aspect-ratio: 3 / 4;
+          object-fit: cover;
+          margin-bottom: 2rem;
+        }
+
+        .blog-item-title {
+          font-family: var(--font-serif);
+          font-size: clamp(1.4rem, 2vw, 1.8rem);
+          color: #1b1c19;
+          margin-bottom: 1rem;
+        }
+
+        .blog-item-desc {
+          font-family: var(--font-sans);
+          font-size: 0.9rem;
+          line-height: 1.7;
+          color: #5e5e5b;
+          max-width: 320px;
+        }
       `}</style>
 
       <div className="blogs-page">
-        <section className="blog-section" style={{ paddingTop: "calc(var(--stack-lg) + 80px)" }}>
-          <div className="page-wrap">
-            <RevealOnScroll>
-              <div className="hero-copy">
-                <p className="label-sm" style={{ color: "var(--text-muted)" }}>Blogs</p>
-                <h1 className="headline-display hero-title">Stories that go beyond the highlight reel.</h1>
-                <p className="hero-lead">
-                  Read thoughtful editorials, styling notes, and wedding stories shaped with
-                  visual rhythm, honest moments, and a premium narrative point of view.
-                </p>
-              </div>
-            </RevealOnScroll>
+        <section className="blog-hero-wrapper">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="blog-hero-video"
+          >
+            <source src="/wedding-trailer.mp4" type="video/mp4" />
+          </video>
+          <div className="blog-hero-overlay" />
+        </section>
+
+        <section className="wedding-blogs-section">
+          <div className="wedding-blogs-header">
+            <h1 className="wedding-blogs-title">Wedding Blogs</h1>
+            <p className="wedding-blogs-subtitle">
+              &ldquo;Memories are timeless treasures of the heart, captured forever in the lens of the mind.&rdquo;
+            </p>
+          </div>
+
+          <div className="blogs-grid-3">
+            {[
+              {
+                slug: "suraj-risha-udaipur",
+                title: "Suraj & Risha, Udaipur",
+                img: "/portfolio1.jpg",
+                desc: "Suraj and Risha chose the majestic city of Udaipur for their intimate wedding celebration, blending tradition, love, and breathtaking views into one unforgettable experience."
+              },
+              {
+                slug: "shraddha-neeti-goa",
+                title: "Shraddha and Neeti, Goa",
+                img: "/portfoli2.jpg",
+                desc: "Shraddha and Neeti's wedding was more than just a beautiful event; it was a powerful statement of love and acceptance. Their wedding in Goa will be remembered for its stunning setting."
+              },
+              {
+                slug: "grace-yohan-goa",
+                title: "Grace & Yohan, Goa",
+                img: "/portfoli3.jpg",
+                desc: "Grace and Yohan recently tied the knot in a beautifully intimate ceremony in Goa, surrounded by the serene beauty of the coastal paradise. Their wedding was a heartfelt and personal affair."
+              },
+              {
+                slug: "aman-priya-jaipur",
+                title: "Aman & Priya, Jaipur",
+                img: "/foooter11.jpg",
+                desc: "A vibrant celebration of love in the Pink City. Aman and Priya's wedding was a masterclass in royal elegance, featuring historic palaces and timeless traditions."
+              },
+              {
+                slug: "sanya-rohan-tuscany",
+                title: "Sanya & Rohan, Tuscany",
+                img: "/internationalsection.jpg",
+                desc: "An editorial escape to the rolling hills of Italy. Sanya and Rohan's sunset ceremony was a testament to understated luxury and the beauty of quiet, shared moments."
+              },
+              {
+                slug: "meera-arjun-mumbai",
+                title: "Meera & Arjun, Mumbai",
+                img: "/footer8.jpg",
+                desc: "A contemporary coastal celebration in the heart of Mumbai. Meera and Arjun's wedding blended urban energy with the calm of the Arabian Sea."
+              }
+            ].map((blog, i) => (
+              <Link key={i} href={`/blogs/${blog.slug}`} className="blog-item" style={{ textDecoration: 'none' }}>
+                <img src={blog.img} alt={blog.title} className="blog-item-img" />
+                <h3 className="blog-item-title">{blog.title}</h3>
+                <p className="blog-item-desc">{blog.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
-        <section className="blog-section-tight">
-          <div className="page-wrap">
-            <nav className="category-row" aria-label="Blog categories">
-              {categories.map((category, index) => (
-                <Link key={category} href="/blogs" className={index === 0 ? "active" : ""}>
-                  {category}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        </section>
 
-        <section className="blog-section">
-          <div className="page-wrap">
-            <div className="featured-layout">
-              <RevealOnScroll className="featured-panel">
-                <MediaPlaceholder ratio="wide" label="Featured blog placeholder image" />
-                <div className="featured-panel-copy">
-                  <span className="tag">Featured Story</span>
-                  <h2 className="headline-lg" style={{ marginTop: ".9rem" }}>
-                    The Ethereal Radiance of Lake Como
-                  </h2>
-                  <p style={{ marginTop: ".7rem", fontSize: ".98rem", lineHeight: 1.75, color: "var(--text-secondary)", maxWidth: "34rem" }}>
-                    Exploring the interplay of ancient stone and shimmering waters during an
-                    intimate sunset elopement on the Italian coast.
-                  </p>
-                  <div className="feature-meta">
-                    <span className="label-sm" style={{ color: "var(--text-muted)" }}>Read Article</span>
-                    <span className="label-sm" style={{ color: "var(--text-muted)" }}>Long-form · Photo + Film</span>
-                  </div>
-                </div>
-              </RevealOnScroll>
 
-              <div className="featured-side">
-                {highlights.slice(1).map((item, index) => (
-                  <RevealOnScroll key={item.title} className="feature-card" delayMs={index * 80}>
-                    <MediaPlaceholder ratio="wide" label={`${item.label} placeholder image`} />
-                    <div className="feature-card-copy">
-                      <span className="tag">{item.label}</span>
-                      <h3>{item.title}</h3>
-                      <p>{item.text}</p>
-                      <div className="feature-meta">
-                        <span className="label-sm" style={{ color: "var(--text-muted)" }}>{item.meta}</span>
-                        <span className="label-sm" style={{ color: "var(--text-muted)" }}>Open Story</span>
-                      </div>
-                    </div>
-                  </RevealOnScroll>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <section className="blog-section-tight" style={{ background: "var(--bg-surface)" }}>
-          <div className="page-wrap">
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "end", marginBottom: "1.75rem", flexWrap: "wrap" }}>
-              <div>
-                <p className="label-sm" style={{ color: "var(--text-muted)", marginBottom: "1rem" }}>Story Highlights</p>
-                <h2 className="headline-lg">Browse recent notes and editorial chapters.</h2>
-              </div>
-              <Link href="/contact-us" className="link-underline">Suggest a Topic</Link>
-            </div>
-
-            <div className="story-grid">
-              {cards.map((card, idx) => (
-                <RevealOnScroll key={card.id} className="story-card" delayMs={idx * 70}>
-                  <MediaPlaceholder ratio="portrait" label={`${card.title} blog placeholder image`} />
-                  <div className="story-copy">
-                    <div className="story-note">
-                      <span>{card.category}</span>
-                      <span>{card.date}</span>
-                    </div>
-                    <h3>{card.title}</h3>
-                    <p>{card.summary}</p>
-                  </div>
-                </RevealOnScroll>
-              ))}
-            </div>
-
-            <div className="archive-cta">
-              <button className="btn-secondary sheen" type="button">
-                View Archive
-              </button>
-            </div>
-          </div>
-        </section>
 
         <section className="blog-section newsletter-shell">
           <div className="page-wrap">
@@ -415,26 +483,6 @@ export default function BlogsPage() {
           </div>
         </section>
 
-        <section className="blog-section-tight">
-          <div className="page-wrap">
-            <RevealOnScroll>
-              <CtaStrip
-                title="Planning your own story chapter?"
-                text="Share your date, city, and moodboard to receive tailored availability and collections."
-                primaryLabel="Check Availability"
-                primaryHref="/contact-us"
-                secondaryLabel="View Films"
-                secondaryHref="/films"
-              />
-            </RevealOnScroll>
-
-            <div style={{ textAlign: "center", paddingTop: "1.5rem" }}>
-              <Link href="/contact-us" className="btn-secondary sheen">
-                Contact The Studio
-              </Link>
-            </div>
-          </div>
-        </section>
       </div>
     </>
   );

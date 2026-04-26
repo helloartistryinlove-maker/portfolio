@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 type Role = {
   title: string;
@@ -470,195 +471,77 @@ export default function CareerPage() {
             grid-column: span 1;
           }
         }
+
+        .career-hero {
+          position: relative;
+          width: 100%;
+          height: 80vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          background: #000;
+        }
+
+        .career-hero-bg {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: 0;
+          opacity: 0.8;
+          filter: blur(5px);
+          transform: scale(1.1);
+        }
+
+        .career-hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%);
+          z-index: 1;
+        }
+
+        .career-hero-content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+          color: #fff;
+          padding: 20px;
+        }
+
+        .career-hero-title {
+          font-family: var(--font-script);
+          font-size: clamp(3rem, 10vw, 6.5rem);
+          font-weight: 400;
+          margin-bottom: 0.5rem;
+          line-height: 1;
+          color: #fbf9f4;
+          text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .career-hero-subtitle {
+          font-family: var(--font-sans);
+          font-size: 0.8rem;
+          letter-spacing: 0.4em;
+          text-transform: uppercase;
+          opacity: 0.9;
+        }
       `}</style>
 
       <div className="career-page">
-        <section className="career-section" style={{ paddingTop: "calc(var(--stack-lg) + 60px)" }}>
-          <div className="page-wrap">
-            <div className="career-hero-grid">
-              <div>
-                <p className="label-sm career-kicker">Join The Collective</p>
-                <h1 className="headline-display career-title">Documenting love as fine art.</h1>
-                <p className="career-lead">
-                  We are a selectively grown studio built for people who care about cinematic
-                  storytelling, quiet luxury, and the discipline required to make work feel timeless.
-                </p>
-
-                <div className="career-hero-actions">
-                  <Link href="#application" className="btn-ghost">
-                    Apply Now
-                  </Link>
-                  <Link href="#roles" className="link-underline">
-                    View Open Roles
-                  </Link>
-                </div>
-
-                <div className="career-stat-row" aria-label="Studio highlights">
-                  <div className="career-stat">
-                    <strong>Selective</strong>
-                    <span>We hire slowly and intentionally.</span>
-                  </div>
-                  <div className="career-stat">
-                    <strong>Editorial</strong>
-                    <span>Strong taste matters as much as skill.</span>
-                  </div>
-                  <div className="career-stat">
-                    <strong>Global</strong>
-                    <span>Travel, destination work, and premium events.</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <PlaceholderImage
-                  alt="Black studio placeholder representing the Careers hero image"
-                  variant="wide"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="career-section-tight" style={{ background: "var(--bg-surface)" }}>
-          <div className="page-wrap">
-            <div className="career-copy-grid" style={{ marginBottom: "clamp(1.2rem, 3vw, 2rem)" }}>
-              <div className="career-copy-wide">
-                <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
-                  Why Join Us
-                </p>
-                <h2 className="headline-lg" style={{ maxWidth: "12ch" }}>
-                  A studio where restraint creates desire.
-                </h2>
-              </div>
-              <div className="career-copy-side" style={{ paddingTop: ".4rem" }}>
-                <p style={{ fontSize: "clamp(1rem, 1.5vw, 1rem)", lineHeight: 1.7, color: "var(--text-secondary)" }}>
-                  Every role here contributes to an experience that feels composed, personal, and
-                  high-touch. We value taste, calm execution, and the ability to make people feel seen.
-                </p>
-              </div>
-            </div>
-
-            <div className="career-values-grid">
-              {values.map((value) => (
-                <div key={value.number} className="career-value-card">
-                  <div>
-                    <p className="label-sm" style={{ marginBottom: "clamp(0.75rem, 2vw, 1rem)", color: "var(--text-muted)" }}>
-                      {value.number}
-                    </p>
-                    <h3 className="headline-md" style={{ marginBottom: ".75rem" }}>
-                      {value.title}
-                    </h3>
-                    <p>{value.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="career-section" id="roles">
-          <div className="page-wrap">
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "clamp(12px, 3vw, 1rem)", alignItems: "end", marginBottom: "clamp(1.2rem, 3vw, 2rem)", flexWrap: "wrap" }}>
-              <div>
-                <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
-                  Available Opportunities
-                </p>
-                <h2 className="headline-lg">Open Positions</h2>
-              </div>
-              <p className="label-sm" style={{ color: "var(--text-muted)" }}>
-                Hiring selectively this season
-              </p>
-            </div>
-
-            <div className="career-roles">
-              {roles.map((role) => (
-                <div key={role.title} className="career-role-row">
-                  <div>
-                    <h3 className="headline-md career-role-title">{role.title}</h3>
-                    <p className="career-role-meta">{role.location}</p>
-                  </div>
-                  <div>
-                    <p className="career-role-summary">{role.summary}</p>
-                  </div>
-                  <div className="career-role-action">
-                    <Link href="#application" className="link-underline">
-                      Apply Now
-                    </Link>
-                    <p className="label-sm" style={{ marginTop: ".75rem", color: "var(--text-muted)" }}>
-                      {role.type}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="career-section-tight" style={{ background: "var(--bg-surface)" }}>
-          <div className="page-wrap career-values-2col">
-            <div className="career-manifesto">
-              <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
-                What We Look For
-              </p>
-              <blockquote>
-                We hire people who can hold a room with their taste, then disappear into the work.
-              </blockquote>
-              <p style={{ fontSize: "clamp(1rem, 1.5vw, 1rem)", lineHeight: 1.7, color: "var(--text-secondary)", maxWidth: "34rem" }}>
-                The right person understands that luxury is not loud. It is precise, disciplined,
-                and deeply considered from the first client call to the final delivery.
-              </p>
-            </div>
-
-            <div className="career-traits">
-              {traits.map((trait, index) => (
-                <div key={trait} className="career-trait">
-                  <p className="label-sm" style={{ marginBottom: ".6rem", color: "var(--text-muted)" }}>
-                    0{index + 1}
-                  </p>
-                  <strong>{trait}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="career-section-tight">
-          <div className="page-wrap">
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "clamp(12px, 3vw, 1rem)", alignItems: "end", marginBottom: "clamp(1rem, 2vw, 1.5rem)", flexWrap: "wrap" }}>
-              <div>
-                <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
-                  Studio Culture
-                </p>
-                <h2 className="headline-lg">Moments In-Between</h2>
-              </div>
-              <p className="label-sm" style={{ color: "var(--text-muted)" }}>
-                The archive
-              </p>
-            </div>
-
-            <div className="career-gallery-grid">
-              <div className="career-gallery-card">
-                <PlaceholderImage alt="Black studio placeholder for a vertical culture image" />
-                <div className="career-gallery-caption">
-                  <span className="label-sm">On Set</span>
-                  <span className="label-sm" style={{ color: "var(--text-muted)" }}>Quiet focus</span>
-                </div>
-              </div>
-              <div className="career-gallery-card">
-                <PlaceholderImage alt="Black studio placeholder for a second culture image" />
-                <div className="career-gallery-caption">
-                  <span className="label-sm">Travel</span>
-                  <span className="label-sm" style={{ color: "var(--text-muted)" }}>Destination work</span>
-                </div>
-              </div>
-              <div className="career-gallery-card">
-                <PlaceholderImage alt="Black studio placeholder for a third culture image" />
-                <div className="career-gallery-caption">
-                  <span className="label-sm">Post</span>
-                  <span className="label-sm" style={{ color: "var(--text-muted)" }}>Refined delivery</span>
-                </div>
-              </div>
-            </div>
+        <section className="career-hero">
+          <img 
+            src="/portfolio1.jpg" 
+            alt="Careers Hero" 
+            className="career-hero-bg" 
+          />
+          <div className="career-hero-overlay" />
+          <div className="career-hero-content">
+            <RevealOnScroll>
+              <h1 className="career-hero-title">Make your story with us</h1>
+              <p className="career-hero-subtitle">we are hiring</p>
+            </RevealOnScroll>
           </div>
         </section>
 
