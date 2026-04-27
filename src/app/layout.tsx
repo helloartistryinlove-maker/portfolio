@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${serifFont.variable} ${sansFont.variable} ${scriptFont.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${serifFont.variable} ${sansFont.variable} ${scriptFont.variable}`}>
       <body>
         <Navigation />
         <main>{children}</main>

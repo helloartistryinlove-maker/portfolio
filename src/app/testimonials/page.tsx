@@ -66,17 +66,17 @@ export default function TestimonialsPage() {
           align-items: center;
           justify-content: center;
           overflow: hidden;
-          background: #fff;
+          background: var(--bg-surface);
         }
 
         .testimonial-strip.media-strip {
-          background: #000;
-          color: #fff;
+          background: linear-gradient(180deg, #4a372c 0%, #2d231c 100%);
+          color: var(--bg-surface);
         }
 
         .testimonial-strip.color-strip {
-          background: #fbf9f4;
-          color: #1b1c19;
+          background: var(--bg);
+          color: var(--text-primary);
         }
 
         .strip-bg {
@@ -92,7 +92,7 @@ export default function TestimonialsPage() {
         .strip-overlay {
           position: absolute;
           inset: 0;
-          background: rgba(0, 0, 0, 0.4);
+          background: rgba(45, 35, 28, 0.4);
           z-index: 1;
         }
 
@@ -120,7 +120,8 @@ export default function TestimonialsPage() {
         }
 
         .media-strip .strip-author { color: #fff; }
-        .color-strip .strip-author { color: #1b1c19; }
+        .media-strip .strip-author { color: var(--bg-surface); }
+        .color-strip .strip-author { color: var(--text-primary); }
 
         .strip-more {
           font-family: var(--font-sans);
@@ -133,16 +134,16 @@ export default function TestimonialsPage() {
         }
 
         .media-strip .strip-more {
-          color: #fff;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+          color: var(--bg-surface);
+          border-bottom: 1px solid rgba(251, 247, 243, 0.3);
         }
-        .media-strip .strip-more:hover { border-bottom-color: #fff; }
+        .media-strip .strip-more:hover { border-bottom-color: var(--bg-surface); }
 
         .color-strip .strip-more {
-          color: #1b1c19;
-          border-bottom: 1px solid rgba(27, 28, 25, 0.3);
+          color: var(--text-primary);
+          border-bottom: 1px solid rgba(45, 35, 28, 0.3);
         }
-        .color-strip .strip-more:hover { border-bottom-color: #1b1c19; }
+        .color-strip .strip-more:hover { border-bottom-color: var(--text-primary); }
       `}</style>
 
       <div className="testimonials-page">

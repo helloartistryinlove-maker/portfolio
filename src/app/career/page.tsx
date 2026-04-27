@@ -85,7 +85,7 @@ const applicationFields = [
 
 function placeholderSrc() {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200"><rect width="1600" height="1200" fill="#111111"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200"><rect width="1600" height="1200" fill="#4a372c"/></svg>`,
   )}`;
 }
 
@@ -256,7 +256,7 @@ export default function CareerPage() {
           object-fit: cover;
           aspect-ratio: 4 / 5;
           border: 1px solid var(--border);
-          background: #111111;
+          background: linear-gradient(180deg, #4a372c 0%, #2d231c 100%);
         }
 
         .career-placeholder-wide {
@@ -563,7 +563,7 @@ export default function CareerPage() {
           position: relative;
           z-index: 2;
           text-align: center;
-          color: #fff;
+          color: var(--bg-surface);
           padding: 20px;
         }
 
@@ -573,7 +573,7 @@ export default function CareerPage() {
           font-weight: 400;
           margin-bottom: 0.5rem;
           line-height: 1;
-          color: #fbf9f4;
+          color: var(--bg-surface);
           text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
@@ -708,7 +708,7 @@ export default function CareerPage() {
                     style={{
                       marginTop: "1rem",
                       fontSize: "0.9rem",
-                      color: submitStatus === "success" ? "var(--text-primary)" : "#9f2d2d",
+                      color: submitStatus === "success" ? "var(--text-primary)" : "#8f5a49",
                     }}
                   >
                     {submitMessage}

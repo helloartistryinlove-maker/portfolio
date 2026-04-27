@@ -16,7 +16,7 @@ export function Footer() {
     <>
       <style>{`
         .footer-root {
-          background: #fdf8f8;
+          background: linear-gradient(180deg, rgba(251,247,243,0.96) 0%, rgba(242,234,228,0.98) 100%);
           padding-top: 100px;
           padding-bottom: 60px;
           text-align: center;
@@ -29,7 +29,7 @@ export function Footer() {
           font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: #1c1b1b;
+          color: var(--text-primary);
           margin-bottom: 48px;
           display: flex;
           align-items: center;
@@ -41,7 +41,7 @@ export function Footer() {
         .header-line {
           flex-grow: 1;
           height: 1px;
-          background: rgba(28,27,27,0.1);
+          background: rgba(45,35,28,0.1);
           display: block;
         }
 
@@ -50,7 +50,7 @@ export function Footer() {
           font-size: 42px;
           text-transform: none;
           letter-spacing: -0.01em;
-          color: #1c1b1b;
+          color: var(--accent);
           font-weight: 400;
           line-height: 1;
         }
@@ -83,7 +83,7 @@ export function Footer() {
           aspect-ratio: 1;
           object-fit: cover;
           flex-shrink: 0;
-          background: #e5e2e1;
+          background: var(--bg-container);
           border: none;
         }
 
@@ -96,7 +96,7 @@ export function Footer() {
           font-size: clamp(28px, 6vw, 40px);
           font-weight: 400;
           font-style: italic;
-          color: #1c1b1b;
+          color: var(--text-primary);
           margin-bottom: 12px;
           letter-spacing: -0.02em;
         }
@@ -107,7 +107,7 @@ export function Footer() {
           font-weight: 600;
           letter-spacing: 0.25em;
           text-transform: uppercase;
-          color: #5e5e5b;
+          color: var(--text-secondary);
         }
 
         .footer-bottom-links {
@@ -124,13 +124,13 @@ export function Footer() {
           font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: #747878;
+          color: var(--text-muted);
           text-decoration: none;
           transition: color 0.4s;
         }
 
         .footer-link:hover {
-          color: #1c1b1b;
+          color: var(--text-primary);
         }
 
         .footer-copyright {
@@ -138,7 +138,7 @@ export function Footer() {
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 9px;
           letter-spacing: 0.15em;
-          color: #a0a09d;
+          color: var(--text-muted);
           text-transform: uppercase;
         }
       `}</style>

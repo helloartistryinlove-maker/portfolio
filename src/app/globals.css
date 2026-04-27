@@ -1,28 +1,36 @@
 /* ── Google Fonts: Noto Serif + Manrope ─────── */
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Noto+Serif:ital,wght@0,400;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;1,400&display=swap');
 
 @import "tailwindcss";
 
-/* ── Design Tokens (Artistry in Love – Light Editorial) ─── */
+/* ── Design Tokens (Artistry in Love – Warm Editorial) ─── */
 :root {
   /* Palette */
-  --bg:                    #fbf9f4;
-  --bg-surface:            #f5f3ee;
-  --bg-container:          #f0eee9;
-  --bg-container-high:     #eae8e3;
-  --bg-on:                 #1b1c19;
+  --bg:                    #f2eae4;
+  --bg-surface:            #fbf7f3;
+  --bg-container:          #f7eee7;
+  --bg-container-high:     #ead8ca;
+  --bg-on:                 #2d231c;
 
-  --text-primary:          #1b1c19;
-  --text-secondary:        #5e5e5e;
-  --text-muted:            #747878;
-  --text-subtle:           #c4c7c7;
+  --text-primary:          #2d231c;
+  --text-secondary:        #6f5f55;
+  --text-muted:            #8b7b6f;
+  --text-subtle:           #b7a89b;
 
-  --outline:               #747878;
-  --outline-variant:       #c4c7c7;
-  --border:                #e4e2dd;
+  --outline:               #9a8678;
+  --outline-variant:       #d6c5b7;
+  --border:                #dac9ba;
 
   /* Display / action accent */
-  --gold:                  #1b1c19;   /* primary black = "gold" role in buttons */
+  --gold:                  #8a5f45;
+  --accent:                #8a5f45;
+  --accent-strong:         #5f4335;
+  --accent-soft:           #e6d7cb;
+  --surface-2:             #f6ede6;
+  --surface-3:             #ead9cb;
+  --line:                  #d8c7b8;
+  --text-2:                #6f5f55;
+  --font-logo:             "Didot", "Bodoni MT", "Bodoni 72", "Times New Roman", serif;
 
   /* Spacing tokens (from spec) */
   --stack-xl:  160px;
@@ -51,7 +59,9 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at top left, rgba(255, 250, 246, 0.72), transparent 34%),
+    linear-gradient(180deg, #f7f0ea 0%, #f2eae4 44%, #eaded2 100%);
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -133,14 +143,14 @@ img, video { display: block; max-width: 100%; }
 }
 .btn-ghost:hover {
   background: var(--text-primary);
-  color: var(--bg);
+  color: var(--bg-surface);
 }
 .btn-ghost-inv {
-  border-color: var(--bg);
-  color: var(--bg);
+  border-color: var(--bg-surface);
+  color: var(--bg-surface);
 }
 .btn-ghost-inv:hover {
-  background: var(--bg);
+  background: var(--bg-surface);
   color: var(--text-primary);
 }
 
@@ -189,7 +199,7 @@ img, video { display: block; max-width: 100%; }
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(242, 234, 228, 0.86);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
@@ -209,7 +219,7 @@ img, video { display: block; max-width: 100%; }
 
 /* ── Black placeholder ─────────────────────── */
 .media-black {
-  background: #111;
+  background: linear-gradient(180deg, #4a372c 0%, #2d231c 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -236,8 +246,8 @@ img, video { display: block; max-width: 100%; }
 
 /* ── Testimonial section (black) ───────────── */
 .section-black {
-  background: #1b1c19;
-  color: #fbf9f4;
+  background: linear-gradient(180deg, #4a372c 0%, #2d231c 100%);
+  color: #fbf7f3;
 }
 
 /* ── Process step ──────────────────────────── */
@@ -255,7 +265,7 @@ img, video { display: block; max-width: 100%; }
 ::-webkit-scrollbar-thumb { background: var(--border); }
 
 /* ── Selection ─────────────────────────────── */
-::selection { background: rgba(27, 28, 25, 0.12); }
+::selection { background: rgba(138, 95, 69, 0.18); }
 
 /* ── Reduced motion ───────────────────────── */
 @media (prefers-reduced-motion: reduce) {
@@ -369,6 +379,7 @@ img, video { display: block; max-width: 100%; }
   text-decoration: none;
 }
 .btn-primary:hover { background: var(--text-primary); color: var(--bg); }
+.btn-primary:hover { color: var(--bg-surface); }
 
 .btn-secondary {
   display: inline-flex;
@@ -389,7 +400,7 @@ img, video { display: block; max-width: 100%; }
   white-space: nowrap;
   text-decoration: none;
 }
-.btn-secondary:hover { border-color: var(--text-primary); }
+.btn-secondary:hover { border-color: var(--text-primary); background: var(--bg-surface); }
 
 /* section heading utility with gold-line — keep for other pages */
 .gold-line {

@@ -21,6 +21,7 @@ function placeholderSvg(text: string): string {
 }
 
 export default function Home() {
+  const pageRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const isHoveredRef = useRef(false);
@@ -48,18 +49,110 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const root = pageRef.current;
+    if (!root) return;
+
+    const parallaxNodes = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-parallax-speed]"),
+    );
+
+    if (!parallaxNodes.length) return;
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let rafId = 0;
+    let ticking = false;
+
+    const getIntensityFactor = () => {
+      const width = window.innerWidth;
+      if (width <= 640) return 0;
+      if (width <= 1024) return 0.45;
+      return 1;
+    };
+
+    const clearTransforms = () => {
+      parallaxNodes.forEach((node) => {
+        node.style.transform = "translate3d(0, 0, 0)";
+      });
+    };
+
+    const updateParallax = () => {
+      ticking = false;
+
+      if (reducedMotionQuery.matches) {
+        clearTransforms();
+        return;
+      }
+
+      const intensity = getIntensityFactor();
+      if (intensity === 0) {
+        clearTransforms();
+        return;
+      }
+
+      const viewportHeight = window.innerHeight;
+      const maxOffset = 64 * intensity;
+
+      parallaxNodes.forEach((node) => {
+        const speed = Number(node.dataset.parallaxSpeed ?? "0");
+        if (!Number.isFinite(speed) || speed === 0) return;
+
+        const rect = node.getBoundingClientRect();
+        const distanceFromCenter = rect.top + rect.height / 2 - viewportHeight / 2;
+        const rawOffset = -distanceFromCenter * speed * intensity;
+        const offsetY = Math.max(-maxOffset, Math.min(maxOffset, rawOffset));
+
+        node.style.transform = `translate3d(0, ${offsetY.toFixed(2)}px, 0)`;
+      });
+    };
+
+    const requestUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      rafId = window.requestAnimationFrame(updateParallax);
+    };
+
+    const handleReducedMotionChange = () => {
+      requestUpdate();
+    };
+
+    requestUpdate();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+
+    if ("addEventListener" in reducedMotionQuery) {
+      reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
+    } else {
+      reducedMotionQuery.addListener(handleReducedMotionChange);
+    }
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+
+      if ("removeEventListener" in reducedMotionQuery) {
+        reducedMotionQuery.removeEventListener("change", handleReducedMotionChange);
+      } else {
+        reducedMotionQuery.removeListener(handleReducedMotionChange);
+      }
+
+      clearTransforms();
+    };
+  }, []);
+
   return (
     <>
       <style>{`
         :root {
-          --primary-color: #000000;
-          --on-primary: #ffffff;
-          --charcoal: #1c1b1b;
-          --off-white: #fdf8f8;
-          --soft-beige: #e5e2e1;
-          --secondary-text: #5e5e5b;
-          --text-secondary: #5e5e5b;
-          --hairline: #1c1b1b;
+          --primary-color: var(--text-primary);
+          --on-primary: var(--bg-surface);
+          --charcoal: var(--text-primary);
+          --off-white: var(--bg-surface);
+          --soft-beige: var(--bg-container);
+          --secondary-text: var(--text-secondary);
+          --text-secondary: var(--text-secondary);
+          --hairline: var(--border);
         }
 
         /* ── Base section spacing ─────── */
@@ -84,6 +177,13 @@ export default function Home() {
           flex-direction: column;
           justify-content: center;
           overflow: hidden;
+          isolation: isolate;
+        }
+
+        .parallax-layer {
+          transform: translate3d(0, 0, 0);
+          will-change: transform;
+          backface-visibility: hidden;
         }
 
         .hero-bg {
@@ -94,13 +194,25 @@ export default function Home() {
           object-fit: cover;
           object-position: center 35%;
           z-index: 0;
+          transform: scale(1.04);
         }
 
         .hero-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to bottom, rgba(28,27,27,0.45) 0%, rgba(28,27,27,0.2) 40%, rgba(28,27,27,0) 100%);
+          background: linear-gradient(to bottom, rgba(45,35,28,0.42) 0%, rgba(45,35,28,0.18) 40%, rgba(45,35,28,0) 100%);
           z-index: 1;
+        }
+
+        .hero-grain {
+          position: absolute;
+          inset: -10%;
+          z-index: 1;
+          opacity: 0.22;
+          pointer-events: none;
+          background-image:
+            radial-gradient(circle at 20% 30%, rgba(251,247,243,0.22), transparent 45%),
+            radial-gradient(circle at 70% 65%, rgba(45,35,28,0.24), transparent 44%);
         }
 
         .hero-content {
@@ -114,8 +226,8 @@ export default function Home() {
           display: inline-flex;
           align-items: center;
           gap: 12px;
-          color: #ffffff;
-          font-family: Inter;
+          color: var(--bg-surface);
+          font-family: var(--font-sans);
           font-size: 14px;
           font-weight: 500;
           letter-spacing: 0.05em;
@@ -165,7 +277,7 @@ export default function Home() {
         }
 
         .intro-body {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: clamp(1rem, 2vw, 16px);
           line-height: 1.7;
           color: var(--text-secondary);
@@ -174,7 +286,7 @@ export default function Home() {
         }
 
         .intro-link {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 14px;
           font-weight: 500;
           letter-spacing: 0.05em;
@@ -190,7 +302,7 @@ export default function Home() {
         }
 
         .intro-kicker {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -223,7 +335,7 @@ export default function Home() {
         }
 
         .portfolio-kicker {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -308,7 +420,7 @@ export default function Home() {
         }
 
         .portfolio-card-location {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -322,7 +434,7 @@ export default function Home() {
           flex-direction: column;
           justify-content: center;
           padding: clamp(24px, 4vw, 48px);
-          background: var(--soft-beige);
+          background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-container) 100%);
           min-height: clamp(200px, 40vh, 300px);
         }
 
@@ -337,7 +449,7 @@ export default function Home() {
         }
 
         .portfolio-quote-source {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -379,7 +491,7 @@ export default function Home() {
         }
 
         .process-kicker {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -410,7 +522,7 @@ export default function Home() {
         }
 
         .process-step-number {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -429,7 +541,7 @@ export default function Home() {
         }
 
         .process-step-description {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: clamp(0.9rem, 1.8vw, 16px);
           line-height: 1.6;
           color: var(--text-secondary);
@@ -437,10 +549,10 @@ export default function Home() {
 
         /* ── Testimonial section ────── */
         .testimonial-wrapper {
-          background-image: linear-gradient(rgba(28,27,27,0.85), rgba(28,27,27,0.85)), url('/testimonial.jpg');
+          background-image: linear-gradient(rgba(45,35,28,0.78), rgba(45,35,28,0.78)), url('/testimonial.jpg');
           background-size: cover;
           background-position: center;
-          color: #ffffff;
+          color: var(--bg-surface);
         }
 
         .testimonial-container {
@@ -494,7 +606,7 @@ export default function Home() {
         }
 
         .testimonial-source {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -504,7 +616,7 @@ export default function Home() {
 
         /* ── CTA section ────────── */
         .cta-wrapper {
-          background: var(--off-white);
+          background: var(--bg);
         }
 
         .cta-container {
@@ -524,7 +636,7 @@ export default function Home() {
         }
 
         .cta-description {
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: clamp(1rem, 2vw, 16px);
           line-height: 1.7;
           color: var(--text-secondary);
@@ -534,10 +646,10 @@ export default function Home() {
         .cta-button {
           display: inline-block;
           padding: clamp(12px, 2.5vw, 16px) clamp(28px, 5vw, 48px);
-          border: 0.5px solid var(--charcoal);
+          border: 1px solid var(--charcoal);
           background: transparent;
           color: var(--charcoal);
-          font-family: Inter;
+          font-family: var(--font-sans);
           font-size: 12px;
           font-weight: 600;
           letter-spacing: 0.15em;
@@ -549,17 +661,71 @@ export default function Home() {
 
         .cta-button:hover {
           background: var(--charcoal);
-          color: #ffffff;
+          color: var(--bg-surface);
         }
 
         /* ── Dividers ──────────── */
         .fine-line {
           height: 0.5px;
-          background: rgba(28,27,27,0.1);
+          background: rgba(45,35,28,0.1);
           margin-block: clamp(32px, 6vw, 64px);
+        }
+
+        .section-divider {
+          position: relative;
+          height: clamp(32px, 5vw, 56px);
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          pointer-events: none;
+        }
+
+        .section-divider-line {
+          width: min(220px, 40vw);
+          height: 1px;
+          background: linear-gradient(90deg, transparent 0%, rgba(138,95,69,0.38) 50%, transparent 100%);
+        }
+
+        .section-divider-glow {
+          position: absolute;
+          width: clamp(120px, 18vw, 220px);
+          height: clamp(120px, 18vw, 220px);
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(138,95,69,0.18) 0%, transparent 72%);
+          filter: blur(18px);
+          opacity: 0.65;
+        }
+
+        .testimonial-wrapper {
+          position: relative;
+        }
+
+        .testimonial-drift {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(ellipse at 20% 20%, rgba(251,247,243,0.1), transparent 55%),
+            radial-gradient(ellipse at 75% 75%, rgba(45,35,28,0.16), transparent 60%);
+          mix-blend-mode: screen;
+          z-index: 0;
+        }
+
+        .testimonial-container,
+        .cta-container {
+          position: relative;
+          z-index: 1;
+        }
+
+        @media (max-width: 640px) {
+          .parallax-layer {
+            will-change: auto;
+          }
         }
       `}</style>
 
+      <div ref={pageRef}>
       {/* ════════════════════════════════════════════════════
           §1  HERO — Premium cinematic full-screen
           ════════════════════════════════════════════════════ */}
@@ -567,9 +733,11 @@ export default function Home() {
         <img
           src="/coverimg.jpg"
           alt="Cinematic wedding photography hero background"
-          className="hero-bg"
+          className="hero-bg parallax-layer"
+          data-parallax-speed="0.08"
         />
-        <div className="hero-overlay" />
+        <div className="hero-overlay parallax-layer" data-parallax-speed="0.04" />
+        <div className="hero-grain parallax-layer" data-parallax-speed="0.05" aria-hidden="true" />
       </section>
 
       {/* ════════════════════════════════════════════════════
@@ -595,7 +763,7 @@ export default function Home() {
             </div>
 
             {/* Image column — 6 cols on desktop, 7 cols start */}
-            <div className="intro-image">
+            <div className="intro-image parallax-layer" data-parallax-speed="0.06">
               <img
                 src="/portfolio1.jpg"
                 alt="Editorial wedding cinematography portrait"
@@ -604,6 +772,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div className="section-divider" aria-hidden="true">
+        <span className="section-divider-line" />
+        <span className="section-divider-glow parallax-layer" data-parallax-speed="0.1" />
+      </div>
 
       {/* ════════════════════════════════════════════════════
           §3  PORTFOLIO — Bento grid with asymmetrical layout
@@ -626,7 +799,7 @@ export default function Home() {
             {/* Large — 16:9, 8 cols on desktop */}
             <div className="portfolio-item-large">
               <div className="portfolio-card">
-                <div className="portfolio-img-wrapper" style={{ aspectRatio: "16 / 9" }}>
+                <div className="portfolio-img-wrapper parallax-layer" data-parallax-speed="0.05" style={{ aspectRatio: "16 / 9" }}>
                   <img
                     src="/portfoli2.jpg"
                     alt="Sienna & Alessandro — Amalfi, Italy wedding film"
@@ -642,7 +815,7 @@ export default function Home() {
             {/* Vertical — 3:4, 4 cols on desktop */}
             <div className="portfolio-item-small">
               <div className="portfolio-card">
-                <div className="portfolio-img-wrapper" style={{ aspectRatio: "3 / 4" }}>
+                <div className="portfolio-img-wrapper parallax-layer" data-parallax-speed="0.07" style={{ aspectRatio: "3 / 4" }}>
                   <img
                     src="/portfoli3.jpg"
                     alt="Chloe & Julian — Paris, France wedding film"
@@ -658,7 +831,7 @@ export default function Home() {
             {/* Medium — 4:3, 5 cols on desktop */}
             <div className="portfolio-item-medium">
               <div className="portfolio-card">
-                <div className="portfolio-img-wrapper" style={{ aspectRatio: "4 / 3" }}>
+                <div className="portfolio-img-wrapper parallax-layer" data-parallax-speed="0.06" style={{ aspectRatio: "4 / 3" }}>
                   <img
                     src="/internationalsection.jpg"
                     alt="Isabella & James — Cotswolds, UK wedding film"
@@ -673,7 +846,7 @@ export default function Home() {
 
             {/* Editorial quote section — 7 cols on desktop */}
             <div className="portfolio-item-text">
-              <div className="portfolio-quote">
+              <div className="portfolio-quote parallax-layer" data-parallax-speed="-0.03">
                 <p className="portfolio-quote-text">
                   &ldquo;They don&apos;t just film a wedding; they document a feeling. Every frame feels like a memory we didn&apos;t know we&apos;d forgotten.&rdquo;
                 </p>
@@ -691,7 +864,7 @@ export default function Home() {
         <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
           <div className="process-grid">
             {/* Left — image */}
-            <div className="process-image-wrapper">
+            <div className="process-image-wrapper parallax-layer" data-parallax-speed="0.05">
               <img
                 src="/foooter11.jpg"
                 alt="The artist at work — filmmaker's cinematography process"
@@ -734,10 +907,16 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="section-divider" aria-hidden="true">
+        <span className="section-divider-line" />
+        <span className="section-divider-glow parallax-layer" data-parallax-speed="0.09" />
+      </div>
+
       {/* ════════════════════════════════════════════════════
           §5  TESTIMONIAL — Centered quote on charcoal background
           ════════════════════════════════════════════════════ */}
       <section className="section-xl section-base testimonial-wrapper">
+        <div className="testimonial-drift parallax-layer" data-parallax-speed="-0.04" aria-hidden="true" />
         <div className="testimonial-container">
           <div 
             className="testimonial-scroll-wrapper" 
@@ -793,7 +972,7 @@ export default function Home() {
           §6  FINAL CTA — Centered call-to-action
           ════════════════════════════════════════════════════ */}
       <section className="section-xl section-base cta-wrapper">
-        <div className="cta-container">
+        <div className="cta-container parallax-layer" data-parallax-speed="-0.03">
           <h2 className="cta-headline">
             Now booking for the MMXXV Season
           </h2>
@@ -805,6 +984,7 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      </div>
     </>
   );
 }

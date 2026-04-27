@@ -40,22 +40,25 @@ export function Navigation() {
           align-items: center;
           justify-content: space-between;
           padding: clamp(16px, 4vw, 28px) clamp(16px, 5vw, 40px);
-          background: ${isTransparent ? "transparent" : "#fbf9f4"};
-          transition: background 0.3s;
+          background: ${isTransparent ? "transparent" : "rgba(242, 234, 228, 0.88)"};
+          backdrop-filter: ${isTransparent ? "none" : "blur(10px)"};
+          -webkit-backdrop-filter: ${isTransparent ? "none" : "blur(10px)"};
+          border-bottom: 1px solid ${isTransparent ? "transparent" : "var(--border)"};
+          transition: background 0.3s, border-color 0.3s;
         }
         .nav-brand {
-          font-family: var(--font-serif, "Noto Serif", serif);
+          font-family: var(--font-logo, "Didot", serif);
           font-size: clamp(18px, 4vw, 22px);
           font-weight: 400;
           letter-spacing: -0.01em;
-          color: ${isTransparent ? "#ffffff" : "#1b1c19"};
+          color: ${isTransparent ? "rgba(255,248,242,0.96)" : "var(--text-primary)"};
           text-decoration: none;
           white-space: nowrap;
           z-index: 101;
           transition: color 0.4s;
         }
         .nav-brand.dark {
-          color: #1b1c19;
+          color: var(--text-primary);
         }
         .nav-links {
           display: flex;
@@ -68,7 +71,7 @@ export function Navigation() {
           font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: ${isTransparent ? "rgba(255,255,255,0.7)" : "#747878"};
+          color: ${isTransparent ? "rgba(255,248,242,0.72)" : "var(--text-muted)"};
           text-decoration: none;
           padding-bottom: 4px;
           border-bottom: 1px solid transparent;
@@ -77,8 +80,8 @@ export function Navigation() {
         }
         .nav-link.active,
         .nav-link:hover {
-          color: ${isTransparent ? "#ffffff" : "#1b1c19"};
-          border-bottom-color: ${isTransparent ? "#ffffff" : "#1b1c19"};
+          color: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
+          border-bottom-color: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
         }
         .nav-cta {
           font-family: var(--font-sans, "Manrope", sans-serif);
@@ -87,8 +90,8 @@ export function Navigation() {
           letter-spacing: 0.2em;
           text-transform: uppercase;
           padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
-          border: 1px solid ${isTransparent ? "#ffffff" : "#1b1c19"};
-          color: ${isTransparent ? "#ffffff" : "#1b1c19"};
+          border: 1px solid ${isTransparent ? "rgba(255,248,242,0.88)" : "var(--text-primary)"};
+          color: ${isTransparent ? "rgba(255,248,242,0.96)" : "var(--text-primary)"};
           background: transparent;
           text-decoration: none;
           transition: background 0.5s, color 0.5s;
@@ -97,8 +100,8 @@ export function Navigation() {
           white-space: nowrap;
         }
         .nav-cta:hover {
-          background: ${isTransparent ? "#ffffff" : "#1b1c19"};
-          color: ${isTransparent ? "#1b1c19" : "#fbf9f4"};
+          background: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
+          color: ${isTransparent ? "var(--text-primary)" : "var(--bg-surface)"};
         }
         .nav-ham {
           display: none;
@@ -115,11 +118,11 @@ export function Navigation() {
           display: block;
           width: 24px;
           height: 1px;
-          background: ${isTransparent ? "#ffffff" : "#1b1c19"};
+          background: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
           transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s, background 0.3s;
         }
         .nav-ham.open span {
-          background: #1b1c19 !important;
+          background: var(--text-primary) !important;
         }
         .nav-ham.open span:nth-child(1) {
           transform: translateY(7px) rotate(45deg);
@@ -140,7 +143,7 @@ export function Navigation() {
           position: fixed;
           inset: 0;
           z-index: 99;
-          background: #fbf9f4;
+          background: linear-gradient(180deg, #f7f0ea 0%, #f2eae4 48%, #eaded2 100%);
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -160,7 +163,7 @@ export function Navigation() {
           font-family: var(--font-serif, "Noto Serif", serif);
           font-size: clamp(2.5rem, 8vw, 4rem);
           font-weight: 400;
-          color: #1b1c19;
+          color: var(--text-primary);
           text-decoration: none;
           opacity: 0;
           transform: translateY(30px);
@@ -188,7 +191,7 @@ export function Navigation() {
           className={`nav-brand${(open || !isTransparent) ? " dark" : ""}`} 
           onClick={() => setOpen(false)}
         >
-          Artistry in Love
+          Artistry In Love
         </Link>
 
         <div className="nav-links">

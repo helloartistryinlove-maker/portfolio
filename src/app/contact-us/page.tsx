@@ -113,21 +113,21 @@ export default function ContactUsPage() {
       <style>{`
         /* ── Contact page scoped ── */
         .contact-page {
-          background: var(--bg, #fbf9f4);
-          color: var(--text-primary, #1b1c19);
+          background: var(--bg);
+          color: var(--text-primary);
         }
 
         /* Minimal form inputs */
         .field-minimal {
           width: 100%;
           border: none;
-          border-bottom: 1px solid var(--text-primary, #1b1c19);
+          border-bottom: 1px solid var(--text-primary);
           background: transparent;
           padding: clamp(10px, 2vw, 12px) 0;
           border-radius: 0;
           font-family: var(--font-sans, 'Manrope', sans-serif);
           font-size: 16px;
-          color: var(--text-primary, #1b1c19);
+          color: var(--text-primary);
           appearance: none;
           -webkit-appearance: none;
           outline: none;
@@ -161,9 +161,9 @@ export default function ContactUsPage() {
         .btn-submit {
           position: relative;
           padding: clamp(14px, 2.5vw, 20px) clamp(32px, 6vw, 48px);
-          border: 1px solid var(--text-primary, #1b1c19);
+          border: 1px solid var(--text-primary);
           background: transparent;
-          color: var(--text-primary, #1b1c19);
+          color: var(--text-primary);
           font-family: var(--font-sans, 'Manrope', sans-serif);
           font-size: 11px;
           font-weight: 600;
@@ -175,11 +175,11 @@ export default function ContactUsPage() {
           transition: color 0.5s;
           -webkit-tap-highlight-color: transparent;
         }
-        .btn-submit:hover { color: var(--bg, #fbf9f4); }
+        .btn-submit:hover { color: var(--bg-surface, #fbf7f3); }
         .btn-submit .btn-fill {
           position: absolute;
           inset: 0;
-          background: var(--text-primary, #1b1c19);
+          background: var(--text-primary);
           transform: translateY(100%);
           transition: transform 0.5s cubic-bezier(.22,1,.36,1);
         }
@@ -241,7 +241,7 @@ export default function ContactUsPage() {
         }
 
         .expect-cell {
-          background: var(--bg, #fbf9f4);
+          background: var(--bg);
           padding: clamp(32px, 5vw, 48px) clamp(20px, 4vw, 40px);
         }
 
@@ -384,7 +384,7 @@ export default function ContactUsPage() {
                           display: "block",
                           width: 6,
                           height: 6,
-                          background: "var(--text-primary,#1b1c19)",
+                          background: "var(--text-primary)",
                           flexShrink: 0,
                         }}
                       />
@@ -405,7 +405,7 @@ export default function ContactUsPage() {
                   style={{
                     width: "100%",
                     height: "100%",
-                    background: "#0d0d0d",
+                    background: "linear-gradient(180deg, #4a372c 0%, #2d231c 100%)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -442,7 +442,7 @@ export default function ContactUsPage() {
                           display: "block",
                           width: 8,
                           height: 13,
-                          border: "1px solid rgba(255,255,255,0.12)",
+                          border: "1px solid rgba(251,247,243,0.12)",
                         }}
                       />
                     ))}
@@ -590,8 +590,8 @@ export default function ContactUsPage() {
                           fontSize: 14,
                           color:
                             submitStatus === "success"
-                              ? "var(--text-primary,#1b1c19)"
-                              : "#9f2d2d",
+                              ? "var(--text-primary)"
+                              : "#8f5a49",
                         }}
                       >
                         {submitMessage}
@@ -629,7 +629,7 @@ export default function ContactUsPage() {
                 fontWeight: 400,
                 fontStyle: "italic",
                 lineHeight: 1.3,
-                color: "var(--text-primary,#1b1c19)",
+                color: "var(--text-primary)",
                 marginBottom: 32,
               }}
             >
@@ -740,7 +740,7 @@ export default function ContactUsPage() {
                         fontWeight: 600,
                         letterSpacing: "0.15em",
                         textTransform: "uppercase",
-                        color: "var(--text-primary,#1b1c19)",
+                        color: "var(--text-primary)",
                         marginBottom: 16,
                       }}
                     >

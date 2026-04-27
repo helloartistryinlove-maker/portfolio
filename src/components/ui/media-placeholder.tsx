@@ -25,7 +25,7 @@ export function MediaPlaceholder({
         overflow: "hidden",
         borderRadius: "inherit",
         background:
-          "linear-gradient(180deg, rgba(29,22,18,0.08), transparent 55%), var(--surface-2)",
+          "linear-gradient(180deg, rgba(138,95,69,0.08), transparent 55%), var(--surface-2)",
         border: "1px solid var(--line)",
       }}
     >
@@ -34,7 +34,7 @@ export function MediaPlaceholder({
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(165deg, rgba(0,0,0,0.06), transparent 55%), var(--surface-2)",
+          background: "linear-gradient(165deg, rgba(45,35,28,0.06), transparent 55%), var(--surface-2)",
         }}
       />
       <div
@@ -54,8 +54,8 @@ export function MediaPlaceholder({
           bottom: "0.75rem",
           left: "0.75rem",
           borderRadius: "50px",
-          border: "1px solid rgba(180,123,67,0.28)",
-          background: "rgba(255,255,255,0.58)",
+          border: "1px solid rgba(138,95,69,0.28)",
+          background: "rgba(251,247,243,0.72)",
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)",
           padding: "0.2rem 0.7rem",

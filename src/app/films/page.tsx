@@ -49,7 +49,7 @@ function InteractiveVideo({ src, title, location }: { src: string; title: string
           position: "relative",
           width: "100%",
           aspectRatio: "16/9",
-          background: "#0d0d0d",
+          background: "linear-gradient(180deg, #4a372c 0%, #2d231c 100%)",
           cursor: !isPlaying ? "pointer" : "default",
           overflow: "hidden",
           borderRadius: "2px",
@@ -72,7 +72,7 @@ function InteractiveVideo({ src, title, location }: { src: string; title: string
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "rgba(0,0,0,0.2)",
+              background: "rgba(45,35,28,0.2)",
               transition: "background 0.4s ease",
             }}
           >
@@ -103,7 +103,7 @@ function InteractiveVideo({ src, title, location }: { src: string; title: string
             fontSize: "clamp(1.25rem, 3vw, 28px)",
             fontWeight: 400,
             lineHeight: 1.3,
-            color: "var(--text-primary,#1b1c19)",
+            color: "var(--text-primary)",
           }}
         >
           {title}
@@ -119,13 +119,13 @@ export default function FilmsPage() {
     <>
       <style>{`
         .films-page {
-          background: var(--bg, #fbf9f4);
-          color: var(--text-primary, #1b1c19);
+          background: var(--bg);
+          color: var(--text-primary);
           min-height: 100vh;
         }
 
         .video-wrapper:hover .video-overlay {
-          background: rgba(0,0,0,0.4) !important;
+          background: rgba(45,35,28,0.48) !important;
         }
         
         .video-wrapper:hover .play-btn-wrapper {
@@ -166,7 +166,7 @@ export default function FilmsPage() {
         }
         .reel-hole {
           width: 7px; height: 10px;
-          border: 1px solid var(--text-primary, #1b1c19);
+          border: 1px solid var(--text-primary);
           flex-shrink: 0;
         }
       `}</style>
@@ -186,7 +186,7 @@ export default function FilmsPage() {
                     fontWeight: 400,
                     lineHeight: 1.1,
                     letterSpacing: "-0.02em",
-                    color: "var(--text-primary,#1b1c19)",
+                    color: "var(--text-primary)",
                     marginBottom: "clamp(24px, 4vw, 40px)",
                     maxWidth: 760,
                   }}
@@ -201,7 +201,7 @@ export default function FilmsPage() {
                     fontFamily: "var(--font-sans,'Manrope',sans-serif)",
                     fontSize: "clamp(1rem, 2.5vw, 18px)",
                     lineHeight: 1.6,
-                    color: "var(--text-secondary,#5e5e5e)",
+                    color: "var(--text-secondary)",
                     maxWidth: 540,
                   }}
                 >

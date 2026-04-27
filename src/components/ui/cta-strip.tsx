@@ -26,8 +26,8 @@ export function CtaStrip({
         borderRadius: "1.25rem",
         padding: "clamp(1.75rem,5vw,3rem)",
         background:
-          "linear-gradient(145deg, rgba(20,18,14,1) 0%, rgba(11,10,8,1) 55%, rgba(18,16,12,1) 100%)",
-        border: "1px solid rgba(233,223,204,0.14)",
+          "linear-gradient(145deg, rgba(251,247,243,0.98) 0%, rgba(247,238,231,0.98) 52%, rgba(234,216,202,0.98) 100%)",
+        border: "1px solid var(--border)",
       }}
     >
       {/* Glow */}
@@ -40,9 +40,9 @@ export function CtaStrip({
           width: "18rem",
           height: "18rem",
           borderRadius: "50%",
-          background: "radial-gradient(circle,rgba(185,154,107,.48) 0%,transparent 70%)",
+          background: "radial-gradient(circle,rgba(138,95,69,.35) 0%,transparent 70%)",
           filter: "blur(45px)",
-          opacity: .18,
+          opacity: .24,
           pointerEvents: "none",
         }}
       />
@@ -61,7 +61,7 @@ export function CtaStrip({
             maxWidth: "480px",
             fontSize: ".9375rem",
             lineHeight: 1.65,
-            color: "var(--text-2)",
+            color: "var(--text-secondary)",
           }}
         >
           {text}

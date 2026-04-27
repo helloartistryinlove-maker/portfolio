@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CtaStrip } from "@/components/ui/cta-strip";
+import { BlogsAudioPlayer } from "@/components/ui/blogs-audio-player";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -78,7 +79,7 @@ export default function BlogsPage() {
           gap: clamp(12px, 3vw, 1.75rem);
           flex-wrap: wrap;
           padding: clamp(12px, 2vw, 1rem) 0;
-          border-bottom: 1px solid rgba(28, 27, 27, 0.08);
+          border-bottom: 1px solid rgba(45, 35, 28, 0.08);
           padding-inline: clamp(16px, 5vw, 40px);
         }
 
@@ -126,7 +127,7 @@ export default function BlogsPage() {
           position: relative;
           overflow: hidden;
           background: var(--bg-surface);
-          border: 1px solid rgba(28, 27, 27, 0.08);
+          border: 1px solid rgba(45, 35, 28, 0.08);
         }
 
         .featured-panel .media-placeholder {
@@ -145,7 +146,7 @@ export default function BlogsPage() {
 
         .feature-card {
           background: var(--bg-surface);
-          border: 1px solid rgba(28, 27, 27, 0.08);
+          border: 1px solid rgba(45, 35, 28, 0.08);
           overflow: hidden;
         }
 
@@ -174,7 +175,7 @@ export default function BlogsPage() {
           align-items: center;
           margin-top: 1rem;
           padding-top: .85rem;
-          border-top: 1px solid rgba(28, 27, 27, 0.08);
+          border-top: 1px solid rgba(45, 35, 28, 0.08);
           flex-wrap: wrap;
         }
 
@@ -241,8 +242,8 @@ export default function BlogsPage() {
 
         .newsletter-shell {
           background: var(--bg-surface);
-          border-top: 1px solid rgba(28, 27, 27, 0.08);
-          border-bottom: 1px solid rgba(28, 27, 27, 0.08);
+          border-top: 1px solid rgba(45, 35, 28, 0.08);
+          border-bottom: 1px solid rgba(45, 35, 28, 0.08);
         }
 
         .newsletter-inner {
@@ -295,7 +296,7 @@ export default function BlogsPage() {
           align-items: center;
           justify-content: center;
           overflow: hidden;
-          background: #000;
+          background: linear-gradient(180deg, #4a372c 0%, #2d231c 100%);
         }
 
         .blog-hero-video {
@@ -310,14 +311,14 @@ export default function BlogsPage() {
         .blog-hero-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%);
+          background: linear-gradient(to bottom, rgba(45,35,28,0.48) 0%, rgba(45,35,28,0.08) 50%, rgba(45,35,28,0.42) 100%);
           z-index: 1;
         }
 
         .wedding-blogs-section {
           padding: clamp(60px, 12vw, 120px) clamp(16px, 5vw, 40px);
           text-align: center;
-          background: #fff;
+          background: var(--bg-surface);
         }
 
         .wedding-blogs-header {
@@ -328,7 +329,7 @@ export default function BlogsPage() {
           font-family: var(--font-serif);
           font-size: clamp(2.5rem, 6vw, 4.5rem);
           font-weight: 400;
-          color: #1b1c19;
+          color: var(--text-primary);
           margin-bottom: 1.5rem;
         }
 
@@ -336,7 +337,7 @@ export default function BlogsPage() {
           font-family: var(--font-serif);
           font-size: clamp(1.1rem, 2.5vw, 1.5rem);
           font-style: italic;
-          color: #5e5e5b;
+          color: var(--text-secondary);
           max-width: 800px;
           margin-inline: auto;
           line-height: 1.6;
@@ -373,7 +374,7 @@ export default function BlogsPage() {
         .blog-item-title {
           font-family: var(--font-serif);
           font-size: clamp(1.4rem, 2vw, 1.8rem);
-          color: #1b1c19;
+          color: var(--text-primary);
           margin-bottom: 1rem;
         }
 
@@ -381,13 +382,14 @@ export default function BlogsPage() {
           font-family: var(--font-sans);
           font-size: 0.9rem;
           line-height: 1.7;
-          color: #5e5e5b;
+          color: var(--text-secondary);
           max-width: 320px;
         }
       `}</style>
 
       <div className="blogs-page">
         <section className="blog-hero-wrapper">
+          <BlogsAudioPlayer />
           <video
             autoPlay
             muted

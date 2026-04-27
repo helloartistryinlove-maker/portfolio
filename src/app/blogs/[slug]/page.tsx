@@ -82,7 +82,7 @@ export default function BlogPostDetail() {
           width: 100%;
           height: 80vh;
           overflow: hidden;
-          background: #000;
+          background: linear-gradient(180deg, #4a372c 0%, #2d231c 100%);
         }
 
         .post-hero-img {
@@ -100,7 +100,7 @@ export default function BlogPostDetail() {
           align-items: center;
           justify-content: center;
           text-align: center;
-          color: #fff;
+          color: var(--bg-surface);
           z-index: 2;
           padding: 20px;
         }
@@ -131,7 +131,7 @@ export default function BlogPostDetail() {
           font-family: var(--font-serif);
           font-size: clamp(1.1rem, 2.5vw, 1.4rem);
           line-height: 1.8;
-          color: #1b1c19;
+          color: var(--text-primary);
           font-style: italic;
         }
 
@@ -161,7 +161,7 @@ export default function BlogPostDetail() {
 
         .gallery-img-wrapper {
           overflow: hidden;
-          background: #fbf9f4;
+          background: var(--bg-surface);
         }
 
         .gallery-img {
@@ -180,7 +180,7 @@ export default function BlogPostDetail() {
         .post-footer-nav {
           padding: 60px 40px;
           text-align: center;
-          border-top: 1px solid #eee;
+          border-top: 1px solid var(--border);
         }
 
         .back-to-blogs {
@@ -189,7 +189,7 @@ export default function BlogPostDetail() {
           letter-spacing: 0.2em;
           text-transform: uppercase;
           text-decoration: none;
-          color: #1b1c19;
+          color: var(--text-primary);
           font-weight: 600;
           display: inline-flex;
           align-items: center;
