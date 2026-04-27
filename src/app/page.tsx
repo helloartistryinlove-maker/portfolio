@@ -119,23 +119,13 @@ export default function Home() {
     requestUpdate();
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
-
-    if ("addEventListener" in reducedMotionQuery) {
-      reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
-    } else {
-      reducedMotionQuery.addListener(handleReducedMotionChange);
-    }
+    reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
 
     return () => {
       window.cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
-
-      if ("removeEventListener" in reducedMotionQuery) {
-        reducedMotionQuery.removeEventListener("change", handleReducedMotionChange);
-      } else {
-        reducedMotionQuery.removeListener(handleReducedMotionChange);
-      }
+      reducedMotionQuery.removeEventListener("change", handleReducedMotionChange);
 
       clearTransforms();
     };
