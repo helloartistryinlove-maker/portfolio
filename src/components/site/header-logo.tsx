@@ -31,7 +31,7 @@ export function HeaderLogo({ className = "" }) {
     typeTimers.current = [];
   };
 
-  const typeZone = (key, word) => {
+  const typeZone = (key: string, word: string) => {
     word.split("").forEach((_, idx) => {
       const t = setTimeout(() => {
         setChars(prev => ({ ...prev, [key]: idx + 1 }));
