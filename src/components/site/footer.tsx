@@ -173,7 +173,7 @@ export function Footer() {
 
         <div className="footer-bottom-links">
           <Link href="/films" className="footer-link">Films</Link>
-          <Link href="/blogs" className="footer-link">Journal</Link>
+          <Link href="/blogs" className="footer-link">Blogs</Link>
           <Link href="/testimonials" className="footer-link">Testimonials</Link>
           <Link href="/contact-us" className="footer-link">Contact</Link>
           <Link href="/career" className="footer-link">Careers</Link>
