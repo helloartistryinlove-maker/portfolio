@@ -128,7 +128,7 @@ img, video { display: block; max-width: 100%; }
   align-items: center;
   justify-content: center;
   padding: 14px 32px;
-  border: 1px solid var(--text-primary);
+  border: 1px solid rgba(45, 35, 28, 0.4);
   background: transparent;
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -138,20 +138,24 @@ img, video { display: block; max-width: 100%; }
   text-transform: uppercase;
   cursor: pointer;
   border-radius: 0;
-  transition: background 0.5s, color 0.5s;
+  transition: all 0.5s ease;
   white-space: nowrap;
 }
 .btn-ghost:hover {
   background: var(--text-primary);
   color: var(--bg-surface);
+  border-color: var(--text-primary);
+  box-shadow: 0 0 15px rgba(45, 35, 28, 0.2);
 }
 .btn-ghost-inv {
-  border-color: var(--bg-surface);
+  border-color: rgba(251, 247, 243, 0.4);
   color: var(--bg-surface);
 }
 .btn-ghost-inv:hover {
   background: var(--bg-surface);
   color: var(--text-primary);
+  border-color: var(--bg-surface);
+  box-shadow: 0 0 15px rgba(251, 247, 243, 0.3);
 }
 
 /* ── Text link underline ───────────────────── */
@@ -415,6 +419,48 @@ img, video { display: block; max-width: 100%; }
 @keyframes fadeRise {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Scroll Fade-In Animations ─────────────── */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+.fade-in-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-section {
+    opacity: 1;
+    transform: translateY(0);
+    transition: none;
+  }
+}
+
+/* ── Hero Text Animations ──────────────────── */
+@keyframes letter-expand {
+  0% { letter-spacing: 0em; opacity: 0; filter: blur(4px); }
+  100% { letter-spacing: 0.05em; opacity: 1; filter: blur(0px); }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Nav for other pages stays working via navigation.tsx inline styles */

@@ -29,7 +29,7 @@ function PlayIcon() {
 }
 
 /* ─── Interactive Video Block ────────────────────────────── */
-function InteractiveVideo({ src, title, location }: { src: string; title: string; location: string }) {
+function InteractiveVideo({ src, title, location, index = 0 }: { src: string; title: string; location: string; index?: number }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -41,7 +41,7 @@ function InteractiveVideo({ src, title, location }: { src: string; title: string
   };
 
   return (
-    <div className="video-block-container" style={{ marginBottom: "clamp(40px, 8vw, 80px)" }}>
+    <div className="video-block-container fade-in-section" style={{ marginBottom: "clamp(40px, 8vw, 80px)", transitionDelay: `${(index % 4) * 0.1}s` }}>
       <div 
         className="video-wrapper"
         onClick={!isPlaying ? handlePlay : undefined}
@@ -174,7 +174,7 @@ export default function FilmsPage() {
       <div className="films-page">
 
         {/* ── 1. HERO ──────────────────────────────────────────── */}
-        <section style={{ paddingInline: "clamp(16px, 5vw, 40px)", paddingBlock: "clamp(60px, 10vw, 120px)" }}>
+        <section className="fade-in-section" style={{ paddingInline: "clamp(16px, 5vw, 40px)", paddingBlock: "clamp(60px, 10vw, 120px)" }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(12, minmax(0,1fr))", gap: "clamp(12px, 3vw, 24px)" }}>
@@ -212,14 +212,14 @@ export default function FilmsPage() {
           </div>
         </section>
 
-        {/* ── 2. VIDEO GRID ────────────────────────────────────── */}
         <div className="video-grid">
-          {videos.map((video) => (
+          {videos.map((video, index) => (
             <InteractiveVideo 
               key={video.id}
               src={video.src}
               title={video.title}
               location={video.location}
+              index={index}
             />
           ))}
         </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Noto_Serif, Great_Vibes } from "next/font/google";
 import { Footer } from "@/components/site/footer";
 import { Navigation } from "@/components/site/navigation";
+import { ScrollObserver } from "@/components/ScrollObserver";
 import "./globals.css";
 
 const serifFont = Noto_Serif({
@@ -41,6 +42,7 @@ export default function RootLayout({
     <html lang="en" data-scroll-behavior="smooth" className={`${serifFont.variable} ${sansFont.variable} ${scriptFont.variable}`}>
       <body>
         <Navigation />
+        <ScrollObserver />
         <main>{children}</main>
         <Footer />
       </body>

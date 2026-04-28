@@ -150,7 +150,7 @@ export default function TestimonialsPage() {
         {testimonials.map((t, i) => {
           const isMedia = i % 2 === 0;
           return (
-            <section key={i} className={`testimonial-strip ${isMedia ? 'media-strip' : 'color-strip'}`}>
+            <section key={i} className={`testimonial-strip fade-in-section ${isMedia ? 'media-strip' : 'color-strip'}`}>
               {isMedia && (
                 <>
                   {t.type === "video" ? (

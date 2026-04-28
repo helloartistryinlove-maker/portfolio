@@ -397,7 +397,7 @@ export default function ContactUsPage() {
               {/* Right: Black placeholder image */}
               <div
                 className="hero-img-col hero-img-wrap"
-                style={{ aspectRatio: "4 / 5", overflow: "hidden" }}
+                style={{ aspectRatio: "4 / 5", overflow: "hidden", transform: "translateY(32px)" }}
               >
                 <div
                   role="img"
@@ -454,7 +454,7 @@ export default function ContactUsPage() {
         </section>
 
         {/* ── 2. INQUIRY FORM ─────────────────────────────────── */}
-        <section style={{ paddingInline: "clamp(16px, 5vw, 40px)", marginBottom: "clamp(80px, 12vw, 160px)" }}>
+        <section className="fade-in-section" style={{ paddingInline: "clamp(16px, 5vw, 40px)", marginBottom: "clamp(80px, 12vw, 160px)" }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(12, minmax(0,1fr))", gap: "clamp(12px, 3vw, 24px)" }}>
               <div style={{ gridColumn: "1 / -1" }}>
@@ -613,6 +613,7 @@ export default function ContactUsPage() {
 
         {/* ── 3. EDITORIAL QUOTE ─────────────────────────────── */}
         <section
+          className="fade-in-section"
           style={{
             paddingInline: "5vw",
             paddingBlock: 160,
@@ -653,7 +654,7 @@ export default function ContactUsPage() {
         </section>
 
         {/* ── 4. WHAT TO EXPECT ──────────────────────────────── */}
-        <section style={{ paddingInline: "5vw", marginBottom: 160 }}>
+        <section className="fade-in-section" style={{ paddingInline: "5vw", marginBottom: 160 }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
             <div
               style={{
@@ -720,7 +721,7 @@ export default function ContactUsPage() {
         </section>
 
         {/* ── 5. CONTACT CARDS: TONAL LAYERING ──────────────── */}
-        <section style={{ paddingInline: "5vw", marginBottom: 160 }}>
+        <section className="fade-in-section" style={{ paddingInline: "5vw", marginBottom: 160 }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
             <div className="contact-cards">
               {contactCards.map((card) => (
@@ -766,7 +767,7 @@ export default function ContactUsPage() {
         </section>
 
         {/* ── 6. FINAL CTA ────────────────────────────────────── */}
-        <section style={{ paddingInline: "5vw", marginBottom: 160 }}>
+        <section className="fade-in-section" style={{ paddingInline: "5vw", marginBottom: 160 }}>
           <div style={{ maxWidth: 1320, marginInline: "auto" }}>
             <div
               style={{

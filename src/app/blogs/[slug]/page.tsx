@@ -212,7 +212,7 @@ export default function BlogPostDetail() {
           </div>
         </section>
 
-        <section className="post-story-section">
+        <section className="post-story-section fade-in-section">
           <RevealOnScroll>
             <p className="post-story-text">
               {post.story}
@@ -220,7 +220,7 @@ export default function BlogPostDetail() {
           </RevealOnScroll>
         </section>
 
-        <section className="post-gallery-section">
+        <section className="post-gallery-section fade-in-section">
           <div className="post-gallery-grid">
             {galleryImages.map((img, i) => (
               <RevealOnScroll key={i} delayMs={i % 2 * 100}>
@@ -232,7 +232,7 @@ export default function BlogPostDetail() {
           </div>
         </section>
 
-        <section className="post-footer-nav">
+        <section className="post-footer-nav fade-in-section">
           <Link href="/blogs" className="back-to-blogs">
             Back to All Stories
           </Link>

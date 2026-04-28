@@ -63,6 +63,32 @@ export function BlogsAudioPlayer() {
     };
   }, []);
 
+  // Attempt to play on first user interaction if autoplay was blocked
+  useEffect(() => {
+    if (!autoplayBlocked || isPlaying) return;
+
+    const handleInteraction = async () => {
+      if (audioRef.current && audioRef.current.paused) {
+        try {
+          await audioRef.current.play();
+          setAutoplayBlocked(false);
+        } catch {
+          // Still blocked
+        }
+      }
+    };
+
+    window.addEventListener("click", handleInteraction, { once: true });
+    window.addEventListener("touchstart", handleInteraction, { once: true });
+    window.addEventListener("scroll", handleInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+      window.removeEventListener("scroll", handleInteraction);
+    };
+  }, [autoplayBlocked, isPlaying]);
+
   const togglePlayback = async () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -117,35 +143,36 @@ export function BlogsAudioPlayer() {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          border: 1px solid rgba(251, 247, 243, 0.26);
-          background: linear-gradient(135deg, rgba(251, 247, 243, 0.18), rgba(242, 234, 228, 0.08));
-          color: var(--bg-surface);
+          border: 1px solid rgba(45, 35, 28, 0.15);
+          background: rgba(255, 255, 255, 0.85);
+          color: var(--text-primary);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
           border-radius: 999px;
           padding: 14px 18px;
-          box-shadow: 0 12px 30px rgba(45, 35, 28, 0.12);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
           cursor: pointer;
-          transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+          transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
           text-align: left;
         }
 
         .blogs-audio-button:hover {
-          transform: translateY(-1px);
-          border-color: rgba(251, 247, 243, 0.42);
-          background: linear-gradient(135deg, rgba(251, 247, 243, 0.24), rgba(242, 234, 228, 0.14));
+          transform: translateY(-2px);
+          border-color: rgba(45, 35, 28, 0.3);
+          background: #ffffff;
+          box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
         }
 
         .blogs-audio-dot {
           width: 10px;
           height: 10px;
           border-radius: 999px;
-          background: rgba(251, 247, 243, 0.42);
-          box-shadow: 0 0 0 0 rgba(251, 247, 243, 0.34);
+          background: rgba(45, 35, 28, 0.3);
+          box-shadow: 0 0 0 0 rgba(45, 35, 28, 0.2);
         }
 
         .blogs-audio-dot.is-playing {
-          background: #fff8f2;
+          background: var(--text-primary);
           animation: blogs-audio-pulse 1.8s ease-out infinite;
         }
 
@@ -179,18 +206,18 @@ export function BlogsAudioPlayer() {
           font-family: var(--font-sans);
           font-size: 11px;
           letter-spacing: 0.08em;
-          color: rgba(255, 248, 242, 0.78);
+          color: var(--text-secondary);
         }
 
         @keyframes blogs-audio-pulse {
           0% {
-            box-shadow: 0 0 0 0 rgba(255, 248, 242, 0.35);
+            box-shadow: 0 0 0 0 rgba(45, 35, 28, 0.35);
           }
           70% {
-            box-shadow: 0 0 0 10px rgba(255, 248, 242, 0);
+            box-shadow: 0 0 0 10px rgba(45, 35, 28, 0);
           }
           100% {
-            box-shadow: 0 0 0 0 rgba(255, 248, 242, 0);
+            box-shadow: 0 0 0 0 rgba(45, 35, 28, 0);
           }
         }
 

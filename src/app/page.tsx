@@ -176,21 +176,27 @@ export default function Home() {
           backface-visibility: hidden;
         }
 
-        .hero-bg {
+        .hero-bg-wrapper {
           position: absolute;
           inset: 0;
           width: 100%;
           height: 100%;
+          z-index: 0;
+        }
+
+        .hero-bg {
+          width: 100%;
+          height: 100%;
           object-fit: cover;
           object-position: center 35%;
-          z-index: 0;
-          transform: scale(1.04);
+          transform: scale(1.08);
+          filter: grayscale(100%);
         }
 
         .hero-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to bottom, rgba(45,35,28,0.42) 0%, rgba(45,35,28,0.18) 40%, rgba(45,35,28,0) 100%);
+          background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
           z-index: 1;
         }
 
@@ -713,6 +719,18 @@ export default function Home() {
             will-change: auto;
           }
         }
+        /* ── Animations ──────────── */
+        .portfolio-img-wrapper img, .process-image {
+          transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .portfolio-card:hover .portfolio-img-wrapper img {
+          transform: scale(1.05);
+        }
+
+        .process-image-wrapper:hover .process-image {
+          transform: scale(1.03);
+        }
       `}</style>
 
       <div ref={pageRef}>
@@ -720,12 +738,13 @@ export default function Home() {
           §1  HERO — Premium cinematic full-screen
           ════════════════════════════════════════════════════ */}
       <section className="hero-wrapper">
-        <img
-          src="/coverimg.jpg"
-          alt="Cinematic wedding photography hero background"
-          className="hero-bg parallax-layer"
-          data-parallax-speed="0.08"
-        />
+        <div className="hero-bg-wrapper parallax-layer" data-parallax-speed="0.08">
+          <img
+            src="/coverimg.jpg"
+            alt="Cinematic wedding photography hero background"
+            className="hero-bg"
+          />
+        </div>
         <div className="hero-overlay parallax-layer" data-parallax-speed="0.04" />
         <div className="hero-grain parallax-layer" data-parallax-speed="0.05" aria-hidden="true" />
       </section>
@@ -733,7 +752,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════
           §2  PHILOSOPHY — Asymmetrical intro with image
           ════════════════════════════════════════════════════ */}
-      <section className="section-xl section-base">
+      <section className="section-xl section-base fade-in-section">
         <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
           <div className="grid-12" style={{ alignItems: "center" }}>
             {/* Text column — 5 cols on desktop */}
@@ -771,7 +790,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════
           §3  PORTFOLIO — Bento grid with asymmetrical layout
           ════════════════════════════════════════════════════ */}
-      <section className="section-xl section-base portfolio-wrapper">
+      <section className="section-xl section-base portfolio-wrapper fade-in-section">
         <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
           {/* Header with divider */}
           <div className="portfolio-header">
@@ -850,7 +869,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════
           §4  PROCESS — 2-col image + numbered steps
           ════════════════════════════════════════════════════ */}
-      <section className="section-lg section-base">
+      <section className="section-lg section-base fade-in-section">
         <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
           <div className="process-grid">
             {/* Left — image */}
@@ -905,7 +924,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════
           §5  TESTIMONIAL — Centered quote on charcoal background
           ════════════════════════════════════════════════════ */}
-      <section className="section-xl section-base testimonial-wrapper">
+      <section className="section-xl section-base testimonial-wrapper fade-in-section">
         <div className="testimonial-drift parallax-layer" data-parallax-speed="-0.04" aria-hidden="true" />
         <div className="testimonial-container">
           <div 
@@ -961,7 +980,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════
           §6  FINAL CTA — Centered call-to-action
           ════════════════════════════════════════════════════ */}
-      <section className="section-xl section-base cta-wrapper">
+      <section className="section-xl section-base cta-wrapper fade-in-section">
         <div className="cta-container parallax-layer" data-parallax-speed="-0.03">
           <h2 className="cta-headline">
             Now booking for the MMXXV Season

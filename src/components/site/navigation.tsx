@@ -16,7 +16,23 @@ const links = [
 export function Navigation() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [logoExpanded, setLogoExpanded] = useState(false);
   const isTransparent = pathname === "/" || pathname === "/blogs" || pathname === "/career";
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLogoExpanded(true);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Lock scroll when menu is open
   useEffect(() => {
@@ -39,16 +55,16 @@ export function Navigation() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: clamp(16px, 4vw, 28px) clamp(16px, 5vw, 40px);
-          background: ${isTransparent ? "transparent" : "rgba(242, 234, 228, 0.88)"};
-          backdrop-filter: ${isTransparent ? "none" : "blur(10px)"};
-          -webkit-backdrop-filter: ${isTransparent ? "none" : "blur(10px)"};
-          border-bottom: 1px solid ${isTransparent ? "transparent" : "var(--border)"};
+          padding: clamp(24px, 5vw, 36px) clamp(24px, 5vw, 40px);
+          background: ${isTransparent ? (isScrolled ? "rgba(0, 0, 0, 0.4)" : "transparent") : "rgba(242, 234, 228, 0.88)"};
+          backdrop-filter: ${isTransparent && !isScrolled ? "none" : "blur(12px)"};
+          -webkit-backdrop-filter: ${isTransparent && !isScrolled ? "none" : "blur(12px)"};
+          border-bottom: 1px solid ${isTransparent || pathname === '/films' || pathname === '/contact-us' ? "transparent" : "var(--border)"};
           transition: background 0.3s, border-color 0.3s;
         }
         .nav-brand {
-          font-family: var(--font-logo, "Didot", serif);
-          font-size: clamp(18px, 4vw, 22px);
+          font-family: var(--font-serif, "Noto Serif", serif);
+          font-size: clamp(22px, 5vw, 28px);
           font-weight: 400;
           letter-spacing: -0.01em;
           color: ${isTransparent ? "rgba(255,248,242,0.96)" : "var(--text-primary)"};
@@ -63,13 +79,13 @@ export function Navigation() {
         .nav-links {
           display: flex;
           align-items: center;
-          gap: clamp(24px, 6vw, 48px);
+          gap: clamp(32px, 6vw, 64px);
         }
         .nav-link {
           font-family: var(--font-sans, "Manrope", sans-serif);
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 600;
-          letter-spacing: 0.2em;
+          letter-spacing: 0.18em;
           text-transform: uppercase;
           color: ${isTransparent ? "rgba(255,248,242,0.72)" : "var(--text-muted)"};
           text-decoration: none;
@@ -85,16 +101,16 @@ export function Navigation() {
         }
         .nav-cta {
           font-family: var(--font-sans, "Manrope", sans-serif);
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 600;
-          letter-spacing: 0.2em;
+          letter-spacing: 0.18em;
           text-transform: uppercase;
           padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
-          border: 1px solid ${isTransparent ? "rgba(255,248,242,0.88)" : "var(--text-primary)"};
+          border: 1px solid ${isTransparent ? "rgba(255,248,242,0.4)" : "rgba(45,35,28,0.4)"};
           color: ${isTransparent ? "rgba(255,248,242,0.96)" : "var(--text-primary)"};
           background: transparent;
           text-decoration: none;
-          transition: background 0.5s, color 0.5s;
+          transition: all 0.5s ease;
           cursor: pointer;
           border-radius: 0;
           white-space: nowrap;
@@ -102,6 +118,8 @@ export function Navigation() {
         .nav-cta:hover {
           background: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
           color: ${isTransparent ? "var(--text-primary)" : "var(--bg-surface)"};
+          border-color: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
+          box-shadow: ${isTransparent ? "0 0 15px rgba(255,248,242,0.2)" : "0 0 15px rgba(45,35,28,0.2)"};
         }
         .nav-ham {
           display: none;
@@ -191,7 +209,13 @@ export function Navigation() {
           className={`nav-brand${(open || !isTransparent) ? " dark" : ""}`} 
           onClick={() => setOpen(false)}
         >
-          Artistry In Love
+          {!logoExpanded ? (
+            <span style={{ animation: "fade-in 1s ease-out forwards" }}>AIL</span>
+          ) : (
+            <span style={{ display: "inline-block", animation: "letter-expand 2s cubic-bezier(0.25, 1, 0.5, 1) forwards" }}>
+              Artistry In Love
+            </span>
+          )}
         </Link>
 
         <div className="nav-links">

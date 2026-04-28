@@ -602,7 +602,7 @@ export default function CareerPage() {
           </div>
         </section>
 
-        <section className="career-section" id="application">
+        <section className="career-section fade-in-section" id="application">
           <div className="page-wrap career-form-shell">
             <div>
               <p className="label-sm" style={{ marginBottom: "clamp(.75rem, 2vw, 1rem)" }}>
@@ -733,7 +733,7 @@ export default function CareerPage() {
           </div>
         </section>
 
-        <section className="career-section-tight career-final-cta">
+        <section className="career-section-tight career-final-cta fade-in-section">
           <div className="page-wrap" style={{ maxWidth: "900px" }}>
             <p className="label-sm" style={{ marginBottom: "1rem" }}>
               Final Invitation

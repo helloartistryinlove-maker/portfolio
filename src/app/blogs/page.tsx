@@ -402,7 +402,7 @@ export default function BlogsPage() {
           <div className="blog-hero-overlay" />
         </section>
 
-        <section className="wedding-blogs-section">
+        <section className="wedding-blogs-section fade-in-section">
           <div className="wedding-blogs-header">
             <h1 className="wedding-blogs-title">Wedding Blogs</h1>
             <p className="wedding-blogs-subtitle">
@@ -449,7 +449,7 @@ export default function BlogsPage() {
                 desc: "A contemporary coastal celebration in the heart of Mumbai. Meera and Arjun's wedding blended urban energy with the calm of the Arabian Sea."
               }
             ].map((blog, i) => (
-              <Link key={i} href={`/blogs/${blog.slug}`} className="blog-item" style={{ textDecoration: 'none' }}>
+              <Link key={i} href={`/blogs/${blog.slug}`} className="blog-item fade-in-section" style={{ textDecoration: 'none', transitionDelay: `${(i % 3) * 0.1}s` }}>
                 <img src={blog.img} alt={blog.title} className="blog-item-img" />
                 <h3 className="blog-item-title">{blog.title}</h3>
                 <p className="blog-item-desc">{blog.desc}</p>
@@ -462,7 +462,7 @@ export default function BlogsPage() {
 
 
 
-        <section className="blog-section newsletter-shell">
+        <section className="blog-section newsletter-shell fade-in-section">
           <div className="page-wrap">
             <div className="newsletter-inner">
               <h2 className="headline-lg" style={{ marginBottom: "1rem" }}>Join the Inner Circle</h2>
