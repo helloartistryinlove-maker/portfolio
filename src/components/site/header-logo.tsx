@@ -24,7 +24,7 @@ const ERASE_DELAY  = 35;
 export function HeaderLogo({ className = "" }) {
   const [phase, setPhase] = useState("ail");
   const [chars, setChars] = useState({ a: 0, i: 0, l: 0 });
-  const typeTimers = useRef([]);
+  const typeTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const clearTypeTimers = () => {
     typeTimers.current.forEach(clearTimeout);
@@ -60,7 +60,7 @@ export function HeaderLogo({ className = "" }) {
 
   useEffect(() => {
     let active = true;
-    const timers = [];
+    const timers: ReturnType<typeof setTimeout>[] = [];
 
     const run = () => {
       timers.forEach(clearTimeout);
@@ -74,7 +74,7 @@ export function HeaderLogo({ className = "" }) {
           if (!active) return;
           setPhase(step.phase);
           const key = PHASE_TO_KEY[step.phase];
-          if (key) typeZone(key, ZONES.find(z => z.key === key).rest);
+          if (key) { const z = ZONES.find(z => z.key === key); if (z) typeZone(key, z.rest); }
           if (step.phase === "collapse") eraseAll();
         }, cursor));
       }
