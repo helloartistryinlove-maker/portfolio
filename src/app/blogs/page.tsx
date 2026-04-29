@@ -1,6 +1,9 @@
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { CtaStrip } from "@/components/ui/cta-strip";
-import { BlogsAudioPlayer } from "@/components/ui/blogs-audio-player";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -35,6 +38,73 @@ const highlights = [
     meta: "Style Tips",
   },
 ];
+
+function BlogHeroMedia() {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const update = () => setIsMobile(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const node = wrapperRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3, rootMargin: "140px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={wrapperRef} className="blog-hero-wrapper">
+      {isMobile ? (
+        <Image
+          src="/testimonial.jpg"
+          alt="Wedding film still"
+          fill
+          priority
+          sizes="100vw"
+          quality={80}
+          className="blog-hero-video"
+        />
+      ) : (
+        <video
+          autoPlay={shouldLoad}
+          muted
+          playsInline
+          loop
+          preload="none"
+          poster="/testimonial.jpg"
+          className="blog-hero-video"
+        >
+          {shouldLoad ? (
+            <>
+              <source src="/wedding-trailer.webm" type="video/webm" />
+              <source src="/wedding-trailer.mp4" type="video/mp4" />
+            </>
+          ) : null}
+        </video>
+      )}
+      <div className="blog-hero-overlay" />
+    </div>
+  );
+}
 
 export default function BlogsPage() {
   return (
@@ -364,11 +434,18 @@ export default function BlogsPage() {
           text-align: center;
         }
 
-        .blog-item-img {
+        .blog-item-img-wrap {
+          position: relative;
           width: 100%;
           aspect-ratio: 3 / 4;
-          object-fit: cover;
+          overflow: hidden;
           margin-bottom: 2rem;
+        }
+
+        .blog-item-img {
+          object-fit: cover;
+          display: block;
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .blog-item-title {
@@ -388,18 +465,8 @@ export default function BlogsPage() {
       `}</style>
 
       <div className="blogs-page">
-        <section className="blog-hero-wrapper">
-          <BlogsAudioPlayer />
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="blog-hero-video"
-          >
-            <source src="/wedding-trailer.mp4" type="video/mp4" />
-          </video>
-          <div className="blog-hero-overlay" />
+        <section>
+          <BlogHeroMedia />
         </section>
 
         <section className="wedding-blogs-section fade-in-section">
@@ -450,7 +517,16 @@ export default function BlogsPage() {
               }
             ].map((blog, i) => (
               <Link key={i} href={`/blogs/${blog.slug}`} className="blog-item fade-in-section" style={{ textDecoration: 'none', transitionDelay: `${(i % 3) * 0.1}s` }}>
-                <img src={blog.img} alt={blog.title} className="blog-item-img" />
+                <div className="blog-item-img-wrap">
+                  <Image
+                    src={blog.img}
+                    alt={blog.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 30vw"
+                    quality={80}
+                    className="blog-item-img"
+                  />
+                </div>
                 <h3 className="blog-item-title">{blog.title}</h3>
                 <p className="blog-item-desc">{blog.desc}</p>
               </Link>

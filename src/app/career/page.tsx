@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import React, { useState } from "react";
 import Link from "next/link";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
@@ -103,13 +104,25 @@ function PlaceholderImage({
         ? "career-placeholder-tall"
         : "";
 
-  return <img src={placeholderSrc()} alt={alt} className={`career-placeholder ${variantClass}`} />;
+  return (
+    <Image
+      src={placeholderSrc()}
+      alt={alt}
+      width={1600}
+      height={1200}
+      sizes="(max-width: 768px) 100vw, 50vw"
+      quality={80}
+      className={`career-placeholder ${variantClass}`}
+    />
+  );
 }
 
 export default function CareerPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const messageRef = React.useRef<HTMLParagraphElement>(null);
 
   async function handleCareerSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -152,6 +165,11 @@ export default function CareerPage() {
       form.reset();
       setSubmitStatus("success");
       setSubmitMessage("Application received. Our team will review it and respond soon.");
+      
+      // Scroll to success message
+      setTimeout(() => {
+        messageRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 100);
     } catch {
       setSubmitStatus("error");
       setSubmitMessage("Unable to submit your application. Please try again.");
@@ -588,10 +606,14 @@ export default function CareerPage() {
 
       <div className="career-page">
         <section className="career-hero">
-          <img 
+          <Image 
             src="/portfolio1.jpg" 
             alt="Careers Hero" 
             className="career-hero-bg" 
+            fill
+            priority
+            sizes="100vw"
+            quality={80}
           />
           <div className="career-hero-overlay" />
           <div className="career-hero-content">
@@ -704,11 +726,17 @@ export default function CareerPage() {
 
                 {submitStatus !== "idle" ? (
                   <p
+                    ref={messageRef}
                     role="status"
                     style={{
-                      marginTop: "1rem",
-                      fontSize: "0.9rem",
+                      marginTop: "1.5rem",
+                      padding: "1rem",
+                      fontSize: "0.95rem",
+                      fontWeight: 500,
                       color: submitStatus === "success" ? "var(--text-primary)" : "#8f5a49",
+                      backgroundColor: submitStatus === "success" ? "rgba(138, 95, 69, 0.08)" : "rgba(143, 90, 73, 0.08)",
+                      border: `1px solid ${submitStatus === "success" ? "rgba(138, 95, 69, 0.2)" : "rgba(143, 90, 73, 0.2)"}`,
+                      borderRadius: "2px",
                     }}
                   >
                     {submitMessage}

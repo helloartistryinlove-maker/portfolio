@@ -1,15 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 /* ─── Film data ──────────────────────────────────────────── */
 
 const videos = [
-  { id: "v1", title: "Israa & Faizan", location: "Wedding Trailer 2025", src: "/wedding-trailer.mp4" },
-  { id: "v2", title: "Cinematic Collection I", location: "Selected Works", src: "/wedding-trailer.mp4" },
-  { id: "v3", title: "Cinematic Collection II", location: "Selected Works", src: "/wedding-trailer.mp4" },
-  { id: "v4", title: "The Art of Love", location: "Signature Film", src: "/wedding-trailer.mp4" },
+  { id: "v1", title: "Israa & Faizan", location: "Wedding Trailer 2025", src: "/wedding-trailer.mp4", poster: "/testimonial.jpg" },
+  { id: "v2", title: "Cinematic Collection I", location: "Selected Works", src: "/wedding-trailer.mp4", poster: "/testimonial.jpg" },
+  { id: "v3", title: "Cinematic Collection II", location: "Selected Works", src: "/wedding-trailer.mp4", poster: "/testimonial.jpg" },
+  { id: "v4", title: "The Art of Love", location: "Signature Film", src: "/wedding-trailer.mp4", poster: "/testimonial.jpg" },
 ];
 
 /* ─── Play Button SVG ────────────────────────────────────── */
@@ -29,9 +29,36 @@ function PlayIcon() {
 }
 
 /* ─── Interactive Video Block ────────────────────────────── */
-function InteractiveVideo({ src, title, location, index = 0 }: { src: string; title: string; location: string; index?: number }) {
+function InteractiveVideo({ src, poster, title, location, index = 0 }: { src: string; poster: string; title: string; location: string; index?: number }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const webmSrc = src.replace(/\.mp4$/i, ".webm");
+
+  useEffect(() => {
+    const node = wrapperRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35, rootMargin: "120px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (shouldLoad) {
+      videoRef.current?.load();
+    }
+  }, [shouldLoad]);
 
   const handlePlay = () => {
     if (videoRef.current) {
@@ -41,7 +68,7 @@ function InteractiveVideo({ src, title, location, index = 0 }: { src: string; ti
   };
 
   return (
-    <div className="video-block-container fade-in-section" style={{ marginBottom: "clamp(40px, 8vw, 80px)", transitionDelay: `${(index % 4) * 0.1}s` }}>
+    <div ref={wrapperRef} className="video-block-container fade-in-section" style={{ marginBottom: "clamp(40px, 8vw, 80px)", transitionDelay: `${(index % 4) * 0.1}s` }}>
       <div 
         className="video-wrapper"
         onClick={!isPlaying ? handlePlay : undefined}
@@ -57,11 +84,20 @@ function InteractiveVideo({ src, title, location, index = 0 }: { src: string; ti
       >
         <video
           ref={videoRef}
-          src={src}
+          preload="none"
+          muted
+          playsInline
+          poster={poster}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
           controls={isPlaying}
-          playsInline
-        />
+        >
+          {shouldLoad ? (
+            <>
+              <source src={webmSrc} type="video/webm" />
+              <source src={src} type="video/mp4" />
+            </>
+          ) : null}
+        </video>
         
         {!isPlaying && (
           <div 
@@ -217,6 +253,7 @@ export default function FilmsPage() {
             <InteractiveVideo 
               key={video.id}
               src={video.src}
+              poster={video.poster}
               title={video.title}
               location={video.location}
               index={index}

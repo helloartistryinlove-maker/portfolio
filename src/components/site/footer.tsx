@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
@@ -223,11 +224,18 @@ export function Footer() {
         }
 
         .footer-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          background: #e0d8d2;
+        }
+
+        .footer-img-shell {
+          position: relative;
           width: clamp(220px, 18vw, 320px);
           aspect-ratio: 1;
-          object-fit: cover;
           flex-shrink: 0;
-          background: #e0d8d2;
+          overflow: hidden;
         }
 
         /* ── 2. INFORMATION FLOW ── */
@@ -465,19 +473,6 @@ export function Footer() {
 
       <footer className="footer-root">
 
-        {/* ── 1. EDITORIAL CTA ── */}
-        <section className="footer-cta">
-          <span className="footer-cta-label">Now Accepting 2025 / 2026 Commissions</span>
-          <h2 className="footer-cta-title">
-            Let's author <br />
-            <em>your legacy.</em>
-          </h2>
-          <Link href="/contact-us" className="footer-cta-button">
-            <span>Start Your Story</span>
-            <span className="arrow" aria-hidden="true">↗</span>
-          </Link>
-        </section>
-
         {/* ── INSTAGRAM SCROLL ── */}
         <div>
           <div className="footer-instagram-header">
@@ -491,12 +486,16 @@ export function Footer() {
           <div className="footer-scroll-container">
             <div className="footer-scroll-content">
               {[...images, ...images].map((src, i) => (
-                <img
-                  key={i}
-                  src={src}
-                  alt={`Instagram feed ${i}`}
-                  className="footer-img"
-                />
+                <div key={i} className="footer-img-shell">
+                  <Image
+                    src={src}
+                    alt={`Instagram feed ${i + 1}`}
+                    fill
+                    sizes="(max-width: 640px) 220px, (max-width: 1200px) 18vw, 320px"
+                    quality={80}
+                    className="footer-img"
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -505,7 +504,7 @@ export function Footer() {
         {/* ── 2. INFO FLOW ── */}
         <div className="footer-content-grid">
           <div className="footer-brand-section">
-            <h3 className="footer-brand-name">AIL.</h3>
+            <h3 className="footer-brand-name">AIL</h3>
             <p className="footer-brand-subtext">
               Preserving the fleeting whispers of today into the timeless poetry of tomorrow. Based in India, traversing the globe for the modern romantic.
             </p>

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
@@ -63,6 +64,16 @@ export default function Home() {
     let rafId = 0;
     let ticking = false;
 
+    type ParallaxItem = {
+      node: HTMLElement;
+      speed: number;
+      maxOffset: number;
+      baseTop: number;
+      height: number;
+    };
+
+    let parallaxItems: ParallaxItem[] = [];
+
     const getIntensityFactor = () => {
       const width = window.innerWidth;
       if (width <= 640) return 0;
@@ -73,6 +84,23 @@ export default function Home() {
     const clearTransforms = () => {
       parallaxNodes.forEach((node) => {
         node.style.transform = "translate3d(0, 0, 0)";
+      });
+    };
+
+    const measureParallaxItems = () => {
+      const scrollY = window.scrollY;
+      parallaxItems = parallaxNodes.map((node) => {
+        const rect = node.getBoundingClientRect();
+        const speed = Number(node.dataset.parallaxSpeed ?? "0");
+        const maxOffset = Number(node.dataset.parallaxMax ?? "0") || 20;
+
+        return {
+          node,
+          speed,
+          maxOffset,
+          baseTop: scrollY + rect.top,
+          height: rect.height,
+        };
       });
     };
 
@@ -90,17 +118,17 @@ export default function Home() {
         return;
       }
 
+      const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
-      const maxOffset = 64 * intensity;
 
-      parallaxNodes.forEach((node) => {
-        const speed = Number(node.dataset.parallaxSpeed ?? "0");
+      parallaxItems.forEach(({ node, speed, maxOffset, baseTop, height }) => {
         if (!Number.isFinite(speed) || speed === 0) return;
 
-        const rect = node.getBoundingClientRect();
-        const distanceFromCenter = rect.top + rect.height / 2 - viewportHeight / 2;
-        const rawOffset = -distanceFromCenter * speed * intensity;
-        const offsetY = Math.max(-maxOffset, Math.min(maxOffset, rawOffset));
+        const elementCenter = baseTop + height / 2;
+        const viewportCenter = scrollY + viewportHeight / 2;
+        const rawOffset = -(viewportCenter - elementCenter) * speed * intensity;
+        const offsetLimit = maxOffset * intensity;
+        const offsetY = Math.max(-offsetLimit, Math.min(offsetLimit, rawOffset));
 
         node.style.transform = `translate3d(0, ${offsetY.toFixed(2)}px, 0)`;
       });
@@ -112,19 +140,30 @@ export default function Home() {
       rafId = window.requestAnimationFrame(updateParallax);
     };
 
-    const handleReducedMotionChange = () => {
+    const recalculate = () => {
+      measureParallaxItems();
       requestUpdate();
     };
 
+    const handleReducedMotionChange = () => {
+      if (reducedMotionQuery.matches) {
+        clearTransforms();
+        return;
+      }
+
+      recalculate();
+    };
+
+    measureParallaxItems();
     requestUpdate();
     window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
+    window.addEventListener("resize", recalculate);
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
 
     return () => {
       window.cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
+      window.removeEventListener("resize", recalculate);
       reducedMotionQuery.removeEventListener("change", handleReducedMotionChange);
 
       clearTransforms();
@@ -247,6 +286,11 @@ export default function Home() {
         }
 
         .intro-image {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 4 / 5;
+          overflow: hidden;
+          background: var(--soft-beige);
           grid-column: 1 / -1;
         }
 
@@ -308,8 +352,7 @@ export default function Home() {
 
         .intro-image img {
           width: 100%;
-          height: auto;
-          aspect-ratio: 4 / 5;
+          height: 100%;
           object-fit: cover;
           border: 0.5px solid var(--soft-beige);
         }
@@ -470,11 +513,13 @@ export default function Home() {
         .process-image-wrapper {
           position: relative;
           width: 100%;
+          aspect-ratio: 4 / 5;
+          overflow: hidden;
         }
 
         .process-image {
           width: 100%;
-          aspect-ratio: 4 / 5;
+          height: 100%;
           object-fit: cover;
           display: block;
           background: var(--charcoal);
@@ -738,15 +783,19 @@ export default function Home() {
           §1  HERO — Premium cinematic full-screen
           ════════════════════════════════════════════════════ */}
       <section className="hero-wrapper">
-        <div className="hero-bg-wrapper parallax-layer" data-parallax-speed="0.08">
-          <img
+        <div className="hero-bg-wrapper parallax-layer" data-parallax-speed="0.08" data-parallax-max="40">
+          <Image
             src="/coverimg.jpg"
             alt="Cinematic wedding photography hero background"
             className="hero-bg"
+            fill
+            priority
+            sizes="100vw"
+            quality={80}
           />
         </div>
-        <div className="hero-overlay parallax-layer" data-parallax-speed="0.04" />
-        <div className="hero-grain parallax-layer" data-parallax-speed="0.05" aria-hidden="true" />
+        <div className="hero-overlay" />
+        <div className="hero-grain" aria-hidden="true" />
       </section>
 
       {/* ════════════════════════════════════════════════════
@@ -772,10 +821,14 @@ export default function Home() {
             </div>
 
             {/* Image column — 6 cols on desktop, 7 cols start */}
-            <div className="intro-image parallax-layer" data-parallax-speed="0.06">
-              <img
+            <div className="intro-image parallax-layer" data-parallax-speed="0.06" data-parallax-max="16">
+              <Image
                 src="/portfolio1.jpg"
                 alt="Editorial wedding cinematography portrait"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                quality={80}
+                className="intro-image-img"
               />
             </div>
           </div>
@@ -784,7 +837,7 @@ export default function Home() {
 
       <div className="section-divider" aria-hidden="true">
         <span className="section-divider-line" />
-        <span className="section-divider-glow parallax-layer" data-parallax-speed="0.1" />
+        <span className="section-divider-glow" />
       </div>
 
       {/* ════════════════════════════════════════════════════
@@ -808,10 +861,14 @@ export default function Home() {
             {/* Large — 16:9, 8 cols on desktop */}
             <div className="portfolio-item-large">
               <div className="portfolio-card">
-                <div className="portfolio-img-wrapper parallax-layer" data-parallax-speed="0.05" style={{ aspectRatio: "16 / 9" }}>
-                  <img
+                <div className="portfolio-img-wrapper" style={{ aspectRatio: "16 / 9" }}>
+                  <Image
                     src="/portfoli2.jpg"
                     alt="Sienna & Alessandro — Amalfi, Italy wedding film"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                    quality={80}
+                    className="portfolio-image"
                   />
                 </div>
                 <div className="portfolio-card-meta">
@@ -824,10 +881,14 @@ export default function Home() {
             {/* Vertical — 3:4, 4 cols on desktop */}
             <div className="portfolio-item-small">
               <div className="portfolio-card">
-                <div className="portfolio-img-wrapper parallax-layer" data-parallax-speed="0.07" style={{ aspectRatio: "3 / 4" }}>
-                  <img
+                <div className="portfolio-img-wrapper" style={{ aspectRatio: "3 / 4" }}>
+                  <Image
                     src="/portfoli3.jpg"
                     alt="Chloe & Julian — Paris, France wedding film"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    quality={80}
+                    className="portfolio-image"
                   />
                 </div>
                 <div className="portfolio-card-meta">
@@ -840,10 +901,14 @@ export default function Home() {
             {/* Medium — 4:3, 5 cols on desktop */}
             <div className="portfolio-item-medium">
               <div className="portfolio-card">
-                <div className="portfolio-img-wrapper parallax-layer" data-parallax-speed="0.06" style={{ aspectRatio: "4 / 3" }}>
-                  <img
+                <div className="portfolio-img-wrapper" style={{ aspectRatio: "4 / 3" }}>
+                  <Image
                     src="/internationalsection.jpg"
                     alt="Isabella & James — Cotswolds, UK wedding film"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 42vw"
+                    quality={80}
+                    className="portfolio-image"
                   />
                 </div>
                 <div className="portfolio-card-meta">
@@ -855,7 +920,7 @@ export default function Home() {
 
             {/* Editorial quote section — 7 cols on desktop */}
             <div className="portfolio-item-text">
-              <div className="portfolio-quote parallax-layer" data-parallax-speed="-0.03">
+              <div className="portfolio-quote">
                 <p className="portfolio-quote-text">
                   &ldquo;They don&apos;t just film a wedding; they document a feeling. Every frame feels like a memory we didn&apos;t know we&apos;d forgotten.&rdquo;
                 </p>
@@ -873,10 +938,13 @@ export default function Home() {
         <div style={{ maxWidth: "1320px", marginInline: "auto" }}>
           <div className="process-grid">
             {/* Left — image */}
-            <div className="process-image-wrapper parallax-layer" data-parallax-speed="0.05">
-              <img
+            <div className="process-image-wrapper parallax-layer" data-parallax-speed="0.05" data-parallax-max="18">
+              <Image
                 src="/foooter11.jpg"
                 alt="The artist at work — filmmaker's cinematography process"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                quality={80}
                 className="process-image"
               />
             </div>
@@ -918,14 +986,13 @@ export default function Home() {
 
       <div className="section-divider" aria-hidden="true">
         <span className="section-divider-line" />
-        <span className="section-divider-glow parallax-layer" data-parallax-speed="0.09" />
+        <span className="section-divider-glow" />
       </div>
 
       {/* ════════════════════════════════════════════════════
           §5  TESTIMONIAL — Centered quote on charcoal background
           ════════════════════════════════════════════════════ */}
       <section className="section-xl section-base testimonial-wrapper fade-in-section">
-        <div className="testimonial-drift parallax-layer" data-parallax-speed="-0.04" aria-hidden="true" />
         <div className="testimonial-container">
           <div 
             className="testimonial-scroll-wrapper" 
@@ -981,7 +1048,7 @@ export default function Home() {
           §6  FINAL CTA — Centered call-to-action
           ════════════════════════════════════════════════════ */}
       <section className="section-xl section-base cta-wrapper fade-in-section">
-        <div className="cta-container parallax-layer" data-parallax-speed="-0.03">
+        <div className="cta-container">
           <h2 className="cta-headline">
             Now booking for the MMXXV Season
           </h2>

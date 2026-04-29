@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
+import { BlogDetailAudioPlayer } from "@/components/ui/blog-detail-audio-player";
 
 const blogPosts: Record<string, any> = {
   "suraj-risha-udaipur": {
@@ -160,14 +162,13 @@ export default function BlogPostDetail() {
         }
 
         .gallery-img-wrapper {
+          position: relative;
+          aspect-ratio: 3 / 2;
           overflow: hidden;
           background: var(--bg-surface);
         }
 
         .gallery-img {
-          width: 100%;
-          height: auto;
-          aspect-ratio: 3 / 2;
           object-fit: cover;
           display: block;
           transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -202,8 +203,17 @@ export default function BlogPostDetail() {
       `}</style>
 
       <div className="post-detail-page">
+        <BlogDetailAudioPlayer />
         <section className="post-hero">
-          <img src={post.heroImg} alt={post.title} className="post-hero-img" />
+          <Image
+            src={post.heroImg}
+            alt={post.title}
+            fill
+            priority
+            sizes="100vw"
+            quality={80}
+            className="post-hero-img"
+          />
           <div className="post-hero-content">
             <RevealOnScroll>
               <h1 className="post-title">{post.title}</h1>
@@ -225,7 +235,14 @@ export default function BlogPostDetail() {
             {galleryImages.map((img, i) => (
               <RevealOnScroll key={i} delayMs={i % 2 * 100}>
                 <div className="gallery-img-wrapper">
-                  <img src={img} alt={`Gallery image ${i + 1}`} className="gallery-img" />
+                  <Image
+                    src={img}
+                    alt={`Gallery image ${i + 1}`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    quality={80}
+                    className="gallery-img"
+                  />
                 </div>
               </RevealOnScroll>
             ))}

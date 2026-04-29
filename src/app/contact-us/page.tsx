@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 /* ─── Contact cards data ─────────────────────────────────── */
@@ -60,6 +60,7 @@ export default function ContactUsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -94,16 +95,21 @@ export default function ContactUsPage() {
       if (!response.ok) {
         setSubmitStatus("error");
         setSubmitMessage(data?.error ?? "Unable to send your inquiry. Please try again.");
+        setIsSubmitting(false);
         return;
       }
 
-      form.reset();
+      // Reset form before updating state
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+      
       setSubmitStatus("success");
       setSubmitMessage("We have received your inquiry. Expect a reply within 24-48 hours.");
+      setIsSubmitting(false);
     } catch {
       setSubmitStatus("error");
       setSubmitMessage("Unable to send your inquiry. Please try again.");
-    } finally {
       setIsSubmitting(false);
     }
   }
@@ -497,7 +503,7 @@ export default function ContactUsPage() {
                   </span>
                 </div>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} ref={formRef}>
                     <div className="contact-form-grid" style={{ marginBottom: 48 }}>
 
                       {/* Name */}
@@ -585,13 +591,18 @@ export default function ContactUsPage() {
                         role="status"
                         style={{
                           marginBottom: 32,
+                          padding: "16px",
                           textAlign: "center",
                           fontFamily: "var(--font-sans,'Manrope',sans-serif)",
-                          fontSize: 14,
+                          fontSize: 15,
+                          fontWeight: 500,
                           color:
                             submitStatus === "success"
                               ? "var(--text-primary)"
                               : "#8f5a49",
+                          backgroundColor: submitStatus === "success" ? "rgba(138, 95, 69, 0.08)" : "rgba(143, 90, 73, 0.08)",
+                          border: `1px solid ${submitStatus === "success" ? "rgba(138, 95, 69, 0.2)" : "rgba(143, 90, 73, 0.2)"}`,
+                          borderRadius: "2px",
                         }}
                       >
                         {submitMessage}

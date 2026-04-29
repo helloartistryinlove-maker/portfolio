@@ -1,6 +1,5 @@
 import "server-only";
 
-import { getServerEnv } from "@/lib/env";
 import { escapeForText } from "@/lib/form-security";
 import { resend } from "@/lib/resend";
 
@@ -29,10 +28,11 @@ type OutboundEmail = {
   replyTo: string;
 };
 
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
+const SENDER_EMAIL = "AIL <onboarding@resend.dev>";
+const RECIPIENT_EMAIL = "hello.artistryinlove@gmail.com";
 
 function getSenderEmail(): string {
-  return process.env.RESEND_FROM_EMAIL?.trim() || DEFAULT_FROM_EMAIL;
+  return SENDER_EMAIL;
 }
 
 function esc(value: string): string {
@@ -138,11 +138,9 @@ export function buildCareerEmail(input: CareerEmailInput): OutboundEmail {
 }
 
 export async function sendFormEmail(email: OutboundEmail): Promise<void> {
-  const { ADMIN_EMAIL } = getServerEnv();
-
   const result = await resend.emails.send({
     from: getSenderEmail(),
-    to: [ADMIN_EMAIL],
+    to: RECIPIENT_EMAIL,
     replyTo: email.replyTo,
     subject: email.subject,
     text: email.text,

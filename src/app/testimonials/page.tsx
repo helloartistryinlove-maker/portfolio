@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 const testimonials = [
@@ -53,6 +55,71 @@ const testimonials = [
     bg: "/footer8.jpg"
   }
 ];
+
+function TestimonialMedia({ type, src, name }: { type: string; src: string; name: string }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const update = () => setIsMobile(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const node = wrapperRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3, rootMargin: "120px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={wrapperRef} style={{ position: "absolute", inset: 0 }}>
+      {type === "video" && !isMobile ? (
+        <video
+          autoPlay={shouldLoad}
+          muted
+          playsInline
+          loop
+          preload="none"
+          poster="/testimonial.jpg"
+          className="strip-bg"
+        >
+          {shouldLoad ? (
+            <>
+              <source src="/wedding-trailer.webm" type="video/webm" />
+              <source src="/wedding-trailer.mp4" type="video/mp4" />
+            </>
+          ) : null}
+        </video>
+      ) : (
+        <Image
+          src={type === "video" ? "/testimonial.jpg" : src}
+          alt={`Testimonial from ${name}`}
+          fill
+          sizes="100vw"
+          quality={80}
+          className="strip-bg"
+        />
+      )}
+    </div>
+  );
+}
 
 export default function TestimonialsPage() {
   return (
@@ -153,19 +220,7 @@ export default function TestimonialsPage() {
             <section key={i} className={`testimonial-strip fade-in-section ${isMedia ? 'media-strip' : 'color-strip'}`}>
               {isMedia && (
                 <>
-                  {t.type === "video" ? (
-                    <video
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="strip-bg"
-                    >
-                      <source src={t.bg} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <img src={t.bg} alt={`Testimonial from ${t.name}`} className="strip-bg" />
-                  )}
+                  <TestimonialMedia type={t.type} src={t.bg} name={t.name} />
                   <div className="strip-overlay" />
                 </>
               )}
