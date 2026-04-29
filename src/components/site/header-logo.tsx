@@ -129,7 +129,8 @@ export function HeaderLogo({ className = "" }) {
           white-space: nowrap;
           width: fit-content;
           line-height: 1;
-          font-family: var(--font-logo, "Didot", "GFS Didot", Georgia, serif);
+          font-family: Didot, "Didot LT STD", "Bodoni MT", "GFS Didot", Georgia, serif;
+          font-size: 1.8rem;
           font-weight: 400;
           -webkit-font-smoothing: antialiased;
           text-rendering: geometricPrecision;
