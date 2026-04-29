@@ -2,28 +2,41 @@
 
 import { useEffect, useState, useRef } from "react";
 
-const SEQUENCE = [
-  { phase: "ail",      ms: 1400 },
-  { phase: "artistry", ms: 900  },
-  { phase: "in",       ms: 650  },
-  { phase: "love",     ms: 650  },
-  { phase: "hold",     ms: 2600 },
+type Phase = "artistry" | "in" | "love" | "collapse" | "idle";
+type DisplayPhase = Phase | "hold";
+type ZoneKey = "artistry" | "in" | "love";
+type SequenceStep = { phase: Phase; ms: number; hold?: boolean };
+
+const ZONES: Record<ZoneKey, { letter: string; rest: string }> = {
+  artistry: { letter: "A", rest: "rtistry" },
+  in: { letter: "I", rest: "n" },
+  love: { letter: "L", rest: "ove" },
+};
+
+const ZONE_ORDER: ZoneKey[] = ["artistry", "in", "love"];
+
+const SEQUENCE: SequenceStep[] = [
+  { phase: "idle", ms: 1400 },
+  { phase: "artistry", ms: 900 },
+  { phase: "in", ms: 650 },
+  { phase: "love", ms: 650 },
+  { phase: "idle", ms: 2600, hold: true },
   { phase: "collapse", ms: 1200 },
 ];
 
-const ZONES = [
-  { key: "a", letter: "A", rest: "rtistry" },
-  { key: "i", letter: "I", rest: "n"       },
-  { key: "l", letter: "L", rest: "ove"     },
-];
-
-const PHASE_TO_KEY = { artistry: "a", in: "i", love: "l" };
+const PHASE_TO_KEY: Record<Phase, ZoneKey | null> = {
+  artistry: "artistry",
+  in: "in",
+  love: "love",
+  collapse: null,
+  idle: null,
+};
 const CHAR_DELAY   = 60;
 const ERASE_DELAY  = 35;
 
 export function HeaderLogo({ className = "" }) {
-  const [phase, setPhase] = useState("ail");
-  const [chars, setChars] = useState({ a: 0, i: 0, l: 0 });
+  const [phase, setPhase] = useState<DisplayPhase>("idle");
+  const [chars, setChars] = useState<Record<ZoneKey, number>>({ artistry: 0, in: 0, love: 0 });
   const typeTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const clearTypeTimers = () => {
@@ -31,7 +44,7 @@ export function HeaderLogo({ className = "" }) {
     typeTimers.current = [];
   };
 
-  const typeZone = (key: string, word: string) => {
+  const typeZone = (key: ZoneKey, word: string) => {
     word.split("").forEach((_, idx) => {
       const t = setTimeout(() => {
         setChars(prev => ({ ...prev, [key]: idx + 1 }));
@@ -41,10 +54,10 @@ export function HeaderLogo({ className = "" }) {
   };
 
   const eraseAll = () => {
-    const order = [
-      { key: "l", word: "ove"     },
-      { key: "i", word: "n"       },
-      { key: "a", word: "rtistry" },
+    const order: Array<{ key: ZoneKey; word: string }> = [
+      { key: "love", word: "ove" },
+      { key: "in", word: "n" },
+      { key: "artistry", word: "rtistry" },
     ];
     let delay = 0;
     order.forEach(({ key, word }) => {
@@ -72,9 +85,11 @@ export function HeaderLogo({ className = "" }) {
         cursor += step.ms;
         timers.push(setTimeout(() => {
           if (!active) return;
-          setPhase(step.phase);
+          setPhase(step.hold ? "hold" : step.phase);
           const key = PHASE_TO_KEY[step.phase];
-          if (key) { const z = ZONES.find(z => z.key === key); if (z) typeZone(key, z.rest); }
+          if (key) {
+            typeZone(key, ZONES[key].rest);
+          }
           if (step.phase === "collapse") eraseAll();
         }, cursor));
       }
@@ -83,8 +98,8 @@ export function HeaderLogo({ className = "" }) {
       timers.push(setTimeout(() => {
         if (!active) return;
         clearTypeTimers();
-        setChars({ a: 0, i: 0, l: 0 });
-        setPhase("ail");
+        setChars({ artistry: 0, in: 0, love: 0 });
+        setPhase("idle");
         run();
       }, cursor));
     };
@@ -93,7 +108,7 @@ export function HeaderLogo({ className = "" }) {
     return () => { active = false; timers.forEach(clearTimeout); clearTypeTimers(); };
   }, []);
 
-  const isCompact = phase === "ail" || phase === "collapse";
+  const isCompact = phase === "idle" || phase === "collapse";
 
   return (
     <>
@@ -174,18 +189,22 @@ export function HeaderLogo({ className = "" }) {
       {/* .ail-shell is what the nav sees — its footprint is stable */}
       <span className={`ail-shell ${className}`} aria-label="Artistry In Love" role="img">
         <span className={`ail-logo${isCompact ? "" : " expanded"}`}>
-          {ZONES.map((zone) => (
-            <span key={zone.key} className="ail-zone">
-              <span className="ail-anchor">{zone.letter}</span>
-              <span className="ail-rest" aria-hidden="true">
-                {zone.rest.split("").map((ch, idx) => (
-                  <span key={idx} className={`ail-char${idx < chars[zone.key] ? " on" : ""}`}>
-                    {ch}
-                  </span>
-                ))}
+          {ZONE_ORDER.map((zoneKey) => {
+            const zone = ZONES[zoneKey];
+
+            return (
+              <span key={zoneKey} className="ail-zone">
+                <span className="ail-anchor">{zone.letter}</span>
+                <span className="ail-rest" aria-hidden="true">
+                  {zone.rest.split("").map((ch, idx) => (
+                    <span key={idx} className={`ail-char${idx < chars[zoneKey] ? " on" : ""}`}>
+                      {ch}
+                    </span>
+                  ))}
+                </span>
               </span>
-            </span>
-          ))}
+            );
+          })}
         </span>
       </span>
     </>
