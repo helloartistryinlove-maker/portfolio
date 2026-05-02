@@ -3,70 +3,118 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { BlogDetailAudioPlayer } from "@/components/ui/blog-detail-audio-player";
+import { EditorialGallery } from "@/components/ui/editorial-gallery";
 
-const blogPosts: Record<string, any> = {
-  "suraj-risha-udaipur": {
-    title: "Suraj & Risha, Udaipur",
-    heroImg: "/portfolio1.jpg",
-    location: "Udaipur, India",
-    date: "Autumn MMXXIV",
-    story: "Suraj and Risha chose the majestic city of Udaipur for their intimate wedding celebration, blending tradition, love, and breathtaking views into one unforgettable experience. The ceremony took place overlooking the serene waters of Lake Pichola, where the ancient stone architecture provided a timeless backdrop for their union. Every moment was a reflection of their deep connection, from the quiet morning preparations to the vibrant celebration that followed.",
-  },
-  "shraddha-neeti-goa": {
-    title: "Shraddha and Neeti, Goa",
-    heroImg: "/portfoli2.jpg",
-    location: "Goa, India",
-    date: "Winter MMXXIV",
-    story: "Shraddha and Neeti's wedding was more than just a beautiful event; it was a powerful statement of love and acceptance. Set against the sun-drenched beaches of Goa, their celebration was filled with joy, laughter, and the warmth of their closest family and friends. It showed that true love can overcome any barrier and that every love story deserves to be celebrated with grandeur and authenticity.",
-  },
-  "grace-yohan-goa": {
-    title: "Grace & Yohan, Goa",
-    heroImg: "/portfoli3.jpg",
-    location: "Goa, India",
-    date: "Spring MMXXIV",
-    story: "Grace and Yohan recently tied the knot in a beautifully intimate ceremony in Goa, surrounded by the serene beauty of the coastal paradise. Their wedding was a heartfelt and personal affair, focusing on the depth of their connection rather than the grandeur of the event. The sound of the waves and the gentle sea breeze added a magical layer to their vows.",
-  },
-  "aman-priya-jaipur": {
-    title: "Aman & Priya, Jaipur",
-    heroImg: "/foooter11.jpg",
-    location: "Jaipur, India",
-    date: "Summer MMXXIV",
-    story: "A vibrant celebration of love in the Pink City. Aman and Priya's wedding was a masterclass in royal elegance, featuring historic palaces and timeless traditions. The city's rich heritage was woven into every aspect of the celebration, from the intricate decor to the traditional music that filled the air.",
-  },
-  "sanya-rohan-tuscany": {
-    title: "Sanya & Rohan, Tuscany",
-    heroImg: "/internationalsection.jpg",
-    location: "Tuscany, Italy",
-    date: "Summer MMXXIV",
-    story: "An editorial escape to the rolling hills of Italy. Sanya and Rohan's sunset ceremony was a testament to understated luxury and the beauty of quiet, shared moments. The golden hour light across the vineyards created a dreamlike atmosphere as they exchanged their promises.",
-  },
-  "meera-arjun-mumbai": {
-    title: "Meera & Arjun, Mumbai",
-    heroImg: "/footer8.jpg",
-    location: "Mumbai, India",
-    date: "Monsoon MMXXIV",
-    story: "A contemporary coastal celebration in the heart of Mumbai. Meera and Arjun's wedding blended urban energy with the calm of the Arabian Sea. Despite the monsoon rains, the celebration was full of light and warmth, capturing the unique spirit of the city.",
+type BlogPost = {
+  title: string;
+  location: string;
+  date: string;
+  story: string;
+};
+
+type GalleryImage = {
+  src: string;
+  subfolder: string;
+  filename: string;
+};
+
+const blogPosts: Record<string, BlogPost> = {
+  "anurag-shreya": {
+    title: "Anurag & Shreya",
+    location: "India",
+    date: "Wedding Story",
+    story: "A curated visual narrative from pre-wedding celebrations through the wedding day, blending color, emotion, and documentary moments.",
   },
 };
 
-const galleryImages = [
-  "/portfolio1.jpg",
-  "/portfoli2.jpg",
-  "/portfoli3.jpg",
-  "/foooter11.jpg",
-  "/internationalsection.jpg",
-  "/footer8.jpg",
-  "/footer1.jpg",
-  "/footer2.jpg",
-  "/footer3.jpg",
-  "/footer4.jpg",
-];
+const INITIAL_VISIBLE_IMAGES = 40;
+const LOAD_MORE_BATCH = 20;
 
 export default function BlogPostDetail() {
   const { slug } = useParams();
   const post = blogPosts[slug as string];
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_IMAGES);
+  const [galleryLoading, setGalleryLoading] = useState(true);
+  const [galleryError, setGalleryError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (slug !== "anurag-shreya") {
+      setGalleryLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+
+    const loadGallery = async () => {
+      try {
+        setGalleryLoading(true);
+        const response = await fetch("/api/blogs/anurag-shreya-gallery", { cache: "no-store" });
+
+        if (!response.ok) throw new Error("Could not load manifest");
+
+        const data = await response.json();
+        const manifest: Record<string, string[]> = data.manifest ?? {};
+
+        // Check session storage for a persisted selection order for this client
+        const sessionKey = `anurag-shreya:selected`;
+        const existing = typeof window !== "undefined" ? sessionStorage.getItem(sessionKey) : null;
+
+        if (existing) {
+          const parsed = JSON.parse(existing) as GalleryImage[];
+          if (isMounted) {
+            setGalleryImages(parsed);
+            setVisibleCount(Math.min(INITIAL_VISIBLE_IMAGES, parsed.length));
+            setGalleryError(null);
+          }
+        } else {
+          // Perform one-time selection and shuffle on initial load
+          const { buildCombinedSelected } = await import("@/lib/gallery-utils");
+          const result = buildCombinedSelected(manifest);
+          const combined = result.combined;
+
+          if (isMounted) {
+            setGalleryImages(combined);
+            setVisibleCount(Math.min(INITIAL_VISIBLE_IMAGES, combined.length));
+            setGalleryError(null);
+            try {
+              sessionStorage.setItem(sessionKey, JSON.stringify(combined));
+            } catch (_) {
+              // ignore storage errors
+            }
+          }
+        }
+      } catch (error) {
+        if (isMounted) {
+          setGalleryError(error instanceof Error ? error.message : "Could not load gallery images.");
+          setGalleryImages([]);
+          setVisibleCount(0);
+        }
+      } finally {
+        if (isMounted) setGalleryLoading(false);
+      }
+    };
+
+    loadGallery();
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  const visibleImages = useMemo(
+    () => galleryImages.slice(0, visibleCount),
+    [galleryImages, visibleCount],
+  );
+  const canLoadMore = visibleCount < galleryImages.length;
+
+  const handleLoadMore = () => {
+    setVisibleCount((current) => Math.min(current + LOAD_MORE_BATCH, galleryImages.length));
+  };
+
+  const heroImg = galleryImages[0]?.src ?? (slug === "anurag-shreya" ? "/Anurag&Shreya/Wedding/238A3328.jpg" : "/testimonial.jpg");
 
   if (!post) {
     return (
@@ -178,6 +226,21 @@ export default function BlogPostDetail() {
           transform: scale(1.05);
         }
 
+        .gallery-status-copy {
+          text-align: center;
+          font-family: var(--font-sans);
+          color: var(--text-secondary);
+          font-size: .95rem;
+          margin-top: 1rem;
+        }
+
+        .gallery-load-more-wrap {
+          display: flex;
+          justify-content: center;
+          margin-top: clamp(40px, 8vw, 80px);
+          padding-inline: clamp(16px, 5vw, 40px);
+        }
+
         .post-footer-nav {
           padding: 60px 40px;
           text-align: center;
@@ -206,7 +269,7 @@ export default function BlogPostDetail() {
         <BlogDetailAudioPlayer />
         <section className="post-hero">
           <Image
-            src={post.heroImg}
+            src={heroImg}
             alt={post.title}
             fill
             priority
@@ -231,22 +294,81 @@ export default function BlogPostDetail() {
         </section>
 
         <section className="post-gallery-section fade-in-section">
-          <div className="post-gallery-grid">
-            {galleryImages.map((img, i) => (
-              <RevealOnScroll key={i} delayMs={i % 2 * 100}>
-                <div className="gallery-img-wrapper">
-                  <Image
-                    src={img}
-                    alt={`Gallery image ${i + 1}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    quality={80}
-                    className="gallery-img"
-                  />
+          {slug === "anurag-shreya" ? (
+            <>
+              {galleryLoading ? (
+                <div className="editorial-gallery">
+                  <div className="editorial-section">
+                    <p className="gallery-status-copy">Loading gallery...</p>
+                  </div>
                 </div>
-              </RevealOnScroll>
-            ))}
-          </div>
+              ) : null}
+
+              {galleryError ? (
+                <div className="editorial-gallery">
+                  <div className="editorial-section">
+                    <p className="gallery-status-copy">{galleryError}</p>
+                  </div>
+                </div>
+              ) : null}
+
+              {!galleryLoading && !galleryError ? (
+                <>
+                  <EditorialGallery images={visibleImages} />
+                  {canLoadMore ? (
+                    <div className="gallery-load-more-wrap">
+                      <button type="button" className="btn-ghost" onClick={handleLoadMore}>
+                        Load More Stories
+                      </button>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+            </>
+          ) : (
+            <>
+              {galleryLoading ? (
+                <div className="post-gallery-grid">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={`placeholder-${i}`} className="gallery-img-wrapper" />
+                  ))}
+                </div>
+              ) : null}
+
+              {galleryError ? (
+                <p className="gallery-status-copy">{galleryError}</p>
+              ) : null}
+
+              {!galleryLoading && !galleryError ? (
+                <>
+                  <div className="post-gallery-grid">
+                    {visibleImages.map((img, i) => (
+                      <RevealOnScroll key={`${img.subfolder}-${img.filename}`} delayMs={i % 2 * 100}>
+                        <div className="gallery-img-wrapper" title={`${img.subfolder} / ${img.filename}`}>
+                          <Image
+                            src={img.src}
+                            alt={`Gallery image ${i + 1}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            quality={80}
+                            className="gallery-img"
+                          />
+                        </div>
+                      </RevealOnScroll>
+                    ))}
+                  </div>
+
+                  {canLoadMore ? (
+                    <div className="gallery-load-more-wrap">
+                      <button type="button" className="btn-ghost" onClick={handleLoadMore}>
+                        Load More
+                      </button>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+            </>
+          )}
         </section>
 
         <section className="post-footer-nav fade-in-section">

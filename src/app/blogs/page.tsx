@@ -3,41 +3,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { CtaStrip } from "@/components/ui/cta-strip";
-import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
-import { SectionHeading } from "@/components/ui/section-heading";
 
-const cards = Array.from({ length: 6 }, (_, i) => ({
-  id: i + 1,
-  title: `Story Chapter ${String(i + 1).padStart(2, "0")}`,
-  category: "Wedding Story",
-  date: "Editorial Entry",
-  summary: "A narrative-led story note that blends atmosphere, emotion, and documentary detail.",
-}));
-
-const categories = ["All Stories", "Behind the Scenes", "Style Tips", "Wedding Stories"];
-
-const highlights = [
+const clientGalleries = [
   {
-    label: "Featured Story",
-    title: "The Ethereal Radiance of Lake Como",
-    text: "Exploring the interplay of ancient stone and shimmering waters during an intimate sunset elopement on the Italian coast.",
-    meta: "Long-form · Photo + Film",
-  },
-  {
-    label: "Story Note",
-    title: "Why We Still Shoot Film",
-    text: "The chemical magic and intentionality behind medium format film photography in the digital age.",
-    meta: "Behind the Scenes",
-  },
-  {
-    label: "Style Note",
-    title: "Curating Your Engagement Look",
-    text: "Choosing timeless silhouettes and palettes that harmonize with the architectural landscape.",
-    meta: "Style Tips",
+    id: "anurag-shreya",
+    slug: "anurag-shreya",
+    title: "Anurag & Shreya",
   },
 ];
+
+type GalleryImage = {
+  src: string;
+  subfolder: string;
+  filename: string;
+};
 
 function BlogHeroMedia() {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -107,6 +86,11 @@ function BlogHeroMedia() {
 }
 
 export default function BlogsPage() {
+  // Use a fixed cover image for the blogs listing card so it always shows the requested image.
+  const [cardCoverImage] = useState<string>('/Anurag&Shreya/Wedding/238A3328.jpg');
+  const [galleryLoading] = useState(false);
+  const [galleryError] = useState<string | null>(null);
+
   return (
     <>
       <style>{`
@@ -413,54 +397,55 @@ export default function BlogsPage() {
           line-height: 1.6;
         }
 
-        .blogs-grid-3 {
+        .client-galleries-grid {
           display: grid;
-          grid-template-columns: repeat(1, 1fr);
-          gap: clamp(32px, 5vw, 64px);
-          max-width: 1400px;
+          grid-template-columns: minmax(0, 1fr);
+          gap: clamp(24px, 4vw, 40px);
+          max-width: 420px;
           margin-inline: auto;
         }
 
-        @media (min-width: 768px) {
-          .blogs-grid-3 {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-
-        .blog-item {
+        .client-gallery-card {
           display: flex;
           flex-direction: column;
           align-items: center;
+          width: 100%;
           text-align: center;
+          text-decoration: none;
+          color: inherit;
         }
 
-        .blog-item-img-wrap {
+        .client-gallery-image-shell {
           position: relative;
           width: 100%;
           aspect-ratio: 3 / 4;
           overflow: hidden;
-          margin-bottom: 2rem;
+          margin-bottom: 1.5rem;
+          border: 1px solid rgba(45, 35, 28, 0.14);
+          background:
+            linear-gradient(180deg, rgba(251, 247, 243, 0.9) 0%, rgba(234, 216, 202, 0.55) 100%),
+            repeating-linear-gradient(
+              -45deg,
+              rgba(138, 95, 69, 0.04),
+              rgba(138, 95, 69, 0.04) 12px,
+              rgba(138, 95, 69, 0.01) 12px,
+              rgba(138, 95, 69, 0.01) 24px
+            );
         }
 
-        .blog-item-img {
-          object-fit: cover;
-          display: block;
-          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .blog-item-title {
+        .client-gallery-title {
           font-family: var(--font-serif);
-          font-size: clamp(1.4rem, 2vw, 1.8rem);
+          font-size: clamp(1.6rem, 3vw, 2.2rem);
           color: var(--text-primary);
-          margin-bottom: 1rem;
+          margin-bottom: .7rem;
         }
 
-        .blog-item-desc {
+        .gallery-status-copy {
           font-family: var(--font-sans);
-          font-size: 0.9rem;
-          line-height: 1.7;
           color: var(--text-secondary);
-          max-width: 320px;
+          font-size: .9rem;
+          line-height: 1.6;
+          margin-top: .8rem;
         }
       `}</style>
 
@@ -477,58 +462,37 @@ export default function BlogsPage() {
             </p>
           </div>
 
-          <div className="blogs-grid-3">
-            {[
-              {
-                slug: "suraj-risha-udaipur",
-                title: "Suraj & Risha, Udaipur",
-                img: "/portfolio1.jpg",
-                desc: "Suraj and Risha chose the majestic city of Udaipur for their intimate wedding celebration, blending tradition, love, and breathtaking views into one unforgettable experience."
-              },
-              {
-                slug: "shraddha-neeti-goa",
-                title: "Shraddha and Neeti, Goa",
-                img: "/portfoli2.jpg",
-                desc: "Shraddha and Neeti's wedding was more than just a beautiful event; it was a powerful statement of love and acceptance. Their wedding in Goa will be remembered for its stunning setting."
-              },
-              {
-                slug: "grace-yohan-goa",
-                title: "Grace & Yohan, Goa",
-                img: "/portfoli3.jpg",
-                desc: "Grace and Yohan recently tied the knot in a beautifully intimate ceremony in Goa, surrounded by the serene beauty of the coastal paradise. Their wedding was a heartfelt and personal affair."
-              },
-              {
-                slug: "aman-priya-jaipur",
-                title: "Aman & Priya, Jaipur",
-                img: "/foooter11.jpg",
-                desc: "A vibrant celebration of love in the Pink City. Aman and Priya's wedding was a masterclass in royal elegance, featuring historic palaces and timeless traditions."
-              },
-              {
-                slug: "sanya-rohan-tuscany",
-                title: "Sanya & Rohan, Tuscany",
-                img: "/internationalsection.jpg",
-                desc: "An editorial escape to the rolling hills of Italy. Sanya and Rohan's sunset ceremony was a testament to understated luxury and the beauty of quiet, shared moments."
-              },
-              {
-                slug: "meera-arjun-mumbai",
-                title: "Meera & Arjun, Mumbai",
-                img: "/footer8.jpg",
-                desc: "A contemporary coastal celebration in the heart of Mumbai. Meera and Arjun's wedding blended urban energy with the calm of the Arabian Sea."
-              }
-            ].map((blog, i) => (
-              <Link key={i} href={`/blogs/${blog.slug}`} className="blog-item fade-in-section" style={{ textDecoration: 'none', transitionDelay: `${(i % 3) * 0.1}s` }}>
-                <div className="blog-item-img-wrap">
-                  <Image
-                    src={blog.img}
-                    alt={blog.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 30vw"
-                    quality={80}
-                    className="blog-item-img"
-                  />
-                </div>
-                <h3 className="blog-item-title">{blog.title}</h3>
-                <p className="blog-item-desc">{blog.desc}</p>
+          <div className="client-galleries-grid">
+            {clientGalleries.map((gallery) => (
+              <Link
+                key={gallery.id}
+                href={`/blogs/${gallery.slug}`}
+                className="client-gallery-card fade-in-section"
+                style={{ transitionDelay: "0s" }}
+              >
+
+                {galleryLoading ? (
+                  <div className="client-gallery-image-shell" aria-label={`Gallery content for ${gallery.title}`} />
+                ) : null}
+
+                {!galleryLoading && !galleryError && cardCoverImage ? (
+                  <div className="client-gallery-image-shell" aria-label={`Gallery cover for ${gallery.title}`}>
+                    <Image
+                      src={cardCoverImage}
+                      alt={`${gallery.title} cover`}
+                      fill
+                      sizes="(max-width: 560px) 100vw, 420px"
+                      quality={78}
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                ) : null}
+
+                {galleryError ? (
+                  <p className="gallery-status-copy">{galleryError}</p>
+                ) : null}
+
+                <h3 className="client-gallery-title">{gallery.title}</h3>
               </Link>
             ))}
           </div>

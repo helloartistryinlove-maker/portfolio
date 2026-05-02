@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore Anurag & Shreya heavy image assets (keep locally, don't track)
+/public/Anurag&Shreya/*
+!public/Anurag&Shreya/README.md
