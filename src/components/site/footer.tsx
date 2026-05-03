@@ -9,6 +9,12 @@ export function Footer() {
   const year = new Date().getFullYear();
   const [isLogoVisible, setIsLogoVisible] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
+  const contactEmail = "hello@artistryinlove.com";
+  const instagramImages = [
+    { src: "/images/PPG05856.jpg", alt: "Cinematic wedding portrait" },
+    { src: "/images/Blog Page Only/2X3A9669.jpg", alt: "Wedding editorial frame" },
+    { src: "/images/Blog Page Only/2X3A9673.jpg", alt: "Wedding cinematic detail" },
+  ];
 
   // Trigger liquid fill when the logo section scrolls into view
   useEffect(() => {
@@ -44,14 +50,6 @@ export function Footer() {
   const waveBottomToTop = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 300' preserveAspectRatio='none'%3E%3Cpath d='M0,148 C7,128,18,122,25,148 C32,174,43,178,50,150 C57,122,66,118,75,152 C84,180,93,172,100,148 L100,300 L0,300 Z' fill='%23141413'/%3E%3C/svg%3E")`;
   const waveTopToBottom = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 300' preserveAspectRatio='none'%3E%3Cpath d='M0,152 C7,172,18,178,25,152 C32,126,43,122,50,150 C57,178,66,182,75,148 C84,120,93,128,100,152 L100,0 L0,0 Z' fill='%23141413'/%3E%3C/svg%3E")`;
 
-  // Use placeholder "#" for non-existent footer images
-  const images = [
-    "#", "#", "#", "#",
-    "#", "#", "#", "#",
-    "#", "#", "#", "#",
-    "#", "#", "#", "#", "#"
-  ];
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -66,21 +64,25 @@ export function Footer() {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          padding-top: clamp(64px, 8vw, 96px);
-          padding-bottom: 24px;
+          padding-top: clamp(48px, 6vw, 72px);
+          padding-bottom: 20px;
           padding-inline: clamp(24px, 5vw, 64px);
           overflow: hidden;
         }
 
         /* ── 1. CTA CENTERPIECE ── */
-        .footer-cta {
+        .footer-cta-shell {
+          width: 100%;
+          max-width: 920px;
+          margin: 0 auto clamp(40px, 6vw, 64px);
           display: flex;
           flex-direction: column;
           align-items: center;
           text-align: center;
-          width: 100%;
-          max-width: 900px;
-          margin: 0 auto 64px;
+          padding: clamp(28px, 4vw, 40px) clamp(20px, 4vw, 40px);
+          border: 1px solid rgba(20, 20, 19, 0.08);
+          background: rgba(255, 255, 255, 0.16);
+          backdrop-filter: blur(4px);
         }
 
         .footer-cta-label {
@@ -90,24 +92,26 @@ export function Footer() {
           letter-spacing: 0.3em;
           text-transform: uppercase;
           color: var(--text-primary, #141413);
-          opacity: 0.5;
-          margin-bottom: 32px;
+          opacity: 0.56;
+          margin-bottom: 18px;
         }
 
         .footer-cta-title {
           font-family: var(--font-serif, "Noto Serif", serif);
-          font-size: clamp(3rem, 8vw, 7.5rem);
+          font-size: clamp(2.2rem, 5vw, 4.4rem);
           font-weight: 400;
           line-height: 1.05;
           letter-spacing: -0.04em;
           color: var(--text-primary, #141413);
-          margin-bottom: 48px;
+          margin: 0 0 12px;
         }
 
-        .footer-cta-title em {
-          font-style: italic;
-          font-weight: 300;
-          opacity: 0.9;
+        .footer-cta-copy {
+          max-width: 620px;
+          margin: 0 0 28px;
+          font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+          line-height: 1.75;
+          color: rgba(20, 20, 19, 0.72);
         }
 
         .footer-cta-button {
@@ -118,7 +122,7 @@ export function Footer() {
           padding: 20px 40px;
           border-radius: 9999px;
           border: 1px solid rgba(20,20,19,0.2);
-          background: transparent;
+          background: rgba(20,20,19,0.02);
           color: var(--text-primary, #141413);
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 11px;
@@ -169,7 +173,13 @@ export function Footer() {
           transform: translate(3px, -3px);
         }
 
-        /* ── INSTAGRAM STRIP ── */
+        /* ── INSTAGRAM PREVIEW GRID ── */
+        .footer-preview-shell {
+          width: 100%;
+          max-width: 1160px;
+          margin: 0 auto clamp(36px, 5vw, 56px);
+        }
+
         .footer-instagram-header {
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 11px;
@@ -177,7 +187,7 @@ export function Footer() {
           letter-spacing: 0.2em;
           text-transform: uppercase;
           color: var(--text-primary, #141413);
-          margin-bottom: 28px;
+          margin-bottom: 18px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -201,42 +211,89 @@ export function Footer() {
           line-height: 1;
         }
 
-        .footer-scroll-container {
-          width: calc(100% + clamp(48px, 10vw, 128px));
-          margin-inline: calc(-1 * clamp(24px, 5vw, 64px));
-          overflow: hidden;
-          margin-bottom: 48px;
-        }
-
-        .footer-scroll-content {
+        .footer-preview-grid {
           display: flex;
-          gap: 20px;
-          width: max-content;
-          animation: footer-ticker 80s linear infinite;
+          gap: 16px;
+          justify-content: center;
+          flex-wrap: wrap;
         }
 
-        .footer-scroll-content:hover {
-          animation-play-state: paused;
-        }
-
-        @keyframes footer-ticker {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(calc(-50% - 10px)); }
-        }
-
-        .footer-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          background: #e0d8d2;
-        }
-
-        .footer-img-shell {
+        .footer-preview-card {
           position: relative;
-          width: clamp(220px, 18vw, 320px);
-          aspect-ratio: 1;
-          flex-shrink: 0;
+          width: clamp(170px, 24vw, 260px);
+          aspect-ratio: 4 / 5;
           overflow: hidden;
+          border-radius: 2px;
+          background: #e0d8d2;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .footer-preview-image {
+          object-fit: cover;
+          transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), filter 300ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .footer-preview-card::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.22) 100%);
+          pointer-events: none;
+        }
+
+        .footer-preview-card:hover .footer-preview-image {
+          transform: scale(1.03);
+          filter: brightness(1.03);
+        }
+
+        .footer-trust-line {
+          margin-top: 16px;
+          text-align: center;
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(20, 20, 19, 0.58);
+        }
+
+        .footer-trust-copy {
+          margin-top: 10px;
+          text-align: center;
+          font-family: var(--font-serif, "Noto Serif", serif);
+          font-size: clamp(1rem, 1.8vw, 1.2rem);
+          font-style: italic;
+          line-height: 1.5;
+          color: rgba(20, 20, 19, 0.85);
+        }
+
+        .footer-contact-panel {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          max-width: 320px;
+        }
+
+        .footer-contact-label {
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+          color: rgba(20, 20, 19, 0.56);
+        }
+
+        .footer-contact-value {
+          font-family: var(--font-serif, "Noto Serif", serif);
+          font-size: clamp(1.2rem, 2vw, 1.6rem);
+          line-height: 1.3;
+          color: #141413;
+          text-decoration: none;
+        }
+
+        .footer-contact-note {
+          font-size: 13px;
+          line-height: 1.7;
+          color: rgba(20, 20, 19, 0.72);
+          margin: 0;
         }
 
         /* ── 2. INFORMATION FLOW ── */
@@ -453,17 +510,29 @@ export function Footer() {
         @media (max-width: 900px) {
           .footer-content-grid {
             grid-template-columns: 1fr;
-            gap: 48px;
+            gap: 40px;
           }
-          
+
           .footer-brand-section {
             max-width: 100%;
+          }
+
+          .footer-preview-grid {
+            justify-content: flex-start;
           }
         }
 
         @media (max-width: 640px) {
-          .footer-cta {
-            margin-bottom: 64px;
+          .footer-cta-shell {
+            padding-inline: 16px;
+          }
+
+          .footer-preview-card {
+            width: calc(50% - 8px);
+          }
+
+          .footer-content-grid {
+            gap: 32px;
           }
 
           .footer-bottom-bar {
@@ -481,8 +550,19 @@ export function Footer() {
 
       <footer className="footer-root">
 
-        {/* ── INSTAGRAM SCROLL ── */}
-        <div>
+        <section className="footer-cta-shell">
+          <p className="footer-cta-label">Limited availability</p>
+          <h2 className="footer-cta-title">Let&apos;s Tell Your Story</h2>
+          <p className="footer-cta-copy">Limited bookings per season. Enquire now to check availability.</p>
+          <Link href="/contact-us" className="footer-cta-button" aria-label="Enquire now">
+            <span>Enquire Now</span>
+            <svg className="arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 10L10 2M6 2H10V6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Link>
+        </section>
+
+        <section className="footer-preview-shell" aria-label="Instagram preview">
           <div className="footer-instagram-header">
             <span className="header-line" />
             <span style={{ whiteSpace: "nowrap" }}>
@@ -491,29 +571,26 @@ export function Footer() {
             <span className="header-line" />
           </div>
 
-          <div className="footer-scroll-container">
-            <div className="footer-scroll-content">
-              {[...images, ...images].map((src, i) => (
-                // Only render images if src is valid (not placeholder "#")
-                src && src !== "#" && (
-                  <div key={i} className="footer-img-shell">
-                    <Image
-                      src={src}
-                      alt={`Instagram feed ${i + 1}`}
-                      fill
-                      sizes="(max-width: 640px) 220px, (max-width: 1200px) 18vw, 320px"
-                      quality={80}
-                      className="footer-img"
-                    />
-                  </div>
-                )
-              ))}
-            </div>
+          <div className="footer-preview-grid">
+            {instagramImages.map((image) => (
+              <div key={image.src} className="footer-preview-card">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 260px"
+                  quality={82}
+                  className="footer-preview-image"
+                />
+              </div>
+            ))}
           </div>
-        </div>
 
-                {/* GRAND FINALE (Moved Top) */}
-          <div ref={logoRef} className="footer-logo-wrapper" style={{ marginBottom: "96px" }}>
+          <p className="footer-trust-line">Crafting cinematic wedding stories across India.</p>
+          <p className="footer-trust-copy">Visual proof of the moments we preserve with a quiet, editorial eye.</p>
+        </section>
+
+        <div ref={logoRef} className="footer-logo-wrapper" style={{ marginBottom: "56px" }}>
 
             {/* Organic ink splatters */}
             {splatters.map((splat, i) => (
@@ -611,10 +688,10 @@ export function Footer() {
             </nav>
 
             {/* Socials & Client Info */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
               <div className="footer-social-col" aria-label="Social links">
                 <a
-                  href="https://instagram.com"
+                  href="https://instagram.com/artistryinlove"
                   target="_blank"
                   rel="noreferrer"
                   className="footer-social-link"
@@ -623,16 +700,7 @@ export function Footer() {
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
                 <a
-                  href="https://wa.me/919999999999"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="footer-social-link"
-                  aria-label="WhatsApp"
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                </a>
-                <a
-                  href="mailto:"
+                  href={`mailto:${contactEmail}`}
                   className="footer-social-link"
                   aria-label="Email"
                 >
@@ -640,11 +708,12 @@ export function Footer() {
                 </a>
               </div>
 
-              {/* Client Info */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", opacity: 0.8, fontFamily: "var(--font-sans, 'Manrope', sans-serif)" }}>
-                <span style={{ fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: "#141413" }}></span>
-                <a href="mailto:" style={{ color: "#141413", textDecoration: "none" }}></a>
-                <a href="https://www.AIL.com" target="_blank" rel="noreferrer" style={{ color: "#141413", textDecoration: "none" }}>www.AIL.com</a>
+              <div className="footer-contact-panel">
+                <span className="footer-contact-label">Enquiries</span>
+                <a className="footer-contact-value" href={`mailto:${contactEmail}`}>
+                  {contactEmail}
+                </a>
+                <p className="footer-contact-note">Crafting cinematic wedding stories across India.</p>
               </div>
             </div>
           </div>
@@ -655,7 +724,7 @@ export function Footer() {
           <div className="footer-bottom-bar">
             <p className="footer-copyright">© {year} Artistry in Love. All Rights Reserved.</p>
 
-            <p className="footer-signature">Crafted with intention, captured with soul.</p>
+            <p className="footer-signature">Crafted with intention. Ready when you are.</p>
 
             <button onClick={scrollToTop} className="footer-back-top" aria-label="Back to top">
               Back to Top&nbsp;

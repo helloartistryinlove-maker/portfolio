@@ -1,8 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FilmPlayer } from "@/components/ui/film-player";
-import { imageKitUrl } from "@/lib/ik-url";
+import { YouTubePlayer } from "@/components/ui/youtube-player";
+import { films } from "@/data/films";
 
 type FilmPageProps = {
   params: Promise<{
@@ -13,7 +12,9 @@ type FilmPageProps = {
 export default async function FilmDetailPage({ params }: FilmPageProps) {
   const { slug } = await params;
 
-  if (slug !== "anurag-shreya") {
+  const film = films.find((f) => f.slug === slug);
+
+  if (!film) {
     notFound();
   }
 
@@ -29,8 +30,12 @@ export default async function FilmDetailPage({ params }: FilmPageProps) {
         }
 
         .film-detail-shell {
-          max-width: 1440px;
+          max-width: 1000px;
           margin: 0 auto;
+        }
+
+        .film-detail-meta {
+          margin-bottom: clamp(40px, 8vw, 60px);
         }
 
         .film-detail-kicker {
@@ -107,14 +112,14 @@ export default async function FilmDetailPage({ params }: FilmPageProps) {
       `}</style>
 
       <div className="film-detail-shell">
-        <p className="film-detail-kicker">Wedding Film</p>
-        <h1 className="film-detail-title">Anurag &amp; Shreya Wedding Film</h1>
+        <div className="film-detail-meta">
+          <p className="film-detail-kicker">{film.kicker}</p>
+          <h1 className="film-detail-title">{film.title}</h1>
+        </div>
 
-        <FilmPlayer
-          title="Anurag & Shreya Wedding Film"
-          posterSrc={imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1800, quality: 82, format: "auto" })}
-          posterAlt="Anurag & Shreya Wedding Film poster"
-          videoId="bKetYuPYvX8"
+        <YouTubePlayer
+          videoId={film.videoId}
+          title={film.title}
         />
 
         <Link href="/films" className="film-detail-back">

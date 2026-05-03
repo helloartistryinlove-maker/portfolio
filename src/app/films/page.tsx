@@ -1,67 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { imageKitUrl } from "@/lib/ik-url";
-
-function PlayIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 64 64"
-      fill="none"
-      width="72"
-      height="72"
-      aria-hidden="true"
-    >
-      <circle cx="32" cy="32" r="30" stroke="rgba(255,255,255,0.82)" strokeWidth="1.5" />
-      <polygon points="27,20 49,32 27,44" fill="rgba(255,255,255,0.96)" />
-    </svg>
-  );
-}
-
-const mockFilms = [
-  { slug: "anurag-shreya", title: "Anurag & Shreya Wedding Film", kicker: "Signature Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
-  { slug: "film-2", title: "Coming Soon - Film 2", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
-  { slug: "film-3", title: "Coming Soon - Film 3", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
-  { slug: "film-4", title: "Coming Soon - Film 4", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
-  { slug: "film-5", title: "Coming Soon - Film 5", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
-  { slug: "film-6", title: "Coming Soon - Film 6", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
-  { slug: "film-7", title: "Coming Soon - Film 7", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) }
-];
-
-type FilmCardProps = {
-  slug: string;
-  title: string;
-  kicker: string;
-  poster: string;
-};
-
-function FilmCard({ slug, title, kicker, poster }: FilmCardProps) {
-  return (
-    <Link href={`/films/${slug}`} className="film-card" aria-label={`Open ${title}`}>
-      <div className="film-card-media">
-        <Image
-          src={poster}
-          alt={`${title} thumbnail`}
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, 1200px"
-          className="film-card-image"
-        />
-        <div className="film-card-overlay" />
-        <div className="film-card-play">
-          <PlayIcon />
-        </div>
-      </div>
-
-      <div className="film-card-meta">
-        <p className="film-card-kicker">{kicker}</p>
-        <h2>{title}</h2>
-      </div>
-    </Link>
-  );
-}
+import { FilmCard } from "@/components/ui/film-card";
+import { films } from "@/data/films";
 
 export default function FilmsPage() {
   return (
@@ -215,13 +155,13 @@ export default function FilmsPage() {
           </section>
 
           <div className="films-grid fade-in-section">
-            {mockFilms.map((film, i) => (
+            {films.map((film) => (
               <FilmCard 
-                key={i} 
+                key={film.slug} 
                 slug={film.slug} 
                 title={film.title} 
                 kicker={film.kicker} 
-                poster={film.poster} 
+                videoId={film.videoId}
               />
             ))}
           </div>
