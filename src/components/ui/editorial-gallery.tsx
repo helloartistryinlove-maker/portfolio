@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 
 type GalleryImage = {
   src: string;
@@ -564,7 +564,11 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
         }
       `}</style>
 
-      {sections.map((section, sectionIndex) => renderSection(section, sectionIndex, sections.length))}
+      {sections.map((section, sectionIndex) => (
+        <React.Fragment key={`${section.pattern}-${sectionIndex}`}>
+          {renderSection(section, sectionIndex, sections.length)}
+        </React.Fragment>
+      ))}
     </div>
   );
 }

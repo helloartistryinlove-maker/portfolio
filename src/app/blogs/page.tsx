@@ -478,7 +478,7 @@ export default function BlogsPage() {
                 {!galleryLoading && !galleryError && cardCoverImage ? (
                   <div className="client-gallery-image-shell" aria-label={`Gallery cover for ${gallery.title}`}>
                     <Image
-                      src={cardCoverImage}
+                      src={encodeURI(cardCoverImage)}
                       alt={`${gallery.title} cover`}
                       fill
                       sizes="(max-width: 560px) 100vw, 420px"
