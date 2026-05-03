@@ -788,7 +788,7 @@ export default function Home() {
       <section className="hero-wrapper">
         <div className="hero-bg-wrapper parallax-layer" data-parallax-speed="0.08" data-parallax-max="40">
           <Image
-            src={placeholderSvg("Hero Image")}
+            src="/images/PPG05856.jpg"
             alt="Cinematic wedding photography hero background"
             className="hero-bg"
             fill

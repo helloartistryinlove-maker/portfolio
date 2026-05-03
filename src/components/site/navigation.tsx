@@ -10,8 +10,8 @@ const links = [
   { href: "/films",        label: "Films" },
   { href: "/blogs",        label: "Blogs" },
   { href: "/testimonials", label: "Testimonials" },
-  { href: "/contact-us",   label: "Contact" },
   { href: "/career",       label: "Careers" },
+  { href: "/contact-us",   label: "Contact" },
 ];
 
 export function Navigation() {

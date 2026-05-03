@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 const clientGalleries = [
   {
@@ -469,7 +470,7 @@ export default function BlogsPage() {
                 style={{ transitionDelay: "0s" }}
               >
                 <div className="client-gallery-image-shell" aria-label={`Gallery cover for ${gallery.title}`}>
-                  <Image
+                  <OptimizedImage
                     src={blogCoverImage}
                     alt={`${gallery.title} cover`}
                     fill

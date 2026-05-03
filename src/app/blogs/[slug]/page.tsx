@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { BlogDetailAudioPlayer } from "@/components/ui/blog-detail-audio-player";
 import { EditorialGallery } from "@/components/ui/editorial-gallery";
@@ -266,14 +267,13 @@ export default function BlogPostDetail() {
       <div className="post-detail-page">
         <BlogDetailAudioPlayer />
         <section className="post-hero">
-          <Image
+          <OptimizedImage
             src={heroImg}
             alt={post.title}
             fill
             priority
             sizes="100vw"
             quality={80}
-            unoptimized
             className="post-hero-img"
           />
           <div className="post-hero-content">
