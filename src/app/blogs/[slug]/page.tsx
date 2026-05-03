@@ -7,18 +7,18 @@ import { useEffect, useMemo, useState } from "react";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { BlogDetailAudioPlayer } from "@/components/ui/blog-detail-audio-player";
 import { EditorialGallery } from "@/components/ui/editorial-gallery";
+import {
+  buildGalleryCacheKeyPrefix,
+  readGalleryCache,
+  writeGalleryCache,
+  type GalleryImage,
+} from "@/lib/gallery-cache";
 
 type BlogPost = {
   title: string;
   location: string;
   date: string;
   story: string;
-};
-
-type GalleryImage = {
-  src: string;
-  subfolder: string;
-  filename: string;
 };
 
 const blogPosts: Record<string, BlogPost> = {
@@ -58,30 +58,30 @@ export default function BlogPostDetail() {
 
         const data = (await response.json()) as Record<string, string[]>;
         console.log("API DATA", data);
-        console.log("Total images received:", Object.values(data).flat().length);
+        const allUrls = Object.values(data).flat();
+        console.log("Total images received:", allUrls.length);
 
-        // Check session storage for a persisted selection order for this client
-        const sessionKey = `anurag-shreya:selected`;
-        const existing = typeof window !== "undefined" ? sessionStorage.getItem(sessionKey) : null;
-        const existingImages = existing ? (JSON.parse(existing) as GalleryImage[]) : null;
+        const cacheKeyPrefix = buildGalleryCacheKeyPrefix("anurag-shreya", allUrls);
+        const cachedImages = readGalleryCache(cacheKeyPrefix);
+        let galleryToUse: GalleryImage[];
 
-        // Perform one-time selection and shuffle on initial load using API data
-        const { buildCombinedSelected } = await import("@/lib/gallery-utils");
-        const selectedImages = buildCombinedSelected(data).combined;
-        console.log("SELECTED IMAGES", selectedImages);
-        console.log("Images passed to gallery:", selectedImages.length);
-
-        const galleryToUse = existingImages && existingImages.length > 0 ? existingImages : selectedImages;
+        if (cachedImages) {
+          galleryToUse = cachedImages;
+          console.log("SELECTED IMAGES", cachedImages);
+          console.log("Images passed to gallery:", cachedImages.length);
+        } else {
+          const { buildCombinedSelected } = await import("@/lib/gallery-utils");
+          const selectedImages = buildCombinedSelected(data).combined;
+          console.log("SELECTED IMAGES", selectedImages);
+          console.log("Images passed to gallery:", selectedImages.length);
+          writeGalleryCache(cacheKeyPrefix, selectedImages, allUrls);
+          galleryToUse = selectedImages;
+        }
 
         if (isMounted) {
           setGalleryImages(galleryToUse);
           setVisibleCount(Math.min(INITIAL_VISIBLE_IMAGES, galleryToUse.length));
           setGalleryError(null);
-          try {
-            sessionStorage.setItem(sessionKey, JSON.stringify(galleryToUse));
-          } catch (_) {
-            // ignore storage errors
-          }
         }
       } catch (error) {
         if (isMounted) {

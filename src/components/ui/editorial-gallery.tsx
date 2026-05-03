@@ -92,39 +92,30 @@ function ImageFrame({
   image,
   alt,
   className,
-  quality,
-  sizes,
-  priority,
-  loading,
   delayIndex,
-  width,
 }: {
   image: GalleryImage;
   alt: string;
   className: string;
-  quality: number;
-  sizes: string;
+  quality?: number;
+  sizes?: string;
   priority?: boolean;
-  loading: "eager" | "lazy";
+  loading?: "eager" | "lazy";
   delayIndex?: number;
-  width: number;
+  width?: number;
 }) {
-  console.log("[blog-gallery] ImageFrame src:", image.src);
-
   return (
-    <div className={className} style={delayIndex !== undefined ? ({ "--index": delayIndex } as React.CSSProperties) : undefined}>
-      <Image
+    <div
+      className={className}
+      style={delayIndex !== undefined ? ({ "--index": delayIndex } as React.CSSProperties) : undefined}
+    >
+      <img
         src={image.src}
         alt={alt}
-        fill
-        sizes={sizes}
-        quality={quality}
-        priority={priority}
-        loading={loading}
-        unoptimized
-        placeholder="blur"
-        blurDataURL={BLUR_PLACEHOLDER}
         className="gallery-image"
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        loading="lazy"
+        decoding="async"
       />
     </div>
   );

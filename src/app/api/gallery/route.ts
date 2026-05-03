@@ -10,23 +10,26 @@ function isFileObject(item: FileObject | FolderObject): item is FileObject {
   return item.type === "file";
 }
 
-async function listFolderImageUrls(folderPath: string) {
+const folders = [
+  "AnuragAndShreya/Haldi",
+  "AnuragAndShreya/Mehndi",
+  "AnuragAndShreya/Sangeet",
+  "AnuragAndShreya/Wedding",
+  "AnuragAndShreya/BrideEntry",
+];
+
+async function listFolderImageUrls(folderPath: string): Promise<string[]> {
   const imagekit = getImageKitClient();
   const response = await imagekit.listFiles({ path: folderPath });
 
   return response
     .filter(isFileObject)
     .sort((left, right) => left.filePath.localeCompare(right.filePath))
-    .map((file) => file.url.split("?")[0]);
+    .map((file) => {
+      const cleanPath = file.filePath.startsWith("/") ? file.filePath.slice(1) : file.filePath;
+      return `/api/image?path=${encodeURIComponent(cleanPath)}`;
+    });
 }
-
-const folders = [
-  "Anurag&Shreya/Haldi",
-  "Anurag&Shreya/Mehndi",
-  "Anurag&Shreya/Sangeet",
-  "Anurag&Shreya/Wedding",
-  "Anurag&Shreya/BrideEntry",
-];
 
 export async function GET(request: NextRequest) {
   const clientName = request.nextUrl.searchParams.get("client")?.trim() ?? "";
@@ -40,14 +43,10 @@ export async function GET(request: NextRequest) {
     const responseBody = Object.fromEntries(
       folders.map((folder, index) => {
         const folderName = folder.split("/").pop() ?? folder;
-
         console.log("[blog-gallery]", folder, result[index].length);
-
         return [folderName, result[index]] as const;
       }),
     );
-
-    console.log("[blog-gallery] API response:", responseBody);
 
     return NextResponse.json(responseBody);
   } catch {
