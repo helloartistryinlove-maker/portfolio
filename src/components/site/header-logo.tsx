@@ -136,7 +136,7 @@ export function HeaderLogo({ className = "" }) {
           text-rendering: geometricPrecision;
           font-variant-ligatures: none;
           gap: 0.13em;
-          transition: gap 480ms cubic-bezier(0.16, 1, 0.3, 1);
+          transition: gap 800ms cubic-bezier(0.16, 1, 0.3, 1);
         }
         .ail-logo.expanded { gap: 0.55em; }
 
@@ -167,10 +167,10 @@ export function HeaderLogo({ className = "" }) {
           transform: translateY(5px);
           filter: blur(3px);
           transition:
-            max-width 80ms linear,
-            opacity   200ms cubic-bezier(0.16, 1, 0.3, 1),
-            transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
-            filter    200ms cubic-bezier(0.16, 1, 0.3, 1);
+            max-width 300ms cubic-bezier(0.25, 1, 0.5, 1),
+            opacity   300ms cubic-bezier(0.25, 1, 0.5, 1),
+            transform 300ms cubic-bezier(0.25, 1, 0.5, 1),
+            filter    300ms cubic-bezier(0.25, 1, 0.5, 1);
         }
         .ail-char.on {
           max-width: 1.4em;

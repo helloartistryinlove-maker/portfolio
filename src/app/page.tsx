@@ -590,9 +590,11 @@ export default function Home() {
 
         /* ── Testimonial section ────── */
         .testimonial-wrapper {
-          background-image: linear-gradient(rgba(45,35,28,0.78), rgba(45,35,28,0.78)), url('/testimonial.jpg');
+          background-image: linear-gradient(rgba(45,35,28,0.78), rgba(45,35,28,0.78)), url('${placeholderSvg("Testimonial Background")}');
+          background-color: var(--charcoal);
           background-size: cover;
           background-position: center;
+          background-attachment: fixed;
           color: var(--bg-surface);
         }
 
@@ -658,6 +660,7 @@ export default function Home() {
         /* ── CTA section ────────── */
         .cta-wrapper {
           background: var(--bg);
+          padding-block: clamp(40px, 8vw, 80px);
         }
 
         .cta-container {
@@ -785,7 +788,7 @@ export default function Home() {
       <section className="hero-wrapper">
         <div className="hero-bg-wrapper parallax-layer" data-parallax-speed="0.08" data-parallax-max="40">
           <Image
-            src="/coverimg.jpg"
+            src={placeholderSvg("Hero Image")}
             alt="Cinematic wedding photography hero background"
             className="hero-bg"
             fill
@@ -823,7 +826,7 @@ export default function Home() {
             {/* Image column — 6 cols on desktop, 7 cols start */}
             <div className="intro-image parallax-layer" data-parallax-speed="0.06" data-parallax-max="16">
               <Image
-                src="/portfolio1.jpg"
+                src={placeholderSvg("Philosophy Image")}
                 alt="Editorial wedding cinematography portrait"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -863,7 +866,7 @@ export default function Home() {
               <div className="portfolio-card">
                 <div className="portfolio-img-wrapper" style={{ aspectRatio: "16 / 9" }}>
                   <Image
-                    src="/portfoli2.jpg"
+                    src={placeholderSvg("Portfolio 1")}
                     alt="Sienna & Alessandro — Amalfi, Italy wedding film"
                     fill
                     sizes="(max-width: 768px) 100vw, 66vw"
@@ -883,7 +886,7 @@ export default function Home() {
               <div className="portfolio-card">
                 <div className="portfolio-img-wrapper" style={{ aspectRatio: "3 / 4" }}>
                   <Image
-                    src="/portfoli3.jpg"
+                    src={placeholderSvg("Portfolio 2")}
                     alt="Chloe & Julian — Paris, France wedding film"
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
@@ -903,7 +906,7 @@ export default function Home() {
               <div className="portfolio-card">
                 <div className="portfolio-img-wrapper" style={{ aspectRatio: "4 / 3" }}>
                   <Image
-                    src="/internationalsection.jpg"
+                    src={placeholderSvg("Portfolio 3")}
                     alt="Isabella & James — Cotswolds, UK wedding film"
                     fill
                     sizes="(max-width: 768px) 100vw, 42vw"
@@ -940,7 +943,7 @@ export default function Home() {
             {/* Left — image */}
             <div className="process-image-wrapper parallax-layer" data-parallax-speed="0.05" data-parallax-max="18">
               <Image
-                src="/foooter11.jpg"
+                src={placeholderSvg("Process Image")}
                 alt="The artist at work — filmmaker's cinematography process"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -1047,7 +1050,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════
           §6  FINAL CTA — Centered call-to-action
           ════════════════════════════════════════════════════ */}
-      <section className="section-xl section-base cta-wrapper fade-in-section">
+      <section className="section-base cta-wrapper fade-in-section">
         <div className="cta-container">
           <h2 className="cta-headline">
             Now booking for the MMXXV Season

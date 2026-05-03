@@ -19,13 +19,30 @@ function PlayIcon() {
   );
 }
 
-function FilmCard() {
+const mockFilms = [
+  { slug: "anurag-shreya", title: "Anurag & Shreya Wedding Film", kicker: "Signature Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
+  { slug: "film-2", title: "Coming Soon - Film 2", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
+  { slug: "film-3", title: "Coming Soon - Film 3", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
+  { slug: "film-4", title: "Coming Soon - Film 4", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
+  { slug: "film-5", title: "Coming Soon - Film 5", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
+  { slug: "film-6", title: "Coming Soon - Film 6", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
+  { slug: "film-7", title: "Coming Soon - Film 7", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" }
+];
+
+type FilmCardProps = {
+  slug: string;
+  title: string;
+  kicker: string;
+  poster: string;
+};
+
+function FilmCard({ slug, title, kicker, poster }: FilmCardProps) {
   return (
-    <Link href="/films/anurag-shreya" className="film-card" aria-label="Open Anurag and Shreya Wedding Film">
+    <Link href={`/films/${slug}`} className="film-card" aria-label={`Open ${title}`}>
       <div className="film-card-media">
         <Image
-          src="/Anurag&Shreya/Wedding/238A3328.jpg"
-          alt="Anurag & Shreya Wedding Film thumbnail"
+          src={poster}
+          alt={`${title} thumbnail`}
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1200px"
@@ -38,8 +55,8 @@ function FilmCard() {
       </div>
 
       <div className="film-card-meta">
-        <p className="film-card-kicker">Signature Film</p>
-        <h2>Anurag &amp; Shreya Wedding Film</h2>
+        <p className="film-card-kicker">{kicker}</p>
+        <h2>{title}</h2>
       </div>
     </Link>
   );
@@ -64,7 +81,9 @@ export default function FilmsPage() {
 
         .films-intro {
           max-width: 760px;
-          margin-bottom: clamp(28px, 5vw, 44px);
+          margin-bottom: clamp(64px, 10vw, 120px);
+          margin-inline: auto;
+          text-align: center;
         }
 
         .films-intro h1 {
@@ -81,16 +100,20 @@ export default function FilmsPage() {
           font-size: clamp(1rem, 2vw, 1.1rem);
           line-height: 1.7;
           color: var(--text-secondary);
-          margin: 0;
+          margin: 0 auto;
           max-width: 540px;
+        }
+
+        .films-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: clamp(48px, 6vw, 80px);
         }
 
         .film-card {
           display: block;
           text-decoration: none;
           color: inherit;
-          max-width: 1240px;
-          margin: 0 auto;
           transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -146,6 +169,7 @@ export default function FilmsPage() {
 
         .film-card-meta {
           padding-top: 18px;
+          text-align: center;
         }
 
         .film-card-kicker {
@@ -174,16 +198,32 @@ export default function FilmsPage() {
           from { opacity: 0; transform: translateY(24px); }
           to { opacity: 1; transform: translateY(0); }
         }
+
+        @media (max-width: 860px) {
+          .films-grid {
+            grid-template-columns: 1fr;
+          }
+        }
       `}</style>
 
       <div className="films-page">
         <div className="films-shell">
           <section className="films-intro fade-in-section">
             <h1>Cinematic Stories</h1>
-            <p>A single premium entry point to the Anurag &amp; Shreya wedding film, presented with a clean editorial hierarchy.</p>
+            <p>A curated collection of our cinematic wedding stories, each crafted to preserve the fleeting whispers of today into timeless poetry.</p>
           </section>
 
-          <FilmCard />
+          <div className="films-grid fade-in-section">
+            {mockFilms.map((film, i) => (
+              <FilmCard 
+                key={i} 
+                slug={film.slug} 
+                title={film.title} 
+                kicker={film.kicker} 
+                poster={film.poster} 
+              />
+            ))}
+          </div>
         </div>
 
       </div>

@@ -64,8 +64,7 @@ export function Footer() {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          min-height: 100vh;
-          padding-top: 128px;
+          padding-top: clamp(64px, 8vw, 96px);
           padding-bottom: 24px;
           padding-inline: clamp(24px, 5vw, 64px);
           overflow: hidden;
@@ -79,7 +78,7 @@ export function Footer() {
           text-align: center;
           width: 100%;
           max-width: 900px;
-          margin: 0 auto 96px;
+          margin: 0 auto 64px;
         }
 
         .footer-cta-label {
@@ -204,7 +203,7 @@ export function Footer() {
           width: calc(100% + clamp(48px, 10vw, 128px));
           margin-inline: calc(-1 * clamp(24px, 5vw, 64px));
           overflow: hidden;
-          margin-bottom: 80px;
+          margin-bottom: 48px;
         }
 
         .footer-scroll-content {
@@ -241,12 +240,11 @@ export function Footer() {
         /* ── 2. INFORMATION FLOW ── */
         .footer-content-grid {
           width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: flex-end;
-          gap: clamp(48px, 6vw, 96px);
-          margin-bottom: 80px;
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr;
+          gap: clamp(64px, 6vw, 100px);
+          margin-bottom: 48px;
+          align-items: start;
         }
 
         .footer-brand-section {
@@ -274,21 +272,22 @@ export function Footer() {
 
         /* Right column: nav + socials side by side */
         .footer-dir {
-          display: flex;
-          flex-direction: row;
-          gap: clamp(48px, 6vw, 96px);
-          align-items: flex-start;
+          display: contents;
         }
 
-        .footer-nav-col,
-        .footer-social-col {
+        .footer-nav-col {
           display: flex;
           flex-direction: column;
-          gap: 18px;
+          gap: 24px;
         }
 
-        .footer-link,
-        .footer-social-link {
+        .footer-social-col {
+          display: flex;
+          flex-direction: row;
+          gap: 32px;
+        }
+
+        .footer-link {
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 11px;
           font-weight: 600;
@@ -299,15 +298,26 @@ export function Footer() {
           text-decoration: none;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
           width: fit-content;
           transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .footer-link:hover,
-        .footer-social-link:hover {
+        .footer-social-link {
+          color: #141413;
+          opacity: 0.6;
+          display: inline-flex;
+          align-items: center;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer-link:hover {
           opacity: 1;
           transform: translateX(6px);
+        }
+
+        .footer-social-link:hover {
+          opacity: 1;
+          transform: translateY(-4px) scale(1.05);
         }
 
         /* ── LIQUID WAVE ANIMATION ── */
@@ -340,7 +350,8 @@ export function Footer() {
 
         .footer-editorial-brand {
           font-family: var(--font-serif, "Noto Serif", serif);
-          font-size: 13.5vw;
+          font-size: clamp(2.8rem, 9.5vw, 110px);
+          opacity: 0.85;
           font-weight: 400;
           line-height: 0.85;
           letter-spacing: -0.05em;
@@ -374,7 +385,7 @@ export function Footer() {
 
         @media (max-width: 640px) {
           .footer-editorial-brand {
-            font-size: 14vw;
+            font-size: 12.5vw;
           }
         }
 
@@ -439,11 +450,10 @@ export function Footer() {
         /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
           .footer-content-grid {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 40px;
+            grid-template-columns: 1fr;
+            gap: 48px;
           }
-
+          
           .footer-brand-section {
             max-width: 100%;
           }
@@ -452,10 +462,6 @@ export function Footer() {
         @media (max-width: 640px) {
           .footer-cta {
             margin-bottom: 64px;
-          }
-
-          .footer-dir {
-            gap: 40px;
           }
 
           .footer-bottom-bar {
@@ -501,65 +507,8 @@ export function Footer() {
           </div>
         </div>
 
-        {/* ── 2. INFO FLOW ── */}
-        <div className="footer-content-grid">
-          <div className="footer-brand-section">
-            <h3 className="footer-brand-name">AIL</h3>
-            <p className="footer-brand-subtext">
-              Preserving the fleeting whispers of today into the timeless poetry of tomorrow. Based in India, traversing the globe for the modern romantic.
-            </p>
-          </div>
-
-          <div className="footer-dir">
-            {/* Navigation */}
-            <nav className="footer-nav-col" aria-label="Footer navigation">
-              {[
-                { label: "Films",        href: "/films" },
-                { label: "Blogs",        href: "/blogs" },
-                { label: "Testimonials", href: "/testimonials" },
-                { label: "Contact",      href: "/contact-us" },
-                { label: "Careers",      href: "/career" },
-              ].map(({ label, href }) => (
-                <Link key={label} href={href} className="footer-link">
-                  {label}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Socials */}
-            <div className="footer-social-col" aria-label="Social links">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="footer-social-link"
-                aria-label="Instagram"
-              >
-                <span>↗</span> Instagram
-              </a>
-              <a
-                href="https://wa.me/919999999999"
-                target="_blank"
-                rel="noreferrer"
-                className="footer-social-link"
-                aria-label="WhatsApp"
-              >
-                <span>↗</span> WhatsApp
-              </a>
-              <a
-                href="mailto:hello@artistryinlove.in"
-                className="footer-social-link"
-                aria-label="Email"
-              >
-                <span>↗</span> Email Studio
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* ── 3. GRAND FINALE ── */}
-        <div>
-          <div ref={logoRef} className="footer-logo-wrapper">
+                {/* GRAND FINALE (Moved Top) */}
+          <div ref={logoRef} className="footer-logo-wrapper" style={{ marginBottom: "96px" }}>
 
             {/* Organic ink splatters */}
             {splatters.map((splat, i) => (
@@ -621,6 +570,83 @@ export function Footer() {
             </h2>
           </div>
 
+
+        {/* ── 2. INFO FLOW ── */}
+        <div className="footer-content-grid">
+          <div className="footer-brand-section">
+            <div style={{ position: "relative", width: "clamp(200px, 25vw, 320px)", marginBottom: "24px" }}>
+              <Image 
+                src="/logo_footer.png" 
+                alt="Artistry In Love Logo" 
+                width={0} 
+                height={0} 
+                sizes="320px" 
+                style={{ width: "100%", height: "auto", objectFit: "contain" }} 
+              />
+            </div>
+            <p className="footer-brand-subtext">
+              Preserving the fleeting whispers of today into the timeless poetry of tomorrow. Based in India, traversing the globe for the modern romantic.
+            </p>
+          </div>
+
+          <div className="footer-dir">
+            {/* Navigation */}
+            <nav className="footer-nav-col" aria-label="Footer navigation">
+              {[
+                { label: "Films",        href: "/films" },
+                { label: "Blogs",        href: "/blogs" },
+                { label: "Testimonials", href: "/testimonials" },
+                { label: "Contact",      href: "/contact-us" },
+                { label: "Careers",      href: "/career" },
+              ].map(({ label, href }) => (
+                <Link key={label} href={href} className="footer-link">
+                  {label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Socials & Client Info */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+              <div className="footer-social-col" aria-label="Social links">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-social-link"
+                  aria-label="Instagram"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a
+                  href="https://wa.me/919999999999"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-social-link"
+                  aria-label="WhatsApp"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                </a>
+                <a
+                  href="mailto:alisonpinto@gmail.com"
+                  className="footer-social-link"
+                  aria-label="Email"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </a>
+              </div>
+
+              {/* Client Info */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", opacity: 0.8, fontFamily: "var(--font-sans, 'Manrope', sans-serif)" }}>
+                <span style={{ fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: "#141413" }}>Alison</span>
+                <a href="mailto:alisonpinto@gmail.com" style={{ color: "#141413", textDecoration: "none" }}>alisonpinto@gmail.com</a>
+                <a href="https://www.AIL.com" target="_blank" rel="noreferrer" style={{ color: "#141413", textDecoration: "none" }}>www.AIL.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 3. GRAND FINALE ── */}
+        <div>
           <div className="footer-bottom-bar">
             <p className="footer-copyright">© {year} Artistry in Love. All Rights Reserved.</p>
 

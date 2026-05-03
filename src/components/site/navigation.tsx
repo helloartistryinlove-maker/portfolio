@@ -39,11 +39,8 @@ export function Navigation() {
           top: 0; left: 0; right: 0;
           z-index: 100;
 
-          /* ── 3-column grid: logo | links | cta ──
-             Logo lives in col-1. No matter how wide it grows,
-             the centre links stay pinned in col-2. */
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
+          /* ── Flex Layout: logo on left, links and cta on right ── */
+          display: flex;
           align-items: center;
 
           padding: clamp(24px, 5vw, 36px) clamp(24px, 5vw, 40px);
@@ -59,11 +56,12 @@ export function Navigation() {
           transition: background 0.3s, border-color 0.3s;
         }
 
-        /* ── Column 1: logo, left-aligned ── */
+        /* ── Logo, left-aligned ── */
         .nav-brand {
           display: inline-flex;
           align-items: center;
           justify-content: flex-start;
+          margin-right: auto;
           color: ${isTransparent ? "rgba(255,248,242,0.96)" : "var(--text-primary)"};
           text-decoration: none;
           z-index: 101;
@@ -74,13 +72,12 @@ export function Navigation() {
         }
         .nav-brand.dark { color: var(--text-primary); }
 
-        /* ── Column 2: nav links, always centred ── */
+        /* ── Nav links, right-aligned ── */
         .nav-links {
           display: flex;
           align-items: center;
-          gap: clamp(32px, 6vw, 64px);
-          /* centre inside the auto column */
-          justify-content: center;
+          gap: clamp(24px, 4vw, 48px);
+          margin-right: clamp(24px, 4vw, 48px);
         }
 
         /* ── Column 3: CTA + hamburger, right-aligned ── */
@@ -94,7 +91,7 @@ export function Navigation() {
         .nav-link {
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 700;
           letter-spacing: 0.18em;
           text-transform: uppercase;
           color: ${isTransparent ? "rgba(255,248,242,0.72)" : "var(--text-muted)"};
@@ -108,30 +105,6 @@ export function Navigation() {
         .nav-link:hover {
           color: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
           border-bottom-color: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
-        }
-
-        .nav-cta {
-          font-family: var(--font-sans, "Manrope", sans-serif);
-          font-size: 13px;
-          font-weight: 600;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          padding: clamp(8px,2vw,12px) clamp(16px,3vw,24px);
-          border: 1px solid ${isTransparent ? "rgba(255,248,242,0.4)" : "rgba(45,35,28,0.4)"};
-          color: ${isTransparent ? "rgba(255,248,242,0.96)" : "var(--text-primary)"};
-          background: transparent;
-          text-decoration: none;
-          transition: all 0.5s ease;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-        .nav-cta:hover {
-          background: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
-          color: ${isTransparent ? "var(--text-primary)" : "var(--bg-surface)"};
-          border-color: ${isTransparent ? "#fff8f2" : "var(--text-primary)"};
-          box-shadow: ${isTransparent
-            ? "0 0 15px rgba(255,248,242,0.2)"
-            : "0 0 15px rgba(45,35,28,0.2)"};
         }
 
         .nav-ham {
@@ -160,12 +133,11 @@ export function Navigation() {
         /* ── Mobile: collapse to flex, show hamburger ── */
         @media (max-width: 768px) {
           .nav-root {
-            /* back to simple flex on mobile — only logo + hamburger */
+            /* flex on mobile — only logo + hamburger */
             display: flex;
             justify-content: space-between;
           }
           .nav-links { display: none; }
-          .nav-cta   { display: none; }
           .nav-ham   { display: flex; }
         }
 
@@ -219,7 +191,7 @@ export function Navigation() {
           <HeaderLogo />
         </Link>
 
-        {/* Col 2 — Nav links (always centred, unaffected by logo width) */}
+        {/* Nav links (right aligned) */}
         <div className="nav-links">
           {links.map(({ href, label }) => (
             <Link
@@ -232,9 +204,8 @@ export function Navigation() {
           ))}
         </div>
 
-        {/* Col 3 — CTA + hamburger, right-aligned */}
+        {/* Hamburger, right-aligned */}
         <div className="nav-right">
-          <Link href="/contact-us" className="nav-cta">Inquire</Link>
           <button
             className={`nav-ham${open ? " open" : ""}`}
             onClick={() => setOpen(!open)}

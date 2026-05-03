@@ -48,7 +48,6 @@ export default async function FilmDetailPage({ params }: FilmPageProps) {
           line-height: 1.02;
           font-weight: 400;
           letter-spacing: -0.03em;
-          max-width: 820px;
           margin: 0 0 18px;
         }
 
@@ -109,9 +108,6 @@ export default async function FilmDetailPage({ params }: FilmPageProps) {
       <div className="film-detail-shell">
         <p className="film-detail-kicker">Wedding Film</p>
         <h1 className="film-detail-title">Anurag &amp; Shreya Wedding Film</h1>
-        <p className="film-detail-copy">
-          A cinematic wedding story entry point designed to feel minimal, premium, and focused on the still frame before the film begins.
-        </p>
 
         <FilmPlayer
           title="Anurag & Shreya Wedding Film"
