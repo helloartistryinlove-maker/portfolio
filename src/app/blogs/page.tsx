@@ -18,6 +18,9 @@ type GalleryImage = {
   filename: string;
 };
 
+const blogHeroPoster = "/testimonial.jpg";
+const blogCoverImage = "/images/Blog Page Only/2X3A9673.jpg";
+
 function BlogHeroMedia() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -54,7 +57,7 @@ function BlogHeroMedia() {
     <div ref={wrapperRef} className="blog-hero-wrapper">
       {isMobile ? (
         <Image
-          src="/testimonial.jpg"
+          src={blogHeroPoster}
           alt="Wedding film still"
           fill
           priority
@@ -69,7 +72,7 @@ function BlogHeroMedia() {
           playsInline
           loop
           preload="none"
-          poster="/testimonial.jpg"
+          poster={blogHeroPoster}
           className="blog-hero-video"
         >
           {shouldLoad ? (
@@ -86,11 +89,6 @@ function BlogHeroMedia() {
 }
 
 export default function BlogsPage() {
-  // Use a fixed cover image for the blogs listing card so it always shows the requested image.
-  const [cardCoverImage] = useState<string>('/Anurag&Shreya/Wedding/238A3328.jpg');
-  const [galleryLoading] = useState(false);
-  const [galleryError] = useState<string | null>(null);
-
   return (
     <>
       <style>{`
@@ -470,27 +468,16 @@ export default function BlogsPage() {
                 className="client-gallery-card fade-in-section"
                 style={{ transitionDelay: "0s" }}
               >
-
-                {galleryLoading ? (
-                  <div className="client-gallery-image-shell" aria-label={`Gallery content for ${gallery.title}`} />
-                ) : null}
-
-                {!galleryLoading && !galleryError && cardCoverImage ? (
-                  <div className="client-gallery-image-shell" aria-label={`Gallery cover for ${gallery.title}`}>
-                    <Image
-                      src={encodeURI(cardCoverImage)}
-                      alt={`${gallery.title} cover`}
-                      fill
-                      sizes="(max-width: 560px) 100vw, 420px"
-                      quality={78}
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                ) : null}
-
-                {galleryError ? (
-                  <p className="gallery-status-copy">{galleryError}</p>
-                ) : null}
+                <div className="client-gallery-image-shell" aria-label={`Gallery cover for ${gallery.title}`}>
+                  <Image
+                    src={blogCoverImage}
+                    alt={`${gallery.title} cover`}
+                    fill
+                    sizes="(max-width: 560px) 100vw, 420px"
+                    quality={78}
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
 
                 <h3 className="client-gallery-title">{gallery.title}</h3>
               </Link>

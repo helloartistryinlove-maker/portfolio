@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { imageKitUrl } from "@/lib/ik-url";
 
 function PlayIcon() {
   return (
@@ -20,13 +21,13 @@ function PlayIcon() {
 }
 
 const mockFilms = [
-  { slug: "anurag-shreya", title: "Anurag & Shreya Wedding Film", kicker: "Signature Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
-  { slug: "film-2", title: "Coming Soon - Film 2", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
-  { slug: "film-3", title: "Coming Soon - Film 3", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
-  { slug: "film-4", title: "Coming Soon - Film 4", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
-  { slug: "film-5", title: "Coming Soon - Film 5", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
-  { slug: "film-6", title: "Coming Soon - Film 6", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" },
-  { slug: "film-7", title: "Coming Soon - Film 7", kicker: "Wedding Film", poster: "/Anurag&Shreya/Wedding/238A3328.jpg" }
+  { slug: "anurag-shreya", title: "Anurag & Shreya Wedding Film", kicker: "Signature Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
+  { slug: "film-2", title: "Coming Soon - Film 2", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
+  { slug: "film-3", title: "Coming Soon - Film 3", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
+  { slug: "film-4", title: "Coming Soon - Film 4", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
+  { slug: "film-5", title: "Coming Soon - Film 5", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
+  { slug: "film-6", title: "Coming Soon - Film 6", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) },
+  { slug: "film-7", title: "Coming Soon - Film 7", kicker: "Wedding Film", poster: imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1600, quality: 78, format: "auto" }) }
 ];
 
 type FilmCardProps = {

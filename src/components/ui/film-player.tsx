@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { imageKitUrl } from "@/lib/ik-url";
 
 type FilmPlayerProps = {
   title: string;
@@ -22,6 +23,9 @@ function PlayIcon() {
 export function FilmPlayer({ title, posterSrc, posterAlt, videoId }: FilmPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0`;
+  const resolvedPosterSrc = posterSrc.startsWith("/Client/")
+    ? imageKitUrl(posterSrc, { width: 1800, quality: 82, format: "auto" })
+    : posterSrc;
 
   return (
     <div className={`film-player ${isPlaying ? "is-playing" : ""}`}>
@@ -183,7 +187,7 @@ export function FilmPlayer({ title, posterSrc, posterAlt, videoId }: FilmPlayerP
             }
           }}
         >
-          <Image src={posterSrc} alt={posterAlt} fill priority sizes="(max-width: 768px) 100vw, 1200px" className="film-player-thumb" />
+          <Image src={resolvedPosterSrc} alt={posterAlt} fill priority sizes="(max-width: 768px) 100vw, 1200px" className="film-player-thumb" />
           <div className="film-player-overlay" />
           <div className="film-player-play" aria-hidden="true">
             <PlayIcon />

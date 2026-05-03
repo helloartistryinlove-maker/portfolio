@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
+const testimonialPoster = "#";
+
 const testimonials = [
   {
     quote: "Romil is a true genius in the way he captures moments and when it all comes together, it truly feels like you're watching a love story. We are so grateful for him. Thank you Romil and team for being there for us and being the best addition to our love story!",
@@ -16,7 +18,7 @@ const testimonials = [
     quote: "All the pictures they have created are beautiful and full of life, but a few are so close to my heart, as they truly sketch the spirit of Artistry in Love. We love you for you have given us the memory of lifetime, in form of this superb album of happy faces, and not just happy, ecstatic ones too!",
     name: "Rajini and Vinay",
     type: "image",
-    bg: "/portfolio1.jpg"
+    bg: "#"
   },
   {
     quote: "Working with the team was an absolute dream. They didn't just document our wedding; they captured the very soul of our relationship. Every frame feels intentional and full of emotion.",
@@ -28,13 +30,13 @@ const testimonials = [
     quote: "The way they use light and shadow is purely magical. We were blown away by the cinematic quality of our film. It's a treasure that we will pass down for generations.",
     name: "Chloe and Julian",
     type: "image",
-    bg: "/portfoli2.jpg"
+    bg: "#"
   },
   {
     quote: "They made us feel so comfortable in front of the lens. We aren't naturally photogenic, but they captured us in such a raw and beautiful way that we were moved to tears.",
     name: "Isabella and James",
     type: "image",
-    bg: "/portfoli3.jpg"
+    bg: "#"
   },
   {
     quote: "Beyond professional. They were like silent observers who caught every laugh, every tear, and every stolen glance. The final edit is a masterpiece of storytelling.",
@@ -46,13 +48,13 @@ const testimonials = [
     quote: "The dedication to their craft is evident in every single shot. They went above and beyond to ensure our story was told with the depth and elegance it deserved.",
     name: "Sanya and Rohan",
     type: "image",
-    bg: "/foooter11.jpg"
+    bg: "#"
   },
   {
     quote: "Simply the best decision we made for our wedding. The team is incredibly talented, kind, and professional. We can't recommend them highly enough.",
     name: "Meera and Arjun",
     type: "image",
-    bg: "/footer8.jpg"
+    bg: "#"
   }
 ];
 
@@ -88,16 +90,24 @@ function TestimonialMedia({ type, src, name }: { type: string; src: string; name
     return () => observer.disconnect();
   }, []);
 
+  // Only render media if src is a valid URL (not placeholder "#")
+  const isValidSrc = src && src !== "#" && src.startsWith("/");
+  const validPoster = testimonialPoster !== "#" ? testimonialPoster : null;
+
+  if (!isValidSrc && !validPoster) {
+    return <div ref={wrapperRef} style={{ position: "absolute", inset: 0 }} />;
+  }
+
   return (
     <div ref={wrapperRef} style={{ position: "absolute", inset: 0 }}>
-      {type === "video" && !isMobile ? (
+      {type === "video" && !isMobile && validPoster ? (
         <video
           autoPlay={shouldLoad}
           muted
           playsInline
           loop
           preload="none"
-          poster="/testimonial.jpg"
+          poster={validPoster}
           className="strip-bg"
         >
           {shouldLoad ? (
@@ -107,16 +117,16 @@ function TestimonialMedia({ type, src, name }: { type: string; src: string; name
             </>
           ) : null}
         </video>
-      ) : (
+      ) : isValidSrc ? (
         <Image
-          src={type === "video" ? "/testimonial.jpg" : src}
+          src={src}
           alt={`Testimonial from ${name}`}
           fill
           sizes="100vw"
           quality={80}
           className="strip-bg"
         />
-      )}
+      ) : null}
     </div>
   );
 }

@@ -97,6 +97,7 @@ function ImageFrame({
   priority,
   loading,
   delayIndex,
+  width,
 }: {
   image: GalleryImage;
   alt: string;
@@ -106,7 +107,10 @@ function ImageFrame({
   priority?: boolean;
   loading: "eager" | "lazy";
   delayIndex?: number;
+  width: number;
 }) {
+  console.log("[blog-gallery] ImageFrame src:", image.src);
+
   return (
     <div className={className} style={delayIndex !== undefined ? ({ "--index": delayIndex } as React.CSSProperties) : undefined}>
       <Image
@@ -117,6 +121,7 @@ function ImageFrame({
         quality={quality}
         priority={priority}
         loading={loading}
+        unoptimized
         placeholder="blur"
         blurDataURL={BLUR_PLACEHOLDER}
         className="gallery-image"
@@ -140,6 +145,7 @@ function renderHeroFull(images: GalleryImage[], isFirstSection: boolean, isFinal
             sizes="100vw"
             priority={isFirstSection}
             loading={isFirstSection ? "eager" : "lazy"}
+            width={1800}
           />
           {isFinalSection ? <div className="final-overlay" /> : null}
           {isFinalSection ? <div className="final-caption">Anurag & Shreya</div> : null}
@@ -166,6 +172,7 @@ function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFir
             sizes="(max-width: 1024px) 100vw, 58vw"
             priority={isFirstSection}
             loading={isFirstSection ? "eager" : sectionIndex < 2 ? "eager" : "lazy"}
+            width={1600}
           />
         ) : null}
 
@@ -179,6 +186,7 @@ function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFir
               sizes="(max-width: 1024px) 50vw, 21vw"
               delayIndex={0}
               loading="lazy"
+              width={1000}
             />
           ) : null}
           {bottom ? (
@@ -190,6 +198,7 @@ function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFir
               sizes="(max-width: 1024px) 50vw, 21vw"
               delayIndex={1}
               loading="lazy"
+              width={1000}
             />
           ) : null}
         </div>
@@ -214,6 +223,7 @@ function renderEqualHalves(images: GalleryImage[], sectionIndex: number, isFirst
             sizes="(max-width: 1024px) 100vw, 50vw"
             delayIndex={0}
             loading={isFirstSection ? "eager" : "lazy"}
+            width={1400}
           />
         ) : null}
         {right ? (
@@ -225,6 +235,7 @@ function renderEqualHalves(images: GalleryImage[], sectionIndex: number, isFirst
             sizes="(max-width: 1024px) 100vw, 50vw"
             delayIndex={1}
             loading="lazy"
+            width={1400}
           />
         ) : null}
       </div>
@@ -249,6 +260,7 @@ function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSe
             sizes="(max-width: 1024px) 50vw, 33vw"
             delayIndex={0}
             loading={isFirstSection ? "eager" : "lazy"}
+            width={1200}
           />
         ) : null}
         {second ? (
@@ -260,6 +272,7 @@ function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSe
             sizes="(max-width: 1024px) 50vw, 33vw"
             delayIndex={1}
             loading="lazy"
+            width={1200}
           />
         ) : null}
         {third ? (
@@ -271,6 +284,7 @@ function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSe
             sizes="(max-width: 1024px) 50vw, 33vw"
             delayIndex={2}
             loading="lazy"
+            width={1200}
           />
         ) : null}
       </div>

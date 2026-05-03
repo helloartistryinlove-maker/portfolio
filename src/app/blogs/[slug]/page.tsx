@@ -52,39 +52,35 @@ export default function BlogPostDetail() {
     const loadGallery = async () => {
       try {
         setGalleryLoading(true);
-        const response = await fetch("/api/blogs/anurag-shreya-gallery", { cache: "no-store" });
+        const response = await fetch(`/api/gallery?client=${encodeURIComponent("Anurag&Shreya")}`, { cache: "no-store" });
 
         if (!response.ok) throw new Error("Could not load manifest");
 
-        const data = await response.json();
-        const manifest: Record<string, string[]> = data.manifest ?? {};
+        const data = (await response.json()) as Record<string, string[]>;
+        console.log("API DATA", data);
+        console.log("Total images received:", Object.values(data).flat().length);
 
         // Check session storage for a persisted selection order for this client
         const sessionKey = `anurag-shreya:selected`;
         const existing = typeof window !== "undefined" ? sessionStorage.getItem(sessionKey) : null;
+        const existingImages = existing ? (JSON.parse(existing) as GalleryImage[]) : null;
 
-        if (existing) {
-          const parsed = JSON.parse(existing) as GalleryImage[];
-          if (isMounted) {
-            setGalleryImages(parsed);
-            setVisibleCount(Math.min(INITIAL_VISIBLE_IMAGES, parsed.length));
-            setGalleryError(null);
-          }
-        } else {
-          // Perform one-time selection and shuffle on initial load
-          const { buildCombinedSelected } = await import("@/lib/gallery-utils");
-          const result = buildCombinedSelected(manifest);
-          const combined = result.combined;
+        // Perform one-time selection and shuffle on initial load using API data
+        const { buildCombinedSelected } = await import("@/lib/gallery-utils");
+        const selectedImages = buildCombinedSelected(data).combined;
+        console.log("SELECTED IMAGES", selectedImages);
+        console.log("Images passed to gallery:", selectedImages.length);
 
-          if (isMounted) {
-            setGalleryImages(combined);
-            setVisibleCount(Math.min(INITIAL_VISIBLE_IMAGES, combined.length));
-            setGalleryError(null);
-            try {
-              sessionStorage.setItem(sessionKey, JSON.stringify(combined));
-            } catch (_) {
-              // ignore storage errors
-            }
+        const galleryToUse = existingImages && existingImages.length > 0 ? existingImages : selectedImages;
+
+        if (isMounted) {
+          setGalleryImages(galleryToUse);
+          setVisibleCount(Math.min(INITIAL_VISIBLE_IMAGES, galleryToUse.length));
+          setGalleryError(null);
+          try {
+            sessionStorage.setItem(sessionKey, JSON.stringify(galleryToUse));
+          } catch (_) {
+            // ignore storage errors
           }
         }
       } catch (error) {
@@ -114,7 +110,9 @@ export default function BlogPostDetail() {
     setVisibleCount((current) => Math.min(current + LOAD_MORE_BATCH, galleryImages.length));
   };
 
-  const heroImg = galleryImages[0]?.src ?? (slug === "anurag-shreya" ? "/Anurag&Shreya/Wedding/238A3328.jpg" : "/testimonial.jpg");
+  const heroImg = slug === "anurag-shreya"
+    ? "/images/Blog Page Only/2X3A9669.jpg"
+    : galleryImages[0]?.src ?? "/testimonial.jpg";
 
   if (!post) {
     return (
@@ -275,6 +273,7 @@ export default function BlogPostDetail() {
             priority
             sizes="100vw"
             quality={80}
+            unoptimized
             className="post-hero-img"
           />
           <div className="post-hero-content">
@@ -351,6 +350,7 @@ export default function BlogPostDetail() {
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
                             quality={80}
+                            unoptimized
                             className="gallery-img"
                           />
                         </div>

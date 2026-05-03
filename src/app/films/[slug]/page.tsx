@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FilmPlayer } from "@/components/ui/film-player";
+import { imageKitUrl } from "@/lib/ik-url";
 
 type FilmPageProps = {
   params: Promise<{
@@ -111,7 +112,7 @@ export default async function FilmDetailPage({ params }: FilmPageProps) {
 
         <FilmPlayer
           title="Anurag & Shreya Wedding Film"
-          posterSrc="/Anurag&Shreya/Wedding/238A3328.jpg"
+          posterSrc={imageKitUrl("/Anurag&Shreya/Wedding/238A3328.jpg", { width: 1800, quality: 82, format: "auto" })}
           posterAlt="Anurag & Shreya Wedding Film poster"
           videoId="bKetYuPYvX8"
         />

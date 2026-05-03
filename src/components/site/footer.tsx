@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+// Footer uses local static images from /public
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -43,11 +44,12 @@ export function Footer() {
   const waveBottomToTop = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 300' preserveAspectRatio='none'%3E%3Cpath d='M0,148 C7,128,18,122,25,148 C32,174,43,178,50,150 C57,122,66,118,75,152 C84,180,93,172,100,148 L100,300 L0,300 Z' fill='%23141413'/%3E%3C/svg%3E")`;
   const waveTopToBottom = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 300' preserveAspectRatio='none'%3E%3Cpath d='M0,152 C7,172,18,178,25,152 C32,126,43,122,50,150 C57,178,66,182,75,148 C84,120,93,128,100,152 L100,0 L0,0 Z' fill='%23141413'/%3E%3C/svg%3E")`;
 
+  // Use placeholder "#" for non-existent footer images
   const images = [
-    "/footer1.jpg", "/footer2.jpg", "/footer3.jpg", "/footer4.jpg",
-    "/footer5.jpg", "/footer6.jpg", "/footer7.jpg", "/footer8.jpg",
-    "/footer9.jpg", "/footer10.jpg", "/foooter11.jpg", "/footer12.jpg",
-    "/footer13.jpg", "/footer14.jpg", "/footer15.jpg", "/footter16.jpg", "/footer17.jpg"
+    "#", "#", "#", "#",
+    "#", "#", "#", "#",
+    "#", "#", "#", "#",
+    "#", "#", "#", "#", "#"
   ];
 
   const scrollToTop = () => {
@@ -492,16 +494,19 @@ export function Footer() {
           <div className="footer-scroll-container">
             <div className="footer-scroll-content">
               {[...images, ...images].map((src, i) => (
-                <div key={i} className="footer-img-shell">
-                  <Image
-                    src={src}
-                    alt={`Instagram feed ${i + 1}`}
-                    fill
-                    sizes="(max-width: 640px) 220px, (max-width: 1200px) 18vw, 320px"
-                    quality={80}
-                    className="footer-img"
-                  />
-                </div>
+                // Only render images if src is valid (not placeholder "#")
+                src && src !== "#" && (
+                  <div key={i} className="footer-img-shell">
+                    <Image
+                      src={src}
+                      alt={`Instagram feed ${i + 1}`}
+                      fill
+                      sizes="(max-width: 640px) 220px, (max-width: 1200px) 18vw, 320px"
+                      quality={80}
+                      className="footer-img"
+                    />
+                  </div>
+                )
               ))}
             </div>
           </div>
@@ -627,7 +632,7 @@ export function Footer() {
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 </a>
                 <a
-                  href="mailto:alisonpinto@gmail.com"
+                  href="mailto:"
                   className="footer-social-link"
                   aria-label="Email"
                 >
@@ -637,8 +642,8 @@ export function Footer() {
 
               {/* Client Info */}
               <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", opacity: 0.8, fontFamily: "var(--font-sans, 'Manrope', sans-serif)" }}>
-                <span style={{ fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: "#141413" }}>Alison</span>
-                <a href="mailto:alisonpinto@gmail.com" style={{ color: "#141413", textDecoration: "none" }}>alisonpinto@gmail.com</a>
+                <span style={{ fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.15em", color: "#141413" }}></span>
+                <a href="mailto:" style={{ color: "#141413", textDecoration: "none" }}></a>
                 <a href="https://www.AIL.com" target="_blank" rel="noreferrer" style={{ color: "#141413", textDecoration: "none" }}>www.AIL.com</a>
               </div>
             </div>

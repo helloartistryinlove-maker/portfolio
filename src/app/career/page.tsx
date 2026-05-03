@@ -123,6 +123,7 @@ export default function CareerPage() {
   const [submitMessage, setSubmitMessage] = useState("");
   const formRef = React.useRef<HTMLFormElement>(null);
   const messageRef = React.useRef<HTMLParagraphElement>(null);
+  const careerHeroImage = "/portfolio1.jpg";
 
   async function handleCareerSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -607,7 +608,7 @@ export default function CareerPage() {
       <div className="career-page">
         <section className="career-hero">
           <Image 
-            src="/portfolio1.jpg" 
+            src={careerHeroImage} 
             alt="Careers Hero" 
             className="career-hero-bg" 
             fill
