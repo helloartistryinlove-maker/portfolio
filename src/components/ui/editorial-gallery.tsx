@@ -347,7 +347,7 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
     return () => clearTimeout(timeout);
   }, [totalImages]);
 
-  const isLoading = totalImages > 0 && loadedCount < totalImages;
+  const isLoading = images.length > 0 && loadedCount < images.length;
 
   const handleImageLoaded = (path: string) => {
     if (loadedPathsRef.current.has(path)) {

@@ -37,9 +37,10 @@ export function RevealOnScroll({
         ...style,
         opacity: 1,
         transform: "none",
-        transition: isMounted
-          ? "opacity 720ms cubic-bezier(.22,1,.36,1), transform 720ms cubic-bezier(.22,1,.36,1)"
-          : "none",
+        pointerEvents: "auto",
+        transitionProperty: isMounted ? "opacity, transform" : undefined,
+        transitionDuration: isMounted ? "720ms" : undefined,
+        transitionTimingFunction: isMounted ? "cubic-bezier(.22,1,.36,1)" : undefined,
         transitionDelay: `${delayMs}ms`,
       }}
     >
