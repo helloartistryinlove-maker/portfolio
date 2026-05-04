@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { getImageKitUrl } from "@/lib/ik-url";
 
 type GalleryImage = {
-  src: string;
+  path: string;
   subfolder: string;
   filename: string;
 };
@@ -93,6 +93,8 @@ function ImageFrame({
   alt,
   className,
   delayIndex,
+  quality,
+  width,
 }: {
   image: GalleryImage;
   alt: string;
@@ -104,18 +106,32 @@ function ImageFrame({
   delayIndex?: number;
   width?: number;
 }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imageUrl = getImageKitUrl(image.path, {
+    width: width ?? 800,
+    quality: quality ?? 80,
+    format: "webp",
+  });
+
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [image.path]);
+
   return (
     <div
       className={className}
       style={delayIndex !== undefined ? ({ "--index": delayIndex } as React.CSSProperties) : undefined}
     >
+      {!isLoaded ? <div className="gallery-image-loader">Loading gallery...</div> : null}
       <img
-        src={image.src}
+        src={imageUrl}
         alt={alt}
         className="gallery-image"
         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
         loading="lazy"
         decoding="async"
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setIsLoaded(true)}
       />
     </div>
   );
@@ -391,6 +407,27 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
           border-radius: 2px;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.045);
           background: rgba(255, 255, 255, 0.02);
+        }
+
+        .gallery-image-loader {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          background: linear-gradient(135deg, rgba(20, 20, 19, 0.08), rgba(20, 20, 19, 0.02));
+          color: rgba(20, 20, 19, 0.72);
+          font-family: var(--font-sans);
+          font-size: 0.72rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          z-index: 1;
+        }
+
+        .gallery-image {
+          position: relative;
+          z-index: 0;
         }
 
         .frame-hero,

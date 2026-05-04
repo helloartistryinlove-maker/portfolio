@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 // Footer uses local static images from /public
@@ -10,11 +9,6 @@ export function Footer() {
   const [isLogoVisible, setIsLogoVisible] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
   const contactEmail = "hello@artistryinlove.com";
-  const instagramImages = [
-    { src: "/images/PPG05856.jpg", alt: "Cinematic wedding portrait" },
-    { src: "/images/Blog Page Only/2X3A9669.jpg", alt: "Wedding editorial frame" },
-    { src: "/images/Blog Page Only/2X3A9673.jpg", alt: "Wedding cinematic detail" },
-  ];
 
   // Trigger liquid fill when the logo section scrolls into view
   useEffect(() => {
@@ -214,36 +208,61 @@ export function Footer() {
         .footer-preview-grid {
           display: flex;
           gap: 16px;
-          justify-content: center;
-          flex-wrap: wrap;
+          justify-content: flex-start;
+          overflow: hidden;
+          width: 100%;
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        }
+
+        .footer-preview-track {
+          display: flex;
+          gap: 16px;
+          width: max-content;
+          animation: footer-preview-marquee 18s linear infinite;
+          will-change: transform;
+        }
+
+        .footer-preview-set {
+          display: flex;
+          gap: 16px;
+        }
+
+        @keyframes footer-preview-marquee {
+          from {
+            transform: translateX(0);
+          }
+
+          to {
+            transform: translateX(calc(-50% - 8px));
+          }
         }
 
         .footer-preview-card {
           position: relative;
+          flex: 0 0 auto;
           width: clamp(170px, 24vw, 260px);
           aspect-ratio: 4 / 5;
           overflow: hidden;
           border-radius: 2px;
-          background: #e0d8d2;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+          background: rgba(224, 216, 210, 0.25);
+          border: 1px solid rgba(20, 20, 19, 0.08);
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
         }
 
-        .footer-preview-image {
-          object-fit: cover;
-          transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), filter 300ms cubic-bezier(0.22, 1, 0.36, 1);
+        .footer-preview-card::before {
+          content: "";
+          position: absolute;
+          inset: 14px;
+          border-radius: 1px;
+          border: 1px solid rgba(20, 20, 19, 0.06);
         }
 
         .footer-preview-card::after {
           content: "";
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.22) 100%);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 42%);
           pointer-events: none;
-        }
-
-        .footer-preview-card:hover .footer-preview-image {
-          transform: scale(1.03);
-          filter: brightness(1.03);
         }
 
         .footer-trust-line {
@@ -308,6 +327,17 @@ export function Footer() {
 
         .footer-brand-section {
           max-width: 420px;
+        }
+
+        .footer-logo-placeholder {
+          width: clamp(200px, 25vw, 320px);
+          aspect-ratio: 5 / 2;
+          margin-bottom: 24px;
+          border-radius: 2px;
+          border: 1px solid rgba(20, 20, 19, 0.08);
+          background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 42%),
+            rgba(224, 216, 210, 0.18);
         }
 
         .footer-brand-name {
@@ -528,7 +558,7 @@ export function Footer() {
           }
 
           .footer-preview-card {
-            width: calc(50% - 8px);
+            width: clamp(140px, 42vw, 220px);
           }
 
           .footer-content-grid {
@@ -572,18 +602,18 @@ export function Footer() {
           </div>
 
           <div className="footer-preview-grid">
-            {instagramImages.map((image) => (
-              <div key={image.src} className="footer-preview-card">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 260px"
-                  quality={82}
-                  className="footer-preview-image"
-                />
+            <div className="footer-preview-track" aria-hidden="true">
+              <div className="footer-preview-set">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div key={`blank-preview-a-${index}`} className="footer-preview-card" />
+                ))}
               </div>
-            ))}
+              <div className="footer-preview-set">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div key={`blank-preview-b-${index}`} className="footer-preview-card" />
+                ))}
+              </div>
+            </div>
           </div>
 
           <p className="footer-trust-line">Crafting cinematic wedding stories across India.</p>
@@ -656,16 +686,7 @@ export function Footer() {
         {/* ── 2. INFO FLOW ── */}
         <div className="footer-content-grid">
           <div className="footer-brand-section">
-            <div style={{ position: "relative", width: "clamp(200px, 25vw, 320px)", marginBottom: "24px" }}>
-              <Image 
-                src="/logo_footer.png" 
-                alt="Artistry In Love Logo" 
-                width={0} 
-                height={0} 
-                sizes="320px" 
-                style={{ width: "100%", height: "auto", objectFit: "contain" }} 
-              />
-            </div>
+            <div className="footer-logo-placeholder" aria-hidden="true" />
             <p className="footer-brand-subtext">
               Preserving the fleeting whispers of today into the timeless poetry of tomorrow. Based in India, traversing the globe for the modern romantic.
             </p>

@@ -1,5 +1,5 @@
 export type GalleryImage = {
-  src: string;
+  path: string;
   subfolder: string;
   filename: string;
 };
@@ -63,9 +63,23 @@ function readEntry(storage: Storage, key: string): GalleryCacheEntry | null {
       return null;
     }
 
+    const normalizedImages = (parsed.images as Array<Partial<GalleryImage> & { src?: string }>).flatMap((image) => {
+      const path = typeof image.path === "string" ? image.path : image.src;
+
+      if (!path || typeof image.subfolder !== "string" || typeof image.filename !== "string") {
+        return [];
+      }
+
+      return [{
+        path,
+        subfolder: image.subfolder,
+        filename: image.filename,
+      }];
+    });
+
     return {
       cachedAt: parsed.cachedAt,
-      images: parsed.images as GalleryImage[],
+      images: normalizedImages,
       allUrls: Array.isArray(parsed.allUrls) ? (parsed.allUrls as string[]) : [],
     };
   } catch {

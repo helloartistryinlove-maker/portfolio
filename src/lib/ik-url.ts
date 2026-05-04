@@ -55,23 +55,7 @@ function encodePathSegments(pathname: string) {
 }
 
 function normalizeAssetPath(src: string) {
-  const cleaned = src.replace(/^\/+/, "");
-  const fileName = cleaned.split("/").pop() ?? cleaned;
-
-  const aliasMap: Record<string, string> = {
-    "foooter11.jpg": "footer11.jpg",
-    "footter16.jpg": "footer16.jpg",
-    "portfoli2.jpg": "portfolio2.jpg",
-    "portfoli3.jpg": "portfolio3.jpg",
-  };
-
-  const normalizedFileName = aliasMap[fileName] ?? fileName;
-
-  if (normalizedFileName === fileName) {
-    return cleaned;
-  }
-
-  return cleaned.slice(0, cleaned.length - fileName.length) + normalizedFileName;
+  return src.replace(/^\/+/, "");
 }
 
 function getAssetPath(src: string) {
@@ -93,6 +77,26 @@ function getAssetPath(src: string) {
   return normalizeAssetPath(src);
 }
 
+export function getImageKitUrl(path: string, options?: ImageKitUrlOptions) {
+  if (!path || path.startsWith("data:") || path.startsWith("blob:")) {
+    return path;
+  }
+
+  const endpoint = getImageKitEndpoint();
+
+  if (!endpoint) {
+    return path;
+  }
+
+  const assetPath = normalizeAssetPath(path);
+  const endpointPath = endpoint.pathname.replace(/\/$/, "");
+  const encodedPath = encodePathSegments(assetPath);
+  const url = `${endpoint.origin}${endpointPath === "/" ? "" : endpointPath}/${encodedPath}`;
+  const tr = buildTransformationQuery(options);
+
+  return tr ? `${url}?tr=${tr}` : url;
+}
+
 export function imageKitUrl(src: string, options?: ImageKitUrlOptions) {
   if (!src || src.startsWith("data:") || src.startsWith("blob:")) {
     return src;
@@ -105,16 +109,5 @@ export function imageKitUrl(src: string, options?: ImageKitUrlOptions) {
     return src;
   }
 
-  // Only allow ImageKit URL generation for gallery images under /Client/{client}/{event}
-  // This prevents accidental conversion of static UI assets (e.g. /footer1.jpg)
-  if (!assetPath.startsWith("Client/")) {
-    return src;
-  }
-
-  const endpointPath = endpoint.pathname.replace(/\/$/, "");
-  const encodedPath = encodePathSegments(assetPath);
-  const url = `${endpoint.origin}${endpointPath === "/" ? "" : endpointPath}/${encodedPath}`;
-  const tr = buildTransformationQuery(options);
-
-  return tr ? `${url}?tr=${tr}` : url;
+  return getImageKitUrl(assetPath, options);
 }

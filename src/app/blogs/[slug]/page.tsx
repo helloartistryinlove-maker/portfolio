@@ -57,9 +57,23 @@ export default function BlogPostDetail() {
 
         if (!response.ok) throw new Error("Could not load manifest");
 
-        const data = (await response.json()) as Record<string, string[]>;
+        const data = (await response.json()) as Array<{ path: string }>;
         console.log("API DATA", data);
-        const allUrls = Object.values(data).flat();
+
+        const manifest = data.reduce<Record<string, string[]>>((accumulator, item) => {
+          const normalizedPath = item.path.replace(/^\/+/, "");
+          const parts = normalizedPath.split("/");
+          const subfolder = parts.length > 1 ? parts[parts.length - 2] : "root";
+
+          if (!accumulator[subfolder]) {
+            accumulator[subfolder] = [];
+          }
+
+          accumulator[subfolder].push(normalizedPath);
+          return accumulator;
+        }, {});
+
+        const allUrls = data.map((item) => item.path.replace(/^\/+/, ""));
         console.log("Total images received:", allUrls.length);
 
         const cacheKeyPrefix = buildGalleryCacheKeyPrefix("anurag-shreya", allUrls);
@@ -72,7 +86,7 @@ export default function BlogPostDetail() {
           console.log("Images passed to gallery:", cachedImages.length);
         } else {
           const { buildCombinedSelected } = await import("@/lib/gallery-utils");
-          const selectedImages = buildCombinedSelected(data).combined;
+          const selectedImages = buildCombinedSelected(manifest).combined;
           console.log("SELECTED IMAGES", selectedImages);
           console.log("Images passed to gallery:", selectedImages.length);
           writeGalleryCache(cacheKeyPrefix, selectedImages, allUrls);
@@ -113,7 +127,7 @@ export default function BlogPostDetail() {
 
   const heroImg = slug === "anurag-shreya"
     ? "/images/Blog Page Only/2X3A9669.jpg"
-    : galleryImages[0]?.src ?? "/testimonial.jpg";
+    : galleryImages[0]?.path ?? "/testimonial.jpg";
 
   if (!post) {
     return (
