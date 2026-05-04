@@ -19,38 +19,27 @@ export function RevealOnScroll({
   style,
 }: RevealOnScrollProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
+    setIsMounted(true);
   }, []);
+
+  const wrapperClassName = [className, isMounted ? "reveal animate" : ""]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div
       ref={ref}
-      className={className}
+      className={wrapperClassName}
       style={{
         ...style,
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : `translateY(${y}px)`,
-        transition:
-          "opacity 720ms cubic-bezier(.22,1,.36,1), transform 720ms cubic-bezier(.22,1,.36,1)",
+        opacity: 1,
+        transform: "none",
+        transition: isMounted
+          ? "opacity 720ms cubic-bezier(.22,1,.36,1), transform 720ms cubic-bezier(.22,1,.36,1)"
+          : "none",
         transitionDelay: `${delayMs}ms`,
       }}
     >

@@ -125,7 +125,7 @@ function ImageFrame({
         sizes="(max-width: 1024px) 100vw, 50vw"
         quality={quality ?? 80}
         unoptimized
-        onLoad={() => onLoaded?.(image.path)}
+        onLoadingComplete={() => onLoaded?.(image.path)}
         onError={() => onLoaded?.(image.path)}
       />
     </div>
@@ -342,12 +342,12 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
 
     const timeout = setTimeout(() => {
       setLoadedCount(totalImages);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, [totalImages]);
 
-  const isLoading = loadedCount < totalImages;
+  const isLoading = totalImages > 0 && loadedCount < totalImages;
 
   const handleImageLoaded = (path: string) => {
     if (loadedPathsRef.current.has(path)) {

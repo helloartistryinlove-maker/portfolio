@@ -253,7 +253,8 @@ export default function BlogPostDetail() {
 
         .gallery-img-wrapper {
           position: relative;
-          aspect-ratio: 3 / 2;
+          width: 100%;
+          aspect-ratio: 4 / 5;
           overflow: hidden;
           background: var(--bg-surface);
         }
