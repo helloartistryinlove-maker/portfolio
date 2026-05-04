@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
-import { BlogDetailAudioPlayer } from "@/components/ui/blog-detail-audio-player";
 import { EditorialGallery } from "@/components/ui/editorial-gallery";
+import { getImageKitUrl } from "@/lib/ik-url";
 import {
   buildGalleryCacheKeyPrefix,
   readGalleryCache,
@@ -41,6 +41,7 @@ export default function BlogPostDetail() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_IMAGES);
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [galleryError, setGalleryError] = useState<string | null>(null);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   useEffect(() => {
     if (slug !== "anurag-shreya") {
@@ -124,6 +125,34 @@ export default function BlogPostDetail() {
   const handleLoadMore = () => {
     setVisibleCount((current) => Math.min(current + LOAD_MORE_BATCH, galleryImages.length));
   };
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (galleryLoading || galleryImages.length === 0) {
+      setShowScrollToTop(false);
+      return;
+    }
+
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+      const nearBottom = scrollY + viewportHeight >= fullHeight - 180;
+      const pastThreshold = scrollY > 520;
+
+      setShowScrollToTop(pastThreshold && !nearBottom);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [galleryLoading, galleryImages.length, visibleCount]);
 
   const heroImg = slug === "anurag-shreya"
     ? "/images/Blog Page Only/2X3A9669.jpg"
@@ -276,10 +305,43 @@ export default function BlogPostDetail() {
         .back-to-blogs::before {
           content: '←';
         }
+
+        .post-scroll-top-btn {
+          position: fixed;
+          right: clamp(14px, 2.2vw, 24px);
+          bottom: clamp(14px, 2.2vw, 26px);
+          width: 42px;
+          height: 42px;
+          border: 1px solid rgba(242, 234, 228, 0.26);
+          background: rgba(20, 20, 19, 0.68);
+          color: #f2eae4;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 40;
+          cursor: pointer;
+          backdrop-filter: blur(6px);
+          transition: transform 220ms ease, opacity 220ms ease, border-color 220ms ease;
+          opacity: 0.96;
+        }
+
+        .post-scroll-top-btn:hover {
+          transform: translateY(-2px);
+          border-color: rgba(242, 234, 228, 0.46);
+        }
+
+        @media (max-width: 768px) {
+          .post-scroll-top-btn {
+            width: 40px;
+            height: 40px;
+            right: 12px;
+            bottom: 12px;
+          }
+        }
       `}</style>
 
       <div className="post-detail-page">
-        <BlogDetailAudioPlayer />
         <section className="post-hero">
           <OptimizedImage
             src={heroImg}
@@ -356,10 +418,10 @@ export default function BlogPostDetail() {
                 <>
                   <div className="post-gallery-grid">
                     {visibleImages.map((img, i) => (
-                      <RevealOnScroll key={`${img.subfolder}-${img.filename}`} delayMs={i % 2 * 100}>
-                        <div className="gallery-img-wrapper" title={`${img.subfolder} / ${img.filename}`}>
+                      <RevealOnScroll key={`${img.path}-${i}`} delayMs={i % 2 * 100}>
+                        <div className="gallery-img-wrapper" title={img.subfolder ? `${img.subfolder}` : `Gallery image ${i + 1}`}>
                           <Image
-                            src={img.src}
+                            src={getImageKitUrl(img.path, { width: 800, quality: 80 })}
                             alt={`Gallery image ${i + 1}`}
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
@@ -390,6 +452,19 @@ export default function BlogPostDetail() {
             Back to All Stories
           </Link>
         </section>
+
+        {showScrollToTop ? (
+          <button
+            type="button"
+            className="post-scroll-top-btn"
+            onClick={handleScrollToTop}
+            aria-label="Scroll to top"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 19V5M12 5L6 11M12 5L18 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        ) : null}
       </div>
     </>
   );

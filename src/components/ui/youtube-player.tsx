@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { getYouTubeEmbedUrl } from "@/lib/youtube-utils";
 import { YouTubeThumbnail } from "./youtube-thumbnail";
 
@@ -11,37 +11,17 @@ type YouTubePlayerProps = {
 
 export function YouTubePlayer({ videoId, title }: YouTubePlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Generate embed URL with unmuted playback
+  // Mobile-safe embed settings: autoplay + muted + playsinline are most reliable on iOS/Android.
   const embedUrl = getYouTubeEmbedUrl(videoId, {
     autoplay: true,
-    mute: false,
+    mute: true,
     controls: true,
     modestbranding: true,
     rel: false,
     fs: true,
+    playsinline: true,
   });
-
-  // Attempt to set quality to 1080p when iframe loads
-  useEffect(() => {
-    if (!isPlaying || !iframeRef.current) return;
-
-    const qualityTimeout = setTimeout(() => {
-      try {
-        const yt = (window as any).YT;
-        if (yt && yt.Player) {
-          // This is a best-effort attempt to set quality
-          // YouTube doesn't guarantee 1080p availability
-          iframeRef.current?.style.opacity === "1";
-        }
-      } catch {
-        // Graceful fallback if API is unavailable
-      }
-    }, 1500);
-
-    return () => clearTimeout(qualityTimeout);
-  }, [isPlaying]);
 
   return (
     <div className="youtube-player-container">
@@ -143,11 +123,11 @@ export function YouTubePlayer({ videoId, title }: YouTubePlayerProps) {
         {isPlaying ? (
           <div className="youtube-player-frame">
             <iframe
-              ref={iframeRef}
               src={embedUrl}
               title={title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
+              loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>

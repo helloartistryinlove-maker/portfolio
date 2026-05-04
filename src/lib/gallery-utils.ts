@@ -1,4 +1,4 @@
-export type GalleryImage = { path: string; subfolder: string; filename: string };
+export type GalleryImage = { path: string; subfolder?: string };
 
 export function shuffleArray<T>(arr: T[]): T[] {
   const copy = arr.slice();
@@ -36,8 +36,7 @@ export function buildCombinedSelected(manifest: Record<string, string[]>) {
     skippedBySubfolder[sub] = skipped;
 
     for (const f of selected) {
-      const filename = f.split('/').pop() ?? f;
-      combined.push({ path: f, subfolder: sub, filename });
+      combined.push({ path: f, subfolder: sub });
     }
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { getYouTubeThumbnailUrl, getYouTubeEmbedUrl } from "@/lib/youtube-utils";
 
 type FilmPlayerProps = {
@@ -22,46 +22,21 @@ function PlayIcon() {
 
 export function FilmPlayer({ title, videoId, posterSrc, posterAlt }: FilmPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Generate YouTube embed URL with unmuted playback
+  // Mobile-safe embed settings: autoplay + muted + playsinline are most reliable on iOS/Android.
   const embedUrl = getYouTubeEmbedUrl(videoId, {
     autoplay: true,
-    mute: false,
+    mute: true,
     controls: true,
     modestbranding: true,
     rel: false,
     fs: true,
+    playsinline: true,
   });
 
   // Use YouTube thumbnail by default, fallback to custom poster if provided
   const thumbnailUrl = getYouTubeThumbnailUrl(videoId, "hqdefault");
   const resolvedPosterSrc = posterSrc || thumbnailUrl;
-
-  // Set YouTube player quality to 1080p when iframe loads
-  useEffect(() => {
-    if (!isPlaying || !iframeRef.current) return;
-
-    const iframe = iframeRef.current;
-
-    // YouTube IFrame API requires window.YT to be loaded
-    // We'll attempt quality setting after a brief delay to ensure player is ready
-    const qualityTimeout = setTimeout(() => {
-      try {
-        // Access the YouTube player instance via the iframe
-        const yt = (window as any).YT;
-        if (yt && yt.Player) {
-          // The iframe's internal player will try to set quality
-          // This is best-effort since YouTube doesn't guarantee 1080p availability
-          iframe.style.opacity = "1";
-        }
-      } catch {
-        // Graceful fallback if API is unavailable
-      }
-    }, 1500);
-
-    return () => clearTimeout(qualityTimeout);
-  }, [isPlaying]);
 
   return (
     <div className="film-player-wrapper">
@@ -242,11 +217,11 @@ export function FilmPlayer({ title, videoId, posterSrc, posterAlt }: FilmPlayerP
         {isPlaying ? (
           <div className="film-player-frame">
             <iframe
-              ref={iframeRef}
               src={embedUrl}
               title={title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
+              loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>

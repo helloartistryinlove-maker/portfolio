@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getImageKitUrl } from "@/lib/ik-url";
 
 type GalleryImage = {
   path: string;
-  subfolder: string;
-  filename: string;
+  subfolder?: string;
 };
 
 type LayoutPattern = "hero-full" | "balanced-split" | "equal-halves" | "tight-grid";
@@ -22,9 +22,6 @@ const PATTERN_COUNTS: Record<LayoutPattern, number> = {
   "equal-halves": 2,
   "tight-grid": 3,
 };
-
-// Minimal blur placeholder (semi-transparent dark)
-const BLUR_PLACEHOLDER = "data:image/svg+xml;base64,Cjxzdmcgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGZpbHRlciBpZD0iYiI+CiAgICA8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC43IiBudW1PY3RhdmVzPSI0IiByZXN1bHQ9Im5vaXNlIiAvPgogICAgPGZlQ29sb3JNYXRyaXggaW4gIm5vaXNlIiB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIiAvPgogIDwvZmlsdGVyPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjMmQyMzFjIiBmaWx0ZXI9InVybCgjYikiIG9wYWNpdHk9IjAuNyIgLz4KPC9zdmc+";
 
 function getPatternForSection(sectionIndex: number): LayoutPattern {
   return PATTERN_SEQUENCE[sectionIndex % PATTERN_SEQUENCE.length];
@@ -70,21 +67,22 @@ function renderSection(
   section: { pattern: LayoutPattern; images: GalleryImage[] },
   sectionIndex: number,
   totalSections: number,
+  onLoaded?: (path: string) => void,
 ) {
   const isFirstSection = sectionIndex === 0;
   const isFinalSection = sectionIndex === totalSections - 1;
 
   switch (section.pattern) {
     case "hero-full":
-      return renderHeroFull(section.images, isFirstSection, isFinalSection);
+      return renderHeroFull(section.images, isFirstSection, isFinalSection, onLoaded);
     case "balanced-split":
-      return renderBalancedSplit(section.images, sectionIndex, isFirstSection);
+      return renderBalancedSplit(section.images, sectionIndex, isFirstSection, onLoaded);
     case "equal-halves":
-      return renderEqualHalves(section.images, sectionIndex, isFirstSection);
+      return renderEqualHalves(section.images, sectionIndex, isFirstSection, onLoaded);
     case "tight-grid":
-      return renderTightGrid(section.images, sectionIndex, isFirstSection);
+      return renderTightGrid(section.images, sectionIndex, isFirstSection, onLoaded);
     default:
-      return renderHeroFull(section.images, isFirstSection, isFinalSection);
+      return renderHeroFull(section.images, isFirstSection, isFinalSection, onLoaded);
   }
 }
 
@@ -95,6 +93,7 @@ function ImageFrame({
   delayIndex,
   quality,
   width,
+  onLoaded,
 }: {
   image: GalleryImage;
   alt: string;
@@ -105,39 +104,40 @@ function ImageFrame({
   loading?: "eager" | "lazy";
   delayIndex?: number;
   width?: number;
+  onLoaded?: (path: string) => void;
 }) {
-  const [isLoaded, setIsLoaded] = useState(false);
   const imageUrl = getImageKitUrl(image.path, {
     width: width ?? 800,
     quality: quality ?? 80,
     format: "webp",
   });
 
-  useEffect(() => {
-    setIsLoaded(false);
-  }, [image.path]);
-
   return (
     <div
       className={className}
       style={delayIndex !== undefined ? ({ "--index": delayIndex } as React.CSSProperties) : undefined}
     >
-      {!isLoaded ? <div className="gallery-image-loader">Loading gallery...</div> : null}
-      <img
+      <Image
         src={imageUrl}
         alt={alt}
         className="gallery-image"
-        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setIsLoaded(true)}
-        onError={() => setIsLoaded(true)}
+        fill
+        sizes="(max-width: 1024px) 100vw, 50vw"
+        quality={quality ?? 80}
+        unoptimized
+        onLoad={() => onLoaded?.(image.path)}
+        onError={() => onLoaded?.(image.path)}
       />
     </div>
   );
 }
 
-function renderHeroFull(images: GalleryImage[], isFirstSection: boolean, isFinalSection: boolean) {
+function renderHeroFull(
+  images: GalleryImage[],
+  isFirstSection: boolean,
+  isFinalSection: boolean,
+  onLoaded?: (path: string) => void,
+) {
   const hero = images[0];
 
   return (
@@ -153,6 +153,7 @@ function renderHeroFull(images: GalleryImage[], isFirstSection: boolean, isFinal
             priority={isFirstSection}
             loading={isFirstSection ? "eager" : "lazy"}
             width={1800}
+            onLoaded={onLoaded}
           />
           {isFinalSection ? <div className="final-overlay" /> : null}
           {isFinalSection ? <div className="final-caption">Anurag & Shreya</div> : null}
@@ -162,7 +163,12 @@ function renderHeroFull(images: GalleryImage[], isFirstSection: boolean, isFinal
   );
 }
 
-function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFirstSection: boolean) {
+function renderBalancedSplit(
+  images: GalleryImage[],
+  sectionIndex: number,
+  isFirstSection: boolean,
+  onLoaded?: (path: string) => void,
+) {
   const hero = images[0];
   const top = images[1];
   const bottom = images[2];
@@ -180,6 +186,7 @@ function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFir
             priority={isFirstSection}
             loading={isFirstSection ? "eager" : sectionIndex < 2 ? "eager" : "lazy"}
             width={1600}
+            onLoaded={onLoaded}
           />
         ) : null}
 
@@ -194,6 +201,7 @@ function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFir
               delayIndex={0}
               loading="lazy"
               width={1000}
+              onLoaded={onLoaded}
             />
           ) : null}
           {bottom ? (
@@ -206,6 +214,7 @@ function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFir
               delayIndex={1}
               loading="lazy"
               width={1000}
+              onLoaded={onLoaded}
             />
           ) : null}
         </div>
@@ -214,7 +223,12 @@ function renderBalancedSplit(images: GalleryImage[], sectionIndex: number, isFir
   );
 }
 
-function renderEqualHalves(images: GalleryImage[], sectionIndex: number, isFirstSection: boolean) {
+function renderEqualHalves(
+  images: GalleryImage[],
+  sectionIndex: number,
+  isFirstSection: boolean,
+  onLoaded?: (path: string) => void,
+) {
   const left = images[0];
   const right = images[1];
 
@@ -231,6 +245,7 @@ function renderEqualHalves(images: GalleryImage[], sectionIndex: number, isFirst
             delayIndex={0}
             loading={isFirstSection ? "eager" : "lazy"}
             width={1400}
+            onLoaded={onLoaded}
           />
         ) : null}
         {right ? (
@@ -243,6 +258,7 @@ function renderEqualHalves(images: GalleryImage[], sectionIndex: number, isFirst
             delayIndex={1}
             loading="lazy"
             width={1400}
+            onLoaded={onLoaded}
           />
         ) : null}
       </div>
@@ -250,7 +266,12 @@ function renderEqualHalves(images: GalleryImage[], sectionIndex: number, isFirst
   );
 }
 
-function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSection: boolean) {
+function renderTightGrid(
+  images: GalleryImage[],
+  sectionIndex: number,
+  isFirstSection: boolean,
+  onLoaded?: (path: string) => void,
+) {
   const first = images[0];
   const second = images[1];
   const third = images[2];
@@ -268,6 +289,7 @@ function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSe
             delayIndex={0}
             loading={isFirstSection ? "eager" : "lazy"}
             width={1200}
+            onLoaded={onLoaded}
           />
         ) : null}
         {second ? (
@@ -280,6 +302,7 @@ function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSe
             delayIndex={1}
             loading="lazy"
             width={1200}
+            onLoaded={onLoaded}
           />
         ) : null}
         {third ? (
@@ -292,6 +315,7 @@ function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSe
             delayIndex={2}
             loading="lazy"
             width={1200}
+            onLoaded={onLoaded}
           />
         ) : null}
       </div>
@@ -300,16 +324,65 @@ function renderTightGrid(images: GalleryImage[], sectionIndex: number, isFirstSe
 }
 
 export function EditorialGallery({ images }: EditorialGalleryProps) {
+  const [loadedCount, setLoadedCount] = useState(0);
+  const totalImages = images.length;
+  const loadedPathsRef = useRef<Set<string>>(new Set());
+
   const sections = useMemo(() => {
     return buildSections(images);
   }, [images]);
 
+  useEffect(() => {
+    loadedPathsRef.current = new Set();
+    setLoadedCount(0);
+  }, [images]);
+
+  useEffect(() => {
+    if (totalImages === 0) return;
+
+    const timeout = setTimeout(() => {
+      setLoadedCount(totalImages);
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [totalImages]);
+
+  const isLoading = loadedCount < totalImages;
+
+  const handleImageLoaded = (path: string) => {
+    if (loadedPathsRef.current.has(path)) {
+      return;
+    }
+
+    loadedPathsRef.current.add(path);
+    setLoadedCount((prev) => Math.min(prev + 1, totalImages));
+  };
+
   return (
     <div className="editorial-gallery">
+      {isLoading ? <div className="gallery-loading-overlay">Loading gallery.</div> : null}
       <style>{`
         .editorial-gallery {
+          position: relative;
           padding: clamp(40px, 8vw, 80px) 0;
           background: var(--bg-surface);
+        }
+
+        .gallery-loading-overlay {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 20;
+          pointer-events: none;
+          background: linear-gradient(180deg, rgba(20, 20, 19, 0.08) 0%, rgba(20, 20, 19, 0.04) 100%);
+          color: rgba(20, 20, 19, 0.72);
+          font-family: var(--font-sans);
+          font-size: 0.86rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          backdrop-filter: blur(1px);
         }
 
         .editorial-section {
@@ -409,22 +482,6 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
           background: rgba(255, 255, 255, 0.02);
         }
 
-        .gallery-image-loader {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 16px;
-          background: linear-gradient(135deg, rgba(20, 20, 19, 0.08), rgba(20, 20, 19, 0.02));
-          color: rgba(20, 20, 19, 0.72);
-          font-family: var(--font-sans);
-          font-size: 0.72rem;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          z-index: 1;
-        }
-
         .gallery-image {
           position: relative;
           z-index: 0;
@@ -450,7 +507,7 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
           width: 100%;
           height: 100%;
           transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), filter 240ms cubic-bezier(0.22, 1, 0.36, 1);
-          animation: imageLoadFade 380ms ease-out both;
+          animation: imageLoadFade 560ms ease-out both;
         }
 
         .frame:hover .gallery-image {
@@ -571,7 +628,7 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
 
         @keyframes imageLoadFade {
           from {
-            opacity: 0.92;
+            opacity: 0.7;
           }
           to {
             opacity: 1;
@@ -608,7 +665,7 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
 
       {sections.map((section, sectionIndex) => (
         <React.Fragment key={`${section.pattern}-${sectionIndex}`}>
-          {renderSection(section, sectionIndex, sections.length)}
+          {renderSection(section, sectionIndex, sections.length, handleImageLoaded)}
         </React.Fragment>
       ))}
     </div>

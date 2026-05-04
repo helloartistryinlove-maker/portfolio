@@ -88,6 +88,8 @@ export interface YouTubeEmbedOptions {
   rel?: boolean;
   fs?: boolean;
   cc_load_policy?: boolean;
+  playsinline?: boolean;
+  enablejsapi?: boolean;
 }
 
 export function getYouTubeEmbedUrl(
@@ -96,12 +98,14 @@ export function getYouTubeEmbedUrl(
 ): string {
   const defaults: YouTubeEmbedOptions = {
     autoplay: true,
-    mute: false,
+    mute: true,
     controls: true,
     modestbranding: true,
     rel: false,
     fs: true,
     cc_load_policy: false,
+    playsinline: true,
+    enablejsapi: false,
   };
 
   const merged = { ...defaults, ...options };
@@ -113,6 +117,8 @@ export function getYouTubeEmbedUrl(
     rel: merged.rel ? "1" : "0",
     fs: merged.fs ? "1" : "0",
     cc_load_policy: merged.cc_load_policy ? "1" : "0",
+    playsinline: merged.playsinline ? "1" : "0",
+    enablejsapi: merged.enablejsapi ? "1" : "0",
   });
 
   return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;

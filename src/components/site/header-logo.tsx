@@ -16,12 +16,12 @@ const ZONES: Record<ZoneKey, { letter: string; rest: string }> = {
 const ZONE_ORDER: ZoneKey[] = ["artistry", "in", "love"];
 
 const SEQUENCE: SequenceStep[] = [
-  { phase: "idle", ms: 1400 },
-  { phase: "artistry", ms: 900 },
-  { phase: "in", ms: 650 },
-  { phase: "love", ms: 650 },
-  { phase: "idle", ms: 2600, hold: true },
-  { phase: "collapse", ms: 1200 },
+  { phase: "idle", ms: 1600 },
+  { phase: "artistry", ms: 980 },
+  { phase: "in", ms: 760 },
+  { phase: "love", ms: 760 },
+  { phase: "idle", ms: 3000, hold: true },
+  { phase: "collapse", ms: 980 },
 ];
 
 const PHASE_TO_KEY: Record<Phase, ZoneKey | null> = {
@@ -31,8 +31,8 @@ const PHASE_TO_KEY: Record<Phase, ZoneKey | null> = {
   collapse: null,
   idle: null,
 };
-const CHAR_DELAY   = 60;
-const ERASE_DELAY  = 35;
+const CHAR_DELAY = 52;
+const ERASE_DELAY = 42;
 
 export function HeaderLogo({ className = "" }) {
   const [phase, setPhase] = useState<DisplayPhase>("idle");
@@ -136,7 +136,7 @@ export function HeaderLogo({ className = "" }) {
           text-rendering: geometricPrecision;
           font-variant-ligatures: none;
           gap: 0.13em;
-          transition: gap 800ms cubic-bezier(0.16, 1, 0.3, 1);
+          transition: gap 920ms cubic-bezier(0.22, 1, 0.36, 1);
         }
         .ail-logo.expanded { gap: 0.55em; }
 
@@ -144,6 +144,7 @@ export function HeaderLogo({ className = "" }) {
           display: inline-flex;
           align-items: baseline;
           flex-shrink: 0;
+          transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .ail-anchor {
@@ -164,19 +165,19 @@ export function HeaderLogo({ className = "" }) {
           max-width: 0;
           overflow: hidden;
           opacity: 0;
-          transform: translateY(5px);
-          filter: blur(3px);
+          transform: translateY(3px) scale(0.985);
+          filter: blur(0.8px);
           transition:
-            max-width 300ms cubic-bezier(0.25, 1, 0.5, 1),
-            opacity   300ms cubic-bezier(0.25, 1, 0.5, 1),
-            transform 300ms cubic-bezier(0.25, 1, 0.5, 1),
-            filter    300ms cubic-bezier(0.25, 1, 0.5, 1);
+            max-width 420ms cubic-bezier(0.22, 1, 0.36, 1),
+            opacity   380ms cubic-bezier(0.22, 1, 0.36, 1),
+            transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+            filter    420ms cubic-bezier(0.22, 1, 0.36, 1);
         }
         .ail-char.on {
           max-width: 1.4em;
           overflow: visible;
           opacity: 1;
-          transform: translateY(0);
+          transform: translateY(0) scale(1);
           filter: blur(0);
         }
 

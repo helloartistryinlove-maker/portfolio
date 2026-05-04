@@ -76,7 +76,7 @@ export default function Home() {
 
     const getIntensityFactor = () => {
       const width = window.innerWidth;
-      if (width <= 640) return 0;
+      if (width <= 768) return 0;
       if (width <= 1024) return 0.45;
       return 1;
     };
@@ -767,6 +767,14 @@ export default function Home() {
             will-change: auto;
           }
         }
+
+        @media (max-width: 768px) {
+          .hero-bg {
+            object-position: 50% 24%;
+            transform: scale(1.02);
+          }
+        }
+
         /* ── Animations ──────────── */
         .portfolio-img-wrapper img, .process-image {
           transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);

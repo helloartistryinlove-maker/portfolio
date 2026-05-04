@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
@@ -199,28 +198,6 @@ export default function TestimonialsPage() {
         .media-strip .strip-author { color: #fff; }
         .media-strip .strip-author { color: var(--bg-surface); }
         .color-strip .strip-author { color: var(--text-primary); }
-
-        .strip-more {
-          font-family: var(--font-sans);
-          font-size: 0.8rem;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          text-decoration: none;
-          padding-bottom: 4px;
-          transition: border-color 0.3s;
-        }
-
-        .media-strip .strip-more {
-          color: var(--bg-surface);
-          border-bottom: 1px solid rgba(251, 247, 243, 0.3);
-        }
-        .media-strip .strip-more:hover { border-bottom-color: var(--bg-surface); }
-
-        .color-strip .strip-more {
-          color: var(--text-primary);
-          border-bottom: 1px solid rgba(45, 35, 28, 0.3);
-        }
-        .color-strip .strip-more:hover { border-bottom-color: var(--text-primary); }
       `}</style>
 
       <div className="testimonials-page">
@@ -241,9 +218,6 @@ export default function TestimonialsPage() {
                     &ldquo;{t.quote}&rdquo;
                   </blockquote>
                   <span className="strip-author">— {t.name}</span>
-                  <Link href="/contact-us" className="strip-more">
-                    More &rsaquo;
-                  </Link>
                 </RevealOnScroll>
               </div>
             </section>

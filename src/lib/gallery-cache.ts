@@ -1,7 +1,6 @@
 export type GalleryImage = {
   path: string;
-  subfolder: string;
-  filename: string;
+  subfolder?: string;
 };
 
 type GalleryCacheEntry = {
@@ -63,17 +62,20 @@ function readEntry(storage: Storage, key: string): GalleryCacheEntry | null {
       return null;
     }
 
-    const normalizedImages = (parsed.images as Array<Partial<GalleryImage> & { src?: string }>).flatMap((image) => {
+    const normalizedImages = (parsed.images as Array<Partial<GalleryImage> & { src?: string; filename?: string }>).flatMap((image) => {
       const path = typeof image.path === "string" ? image.path : image.src;
 
-      if (!path || typeof image.subfolder !== "string" || typeof image.filename !== "string") {
+      if (!path) {
         return [];
       }
 
+      const normalizedPath = path.replace(/^\/+/, "");
+      const parts = normalizedPath.split("/");
+      const derivedSubfolder = parts.length > 1 ? parts[parts.length - 2] : undefined;
+
       return [{
-        path,
-        subfolder: image.subfolder,
-        filename: image.filename,
+        path: normalizedPath,
+        subfolder: typeof image.subfolder === "string" ? image.subfolder : derivedSubfolder,
       }];
     });
 
