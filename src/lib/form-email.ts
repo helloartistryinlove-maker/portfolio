@@ -2,6 +2,7 @@ import "server-only";
 
 import { escapeForText } from "@/lib/form-security";
 import { resend } from "@/lib/resend";
+import { getServerEnv } from "@/lib/env";
 
 type ContactEmailInput = {
   name: string;
@@ -28,7 +29,10 @@ type OutboundEmail = {
   replyTo: string;
 };
 
-const SENDER_EMAIL = "AIL <onboarding@resend.dev>";
+const { ADMIN_EMAIL } = getServerEnv();
+
+const SENDER_EMAIL = `Artistry In Love <${ADMIN_EMAIL}>`;
+// Receive emails in gmail inbox, not on the verified domain (which has no mailbox)
 const RECIPIENT_EMAIL = "hello.artistryinlove@gmail.com";
 
 function getSenderEmail(): string {
@@ -138,16 +142,43 @@ export function buildCareerEmail(input: CareerEmailInput): OutboundEmail {
 }
 
 export async function sendFormEmail(email: OutboundEmail): Promise<void> {
-  const result = await resend.emails.send({
-    from: getSenderEmail(),
+  // Validate reply-to (user email) before using it
+  const isValidEmail = (value?: string | null) => {
+    if (!value) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  };
+
+  const fromEmail = getSenderEmail();
+  const userEmail = email.replyTo;
+
+  const payload: Record<string, unknown> = {
+    from: fromEmail,
     to: RECIPIENT_EMAIL,
-    replyTo: email.replyTo,
     subject: email.subject,
     text: email.text,
     html: email.html,
-  });
+  };
 
-  if (result.error) {
-    throw new Error(`Resend error: ${result.error.message || "unknown"}`);
+  // Debug logs (temporary) to verify headers before sending
+  // eslint-disable-next-line no-console
+  console.log("FROM:", "hello@artistryinlove.com");
+  // eslint-disable-next-line no-console
+  console.log("TO:", "hello.artistryinlove@gmail.com");
+  // eslint-disable-next-line no-console
+  console.log("REPLY_TO:", userEmail);
+
+  if (isValidEmail(email.replyTo)) {
+    // Use reply_to so replies go to the user, but keep FROM on the verified domain
+    // include both variants to be resilient to SDK differences
+    // @ts-ignore
+    payload.reply_to = email.replyTo;
+    // @ts-ignore
+    payload.replyTo = email.replyTo;
+  }
+
+  const result = await resend.emails.send(payload as any);
+
+  if ((result as any).error) {
+    throw new Error(`Resend error: ${(result as any).error.message || "unknown"}`);
   }
 }

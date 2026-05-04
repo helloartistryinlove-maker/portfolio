@@ -23,6 +23,15 @@ const PATTERN_COUNTS: Record<LayoutPattern, number> = {
   "tight-grid": 3,
 };
 
+// Define cinematic folder order used to sequence gallery images (normalized lowercase)
+const FOLDER_SEQUENCE = [
+  "brideentry",
+  "mehndi",
+  "haldi",
+  "sangeet",
+  "wedding",
+];
+
 function getPatternForSection(sectionIndex: number): LayoutPattern {
   return PATTERN_SEQUENCE[sectionIndex % PATTERN_SEQUENCE.length];
 }
@@ -125,7 +134,8 @@ function ImageFrame({
         sizes="(max-width: 1024px) 100vw, 50vw"
         quality={quality ?? 80}
         unoptimized
-        onLoadingComplete={() => onLoaded?.(image.path)}
+        style={{ objectFit: "cover", objectPosition: "center" }}
+        onLoad={() => onLoaded?.(image.path)}
         onError={() => onLoaded?.(image.path)}
       />
     </div>
@@ -328,9 +338,48 @@ export function EditorialGallery({ images }: EditorialGalleryProps) {
   const totalImages = images.length;
   const loadedPathsRef = useRef<Set<string>>(new Set());
 
-  const sections = useMemo(() => {
-    return buildSections(images);
+  // Compute orderedImages by grouping images by their subfolder and merging
+  // them according to the cinematic folder sequence. This only changes
+  // ordering — it does not mutate the original items or alter loading logic.
+  const orderedImages = useMemo(() => {
+    if (!images || images.length === 0) return images;
+
+    const grouped: Record<string, GalleryImage[]> = {};
+
+    images.forEach((img) => {
+      const parts = img.path.split("/").filter(Boolean);
+      const folder = parts[1]?.trim().toLowerCase() ?? ""; // normalized subfolder
+      if (!grouped[folder]) grouped[folder] = [];
+      grouped[folder].push(img);
+    });
+
+    // Sort images inside each folder by filename (stable, locale-aware)
+    Object.keys(grouped).forEach((folder) => {
+      grouped[folder].sort((a, b) => {
+        const nameA = a.path.split("/").pop() ?? "";
+        const nameB = b.path.split("/").pop() ?? "";
+        return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: "base" });
+      });
+    });
+
+    // Debug: show detected folder groups (temporary)
+    // eslint-disable-next-line no-console
+    console.log("Folder groups:", Object.keys(grouped));
+
+    // Merge folders in the defined FOLDER_SEQUENCE
+    const ordered: GalleryImage[] = [];
+    FOLDER_SEQUENCE.forEach((folder) => {
+      if (grouped[folder]) ordered.push(...grouped[folder]);
+    });
+
+    // Append any folders not listed in FOLDER_SEQUENCE (preserve deterministic order)
+    const remaining = Object.keys(grouped).filter((f) => !FOLDER_SEQUENCE.includes(f)).sort();
+    remaining.forEach((folder) => ordered.push(...grouped[folder]));
+
+    return ordered;
   }, [images]);
+
+  const sections = useMemo(() => buildSections(orderedImages), [orderedImages]);
 
   useEffect(() => {
     loadedPathsRef.current = new Set();
