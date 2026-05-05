@@ -1,0 +1,89 @@
+Progress: searched imports, dynamic imports, app routes, APIs, and public assets.
+
+Audit report (production-safe verification — no deletions performed)
+
+A. Safe to remove (high confidence)
+
+Components (no import, dynamic import, lazy load, or route usage found across src):
+HeroTextAnimation.tsx — no references outside file; appears only in build cache (.next) but not in source.
+section-heading.tsx — no imports or JSX usage found.
+media-placeholder.tsx — no imports or JSX usage found (note: CSS class media-placeholder exists in pages, component not used).
+film-player.tsx — no imports or JSX usage found.
+cta-strip.tsx — no imports or JSX usage found.
+Rationale/evidence: repo-wide searches for symbol names, JSX tags (<Name>), dynamic imports (dynamic( / import() returned no usages (only definitions). These files only appear in their own module and the build cache.
+B. Needs manual review (requires human check before deletion)
+
+Assets (public):
+file.svg, globe.svg, next.svg, vercel.svg, window.svg — no code references found in source files; could be used by external tooling, README, or build scripts. Recommend manual review.
+Components with indirect/ambiguous linkage:
+None remain ambiguous for imports/dynamic import; media-placeholder component is unused but the CSS class named media-placeholder is used in page.tsx (className-based styling). Removing the component is safe, but confirm no intention to switch to the component in content or CMS templates.
+Notes: .next build artifacts referenced some component names — this is expected and not authoritative.
+C. Definitely keep
+
+Footer images and listed assets (explicitly referenced):
+public/images/footer-scroll/* — referenced by footer.tsx via footerScrollImages array (explicit).
+public/images/Blog Page Only/* — referenced by src/app/blogs/*.tsx.
+PPG05856.jpg — referenced by page.tsx.
+wedding-trailer.mp4 — referenced by page.tsx and page.tsx.
+blog-theme.wav — used by blog audio player (code constructs new Audio("/audio/blog-theme.wav")).
+Server-side libraries and utilities (imports found in lib and APIs):
+resend (package) — used in resend.ts and form-email.ts.
+@upstash/ratelimit and @upstash/redis — used in rate-limit.ts and env checks.
+imagekit & getImageKitClient / ik-url helpers — used by route.ts and blog/gallery code.
+Framework/runtime dependencies:
+next, react, react-dom — used across app.
+Dev tooling (tailwindcss, @tailwindcss/postcss, eslint, typescript, @types/*) — referenced in postcss.config.mjs, globals.css (@import "tailwindcss"), and eslint.config.mjs (so keep).
+Confidence levels summary
+
+High confidence (SAFE TO REMOVE): listed components — 99% (no imports, no dynamic usage, not present in pages/layouts/routes).
+Medium confidence (NEEDS MANUAL REVIEW): listed SVGs — 60–80% (no code references, could be referenced outside source code or by external assets).
+Very high confidence (KEEP): assets and libraries explicitly imported/used in code — 100% (direct imports or explicit path references).
+Actions I ran (non-destructive)
+
+Repo-wide symbol and filename searches for each candidate component and asset.
+Searched for dynamic imports (dynamic(, import(, React.lazy).
+Listed public contents and checked explicit references in code (footer.tsx, blogs, testimonials).
+Cross-checked package.json dependencies against imports in src.
+Recommended next steps (non-destructive)
+
+Run npx depcheck locally to double-check npm package usage (non-destructive).
+Optional: run ts-unused-exports or use TypeScript language-server to produce an automated unused-export report for components.
+For items in "Needs manual review", open files and decide (icons are small; consider removing if not used).
+After approvals, remove items in a follow-up PR with tests/visual QA.
+Do you want me to:
+
+A) Run npx depcheck and ts-unused-exports now and attach results, or
+B) Produce a PR removing the high-confidence components (I will not delete until you confirm)?
+You've used 52% of your weekly rate limit. Your weekly rate limit will reset on May 11 at 5:30 AM. Learn More
+
+GPT-5 mini • 0x
+
+
+Result — usage verification for HeroTextAnimation
+
+Definition: HeroTextAnimation.tsx — component is defined here. HeroTextAnimation.tsx:1
+
+Searched for:
+
+import HeroTextAnimation
+<HeroTextAnimation
+dynamic imports (dynamic(, import(...), React.lazy)
+re-exports referencing HeroTextAnimation
+lowercased file name variants
+Evidence:
+
+Repo search matches:
+Definition only: HeroTextAnimation.tsx:1 (exported function).
+Build cache references only: .tsbuildinfo (build artifact; not source).
+No occurrences in layouts, pages, navigation, or header/logo:
+layout.tsx imports Navigation, ScrollObserver, Footer — no HeroTextAnimation. layout.tsx:1
+Header animation implemented in HeaderLogo (header-logo.tsx) and used in Navigation (navigation.tsx): header-logo.tsx:1, navigation.tsx:1
+No dynamic import or re-export found that would pull HeroTextAnimation at runtime.
+Conclusion (exact):
+
+Not used anywhere in the codebase (only its own module definition and build cache references).
+If you want, I can:
+
+Open HeroTextAnimation.tsx and annotate a suggested removal PR (no files changed yet), or
+Run ts-unused-exports to produce an automated unused-export report for additional confirmation. Which should I run next?
+GPT-5 mini • 0x

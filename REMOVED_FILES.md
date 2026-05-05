@@ -20,3 +20,24 @@ Timestamp: 2026-05-06
 - Type: Legacy static data (local backup)
 - Reason: Duplicate/legacy copy of `gallery.json`; no references in codebase
 - Notes: Removed per request and documented here. If you intended to keep an archival copy, restore from version control history.
+
+#### HeroTextAnimation.tsx
+- Type: Unused component
+- Reason: No references in codebase; replaced by `HeaderLogo`
+
+#### section-heading.tsx
+- Type: Unused UI component
+- Reason: Not imported or used anywhere
+
+#### media-placeholder.tsx
+- Type: Unused component
+- Reason: Only CSS class used, component not used
+
+#### film-player.tsx
+- Type: Unused component
+- Reason: No usage in app
+
+#### cta-strip.tsx
+- Type: Unused component
+- Reason: Not referenced anywhere
+
