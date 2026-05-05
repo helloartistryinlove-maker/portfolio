@@ -31,12 +31,6 @@ export const metadata: Metadata = {
   title: "Artistry In Love | Editorial Wedding Cinema",
   description:
     "We specialize in editorial wedding cinema for those who value the intentional, the understated, and the timeless.",
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-  },
 };
 
 export default function RootLayout({
