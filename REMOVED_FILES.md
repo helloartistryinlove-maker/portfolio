@@ -15,3 +15,8 @@
 Removal performed: Deleted `move-client-info.js`. `gallery.json` was not found in repository root during cleanup and therefore was not deleted by this operation; please confirm if you want `galler-legacyy.json` removed or renamed.
 
 Timestamp: 2026-05-06
+
+#### galler-legacyy.json
+- Type: Legacy static data (local backup)
+- Reason: Duplicate/legacy copy of `gallery.json`; no references in codebase
+- Notes: Removed per request and documented here. If you intended to keep an archival copy, restore from version control history.
