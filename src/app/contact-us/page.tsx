@@ -199,32 +199,16 @@ export default function ContactUsPage() {
           transform: translateY(100%);
         }
 
-        /* Hero image grayscale hover */
-        .hero-img-wrap img {
-          filter: grayscale(100%);
-          transition: filter 1s ease-in-out;
-        }
-        .hero-img-wrap:hover img { filter: grayscale(0%); }
-
         /* Hero grid */
         .hero-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: clamp(24px, 5vw, 24px);
-          align-items: end;
+          gap: 0;
+          align-items: start;
+          justify-items: start;
         }
 
-        @media (min-width: 768px) {
-          .hero-grid { 
-            grid-template-columns: 5fr 7fr; 
-            gap: 24px;
-          }
-          .hero-text-col { order: 1; }
-          .hero-img-col  { order: 2; }
-        }
-
-        .hero-text-col { order: 2; }
-        .hero-img-col  { order: 1; }
+        .hero-text-col { order: 1; }
 
         /* What to expect grid */
         .expect-grid {
@@ -334,7 +318,7 @@ export default function ContactUsPage() {
                     fontWeight: 400,
                     lineHeight: 1.1,
                     letterSpacing: "-0.02em",
-                    marginBottom: "clamp(16px, 4vw, 32px)",
+                    marginBottom: "clamp(10px, 2vw, 14px)",
                   }}
                 >
                   Tell Your<br /><em>Story.</em>
@@ -342,6 +326,23 @@ export default function ContactUsPage() {
 
                 <p
                   className="c-reveal c-reveal-d2"
+                  style={{
+                    fontFamily: "var(--font-serif,'Noto Serif',serif)",
+                    fontStyle: "italic",
+                    fontWeight: 400,
+                    fontSize: "clamp(1.05rem, 2vw, 1.35rem)",
+                    lineHeight: 1.45,
+                    letterSpacing: "0.015em",
+                    color: "rgba(45, 35, 28, 0.58)",
+                    maxWidth: 500,
+                    marginBottom: "clamp(16px, 3vw, 24px)",
+                  }}
+                >
+                  Through our lens, every moment finds its voice.
+                </p>
+
+                <p
+                  className="c-reveal c-reveal-d3"
                   style={{
                     fontFamily: "var(--font-sans,'Manrope',sans-serif)",
                     fontSize: "clamp(1rem, 2.5vw, 18px)",
@@ -400,61 +401,6 @@ export default function ContactUsPage() {
                 </div>
               </div>
 
-              {/* Right: Black placeholder image */}
-              <div
-                className="hero-img-col hero-img-wrap"
-                style={{ aspectRatio: "4 / 5", overflow: "hidden", transform: "translateY(32px)" }}
-              >
-                <div
-                  role="img"
-                  aria-label="Editorial portrait of a couple in a high-fashion pose within a minimalist architectural space, dramatic shadows and soft cinematic lighting"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    background: "linear-gradient(180deg, #4a372c 0%, #2d231c 100%)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    aria-hidden
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      backgroundImage:
-                        "radial-gradient(ellipse 70% 70% at 55% 40%, rgba(90,80,60,.15), transparent 70%)",
-                    }}
-                  />
-                  {/* Film strip side dots */}
-                  <div
-                    aria-hidden
-                    style={{
-                      position: "absolute",
-                      left: 14,
-                      top: 0,
-                      bottom: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-evenly",
-                      gap: 0,
-                    }}
-                  >
-                    {Array.from({ length: 18 }).map((_, i) => (
-                      <span
-                        key={i}
-                        style={{
-                          display: "block",
-                          width: 8,
-                          height: 13,
-                          border: "1px solid rgba(251,247,243,0.12)",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

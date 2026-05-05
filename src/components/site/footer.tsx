@@ -1,8 +1,48 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 // Footer uses local static images from /public
+
+const footerScrollImages = [
+  "A7402765.jpg",
+  "PPG03594.jpg",
+  "PPG03764.jpg",
+  "PPG03865.jpg",
+  "PPG03986.jpg",
+  "PPG04315.jpg",
+  "PPG04362.jpg",
+  "PPG04611.jpg",
+  "PPG04628.jpg",
+  "PPG04800.jpg",
+  "PPG04823.jpg",
+  "PPG04837.jpg",
+  "PPG04992.jpg",
+  "PPG05421.jpg",
+  "PPG05514.jpg",
+  "PPG05859.jpg",
+  "PPG07068.jpg",
+  "PPG07813.jpg",
+  "PPG07815.jpg",
+  "PPG08249.jpg",
+  "PPG08363.jpg",
+  "PPG08659.jpg",
+  "PRN00258.jpg",
+  "PRN05586.jpg",
+  "PRN06668.jpg",
+  "PRN07275.jpg",
+  "PRN08965.jpg",
+  "PRN09135.jpg",
+  "PRN09243.jpg",
+  "PRN09335.jpg",
+  "PRN09631.jpg",
+  "_PPG3793.jpg",
+  "_PPG4159.jpg",
+  "_PPG8636 Prerana Photo Studio.JPG",
+];
+
+const toFooterImageSrc = (fileName: string) => `/images/footer-scroll/${encodeURIComponent(fileName)}`;
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -21,23 +61,6 @@ export function Footer() {
   }, []);
 
   const brandName = "Artistry In Love";
-
-  // Organic ink splatters — positioned relative to the logo container
-  const splatters = [
-    { top: "-18%", left:  "4%",  size: "13px", delay:  700 },
-    { top: "115%", left: "11%",  size:  "7px", delay: 1700 },
-    { top: "-28%", left: "24%",  size: "17px", delay: 3100 },
-    { top: "130%", left: "37%",  size:  "9px", delay: 4400 },
-    { top: "-12%", left: "51%",  size: "11px", delay: 5700 },
-    { top: "118%", left: "67%",  size: "15px", delay: 7100 },
-    { top: "-22%", left: "81%",  size:  "8px", delay: 8700 },
-    { top: "108%", left: "94%",  size: "14px", delay: 10400 },
-    // Satellite micro-drops for realism
-    { top:  "8%",  left: "27%",  size:  "4px", delay: 3400 },
-    { top: "78%",  left: "71%",  size:  "5px", delay: 7400 },
-    { top: "-5%",  left: "57%",  size:  "3px", delay: 6100 },
-    { top: "95%",  left: "44%",  size:  "4px", delay: 5000 },
-  ];
 
   // Improved wave SVGs using cubic beziers for an organic, asymmetric liquid surface
   // %23141413 = URL-encoded #141413
@@ -58,10 +81,19 @@ export function Footer() {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          padding-top: clamp(48px, 6vw, 72px);
-          padding-bottom: 20px;
-          padding-inline: clamp(24px, 5vw, 64px);
+          padding: clamp(40px, 6vw, 80px);
           overflow: hidden;
+        }
+
+        .footer-content-rule,
+        .footer-bottom-rule {
+          width: 100%;
+          height: 1px;
+          background: rgba(20, 20, 19, 0.1);
+        }
+
+        .footer-bottom-rule {
+          background: rgba(20, 20, 19, 0.08);
         }
 
         /* ── 1. CTA CENTERPIECE ── */
@@ -206,25 +238,31 @@ export function Footer() {
         }
 
         .footer-preview-grid {
+          --footer-preview-gap: clamp(12px, 1.5vw, 20px);
           display: flex;
-          gap: 16px;
           justify-content: flex-start;
           overflow: hidden;
-          width: 100%;
-          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          overflow-y: hidden;
+          position: relative;
+          width: 100vw;
+          max-width: none;
+          margin-left: calc(50% - 50vw);
+          margin-right: calc(50% - 50vw);
+          padding-inline: clamp(16px, 3vw, 40px);
         }
 
         .footer-preview-track {
           display: flex;
-          gap: 16px;
+          gap: var(--footer-preview-gap);
           width: max-content;
-          animation: footer-preview-marquee 18s linear infinite;
+          animation: footer-preview-marquee 140s linear infinite;
           will-change: transform;
+          transform: translateZ(0);
         }
 
         .footer-preview-set {
           display: flex;
-          gap: 16px;
+          gap: var(--footer-preview-gap);
         }
 
         @keyframes footer-preview-marquee {
@@ -233,7 +271,7 @@ export function Footer() {
           }
 
           to {
-            transform: translateX(calc(-50% - 8px));
+            transform: translateX(calc(-50% - (var(--footer-preview-gap) / 2)));
           }
         }
 
@@ -243,26 +281,10 @@ export function Footer() {
           width: clamp(170px, 24vw, 260px);
           aspect-ratio: 4 / 5;
           overflow: hidden;
-          border-radius: 2px;
+          border-radius: 0;
           background: rgba(224, 216, 210, 0.25);
-          border: 1px solid rgba(20, 20, 19, 0.08);
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
-        }
-
-        .footer-preview-card::before {
-          content: "";
-          position: absolute;
-          inset: 14px;
-          border-radius: 1px;
-          border: 1px solid rgba(20, 20, 19, 0.06);
-        }
-
-        .footer-preview-card::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 42%);
-          pointer-events: none;
+          border: none;
+          outline: none;
         }
 
         .footer-trust-line {
@@ -285,7 +307,6 @@ export function Footer() {
         }
 
         .footer-contact-panel {
-          position: relative;
           display: flex;
           flex-direction: column;
           gap: 14px;
@@ -293,25 +314,27 @@ export function Footer() {
         }
 
         .footer-contact-label {
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.24em;
+          font-size: 9.5px;
+          font-weight: 500;
+          letter-spacing: 0.3em;
           text-transform: uppercase;
-          color: rgba(20, 20, 19, 0.56);
+          color: rgba(20, 20, 19, 0.35);
         }
 
         .footer-contact-value {
           font-family: var(--font-serif, "Noto Serif", serif);
-          font-size: clamp(1.2rem, 2vw, 1.6rem);
-          line-height: 1.3;
+          font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+          line-height: 1.35;
+          letter-spacing: 0.015em;
           color: #141413;
           text-decoration: none;
         }
 
         .footer-contact-note {
-          font-size: 13px;
+          font-size: 10.5px;
           line-height: 1.7;
-          color: rgba(20, 20, 19, 0.72);
+          color: rgba(20, 20, 19, 0.38);
+          letter-spacing: 0.04em;
           margin: 0;
         }
 
@@ -319,76 +342,67 @@ export function Footer() {
         .footer-content-grid {
           width: 100%;
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr;
-          gap: clamp(64px, 6vw, 100px);
-          margin-bottom: 48px;
+          grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+          gap: clamp(24px, 4vw, 48px);
+          padding-block: clamp(24px, 4vw, 56px) clamp(24px, 4vw, 60px);
+          margin-bottom: clamp(16px, 2.5vw, 28px);
           align-items: start;
         }
 
         .footer-brand-section {
-          max-width: 420px;
-        }
-
-        .footer-logo-placeholder {
-          width: clamp(200px, 25vw, 320px);
-          aspect-ratio: 5 / 2;
-          margin-bottom: 24px;
-          border-radius: 2px;
-          border: 1px solid rgba(20, 20, 19, 0.08);
-          background:
-            linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 42%),
-            rgba(224, 216, 210, 0.18);
-        }
-
-        .footer-brand-name {
-          font-family: var(--font-serif, "Noto Serif", serif);
-          font-size: clamp(28px, 4vw, 40px);
-          font-weight: 400;
-          font-style: italic;
-          color: var(--text-primary, #141413);
-          margin-bottom: 16px;
-          letter-spacing: -0.02em;
+          max-width: 255px;
+          padding-top: 2px;
         }
 
         .footer-brand-subtext {
           font-family: var(--font-sans, "Manrope", sans-serif);
-          font-size: 14px;
+          font-size: 12.5px;
           font-weight: 400;
-          line-height: 1.8;
+          line-height: 2;
           color: #141413;
-          opacity: 0.75;
-        }
-
-        /* Right column: nav + socials side by side */
-        .footer-dir {
-          display: contents;
+          opacity: 0.55;
+          letter-spacing: 0.025em;
         }
 
         .footer-nav-col {
           display: flex;
           flex-direction: column;
+          gap: 16px;
+          align-items: center;
+          justify-self: center;
+        }
+
+        .footer-contact-col {
+          display: flex;
+          flex-direction: column;
           gap: 24px;
+          align-items: flex-end;
+          justify-self: end;
+          text-align: right;
+          padding-top: 2px;
         }
 
         .footer-social-col {
           display: flex;
           flex-direction: row;
-          gap: 32px;
+          gap: 24px;
+          justify-content: flex-end;
         }
 
         .footer-link {
           font-family: var(--font-sans, "Manrope", sans-serif);
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.25em;
+          font-size: 9.5px;
+          font-weight: 700;
+          letter-spacing: 0.32em;
           text-transform: uppercase;
           color: #141413;
-          opacity: 0.6;
+          opacity: 0.58;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
           width: fit-content;
-          transition: opacity 0.3s ease, transform 0.3s ease;
+          transition: opacity 0.25s ease;
+          padding: 2px 0;
         }
 
         .footer-social-link {
@@ -401,12 +415,35 @@ export function Footer() {
 
         .footer-link:hover {
           opacity: 1;
-          transform: translateX(6px);
         }
 
         .footer-social-link:hover {
           opacity: 1;
           transform: translateY(-4px) scale(1.05);
+        }
+
+        .footer-enquire-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px 18px;
+          border: 1px solid rgba(20, 20, 19, 0.26);
+          background: transparent;
+          color: #141413;
+          text-decoration: none;
+          font-family: var(--font-sans, "Manrope", sans-serif);
+          font-size: 9.5px;
+          font-weight: 700;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+          transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .footer-enquire-button:hover {
+          background: #141413;
+          color: #F2EAE4;
+          border-color: #141413;
+          transform: translateY(-1px);
         }
 
         /* ── LIQUID WAVE ANIMATION ── */
@@ -480,12 +517,11 @@ export function Footer() {
 
         .footer-bottom-bar {
           width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
           align-items: center;
-          gap: 16px;
-          padding-inline: 4px;
+          gap: 24px;
+          padding-top: 20px;
         }
 
         .footer-copyright {
@@ -508,6 +544,7 @@ export function Footer() {
         .footer-back-top {
           display: inline-flex;
           align-items: center;
+          justify-self: end;
           gap: 8px;
           font-family: var(--font-sans, "Manrope", sans-serif);
           font-size: 10px;
@@ -541,10 +578,24 @@ export function Footer() {
           .footer-content-grid {
             grid-template-columns: 1fr;
             gap: 40px;
+            justify-items: center;
+            text-align: center;
+            padding-block: 32px;
           }
 
           .footer-brand-section {
             max-width: 100%;
+          }
+
+          .footer-nav-col,
+          .footer-contact-col {
+            justify-self: center;
+            align-items: center;
+            text-align: center;
+          }
+
+          .footer-social-col {
+            justify-content: center;
           }
 
           .footer-preview-grid {
@@ -566,14 +617,24 @@ export function Footer() {
           }
 
           .footer-bottom-bar {
-            flex-direction: column;
+            grid-template-columns: 1fr;
             align-items: center;
             text-align: center;
             gap: 12px;
           }
 
+          .footer-back-top {
+            justify-self: center;
+          }
+
           .footer-signature {
             display: none;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .footer-preview-track {
+            animation: none;
           }
         }
       `}</style>
@@ -604,13 +665,31 @@ export function Footer() {
           <div className="footer-preview-grid">
             <div className="footer-preview-track" aria-hidden="true">
               <div className="footer-preview-set">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div key={`blank-preview-a-${index}`} className="footer-preview-card" />
+                {footerScrollImages.map((fileName, index) => (
+                  <div key={`preview-a-${fileName}`} className="footer-preview-card">
+                    <Image
+                      src={toFooterImageSrc(fileName)}
+                      alt={`Footer gallery image ${index + 1}`}
+                      fill
+                      sizes="(max-width: 640px) 42vw, (max-width: 1024px) 24vw, 260px"
+                      loading="lazy"
+                      style={{ objectFit: "cover", objectPosition: "center" }}
+                    />
+                  </div>
                 ))}
               </div>
               <div className="footer-preview-set">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div key={`blank-preview-b-${index}`} className="footer-preview-card" />
+                {footerScrollImages.map((fileName, index) => (
+                  <div key={`preview-b-${fileName}`} className="footer-preview-card">
+                    <Image
+                      src={toFooterImageSrc(fileName)}
+                      alt={`Footer gallery image ${index + 1}`}
+                      fill
+                      sizes="(max-width: 640px) 42vw, (max-width: 1024px) 24vw, 260px"
+                      loading="lazy"
+                      style={{ objectFit: "cover", objectPosition: "center" }}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
@@ -620,36 +699,7 @@ export function Footer() {
           <p className="footer-trust-copy">Visual proof of the moments we preserve with a quiet, editorial eye.</p>
         </section>
 
-        <div ref={logoRef} className="footer-logo-wrapper" style={{ marginBottom: "56px" }}>
-
-            {/* Organic ink splatters */}
-            {splatters.map((splat, i) => (
-              <div
-                key={`splat-${i}`}
-                style={{
-                  position: "absolute",
-                  top: splat.top,
-                  left: splat.left,
-                  width: splat.size,
-                  height: splat.size,
-                  background: "#141413",
-                  borderRadius: i % 3 === 0
-                    ? "40% 60% 70% 30% / 40% 50% 60% 50%"
-                    : i % 3 === 1
-                    ? "60% 40% 30% 70% / 50% 60% 40% 50%"
-                    : "50% 70% 40% 60% / 60% 40% 70% 50%",
-                  opacity: isLogoVisible ? 0.65 : 0,
-                  transform: isLogoVisible
-                    ? "scale(1) translateY(0)"
-                    : "scale(0) translateY(-40px)",
-                  transition: `opacity 2400ms cubic-bezier(0.34,1.56,0.64,1) ${splat.delay}ms,
-                               transform 2400ms cubic-bezier(0.34,1.56,0.64,1) ${splat.delay}ms`,
-                  pointerEvents: "none",
-                  zIndex: 0,
-                  filter: "drop-shadow(0 1px 3px rgba(20,20,19,0.2))",
-                }}
-              />
-            ))}
+        <div ref={logoRef} className="footer-logo-wrapper" style={{ marginBottom: "clamp(24px, 4vw, 48px)" }}>
 
             {/* Letter-by-letter liquid fill */}
             <h2 className="footer-editorial-brand">
@@ -680,65 +730,69 @@ export function Footer() {
                 );
               })}
             </h2>
-          </div>
+            </div>
 
+          <div className="footer-content-rule" aria-hidden="true" />
 
         {/* ── 2. INFO FLOW ── */}
         <div className="footer-content-grid">
           <div className="footer-brand-section">
-            <div className="footer-logo-placeholder" aria-hidden="true" />
             <p className="footer-brand-subtext">
               Preserving the fleeting whispers of today into the timeless poetry of tomorrow. Based in India, traversing the globe for the modern romantic.
             </p>
           </div>
 
-          <div className="footer-dir">
-            {/* Navigation */}
-            <nav className="footer-nav-col" aria-label="Footer navigation">
-              {[
-                { label: "Films",        href: "/films" },
-                { label: "Blogs",        href: "/blogs" },
-                { label: "Testimonials", href: "/testimonials" },
-                { label: "Contact",      href: "/contact-us" },
-                { label: "Careers",      href: "/career" },
-              ].map(({ label, href }) => (
-                <Link key={label} href={href} className="footer-link">
-                  {label}
-                </Link>
-              ))}
-            </nav>
+          {/* Navigation */}
+          <nav className="footer-nav-col" aria-label="Footer navigation">
+            {[
+              { label: "Films",        href: "/films" },
+              { label: "Blogs",        href: "/blogs" },
+              { label: "Testimonials", href: "/testimonials" },
+              { label: "Contact",      href: "/contact-us" },
+              { label: "Careers",      href: "/career" },
+            ].map(({ label, href }) => (
+              <Link key={label} href={href} className="footer-link">
+                {label}
+              </Link>
+            ))}
+          </nav>
 
-            {/* Socials & Client Info */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-              <div className="footer-social-col" aria-label="Social links">
-                <a
-                  href="https://instagram.com/artistryinlove"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="footer-social-link"
-                  aria-label="Instagram"
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-                <a
-                  href={`mailto:${contactEmail}`}
-                  className="footer-social-link"
-                  aria-label="Email"
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                </a>
-              </div>
-
-              <div className="footer-contact-panel">
-                <span className="footer-contact-label">Enquiries</span>
-                <a className="footer-contact-value" href={`mailto:${contactEmail}`}>
-                  {contactEmail}
-                </a>
-                <p className="footer-contact-note">Crafting cinematic wedding stories across India.</p>
-              </div>
+          {/* Socials & Client Info */}
+          <div className="footer-contact-col">
+            <div className="footer-social-col" aria-label="Social links">
+              <a
+                href="https://instagram.com/artistryinlove"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-social-link"
+                aria-label="Instagram"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
+              <a
+                href={`mailto:${contactEmail}`}
+                className="footer-social-link"
+                aria-label="Email"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </a>
             </div>
+
+            <div className="footer-contact-panel">
+              <span className="footer-contact-label">Enquiries</span>
+              <a className="footer-contact-value" href={`mailto:${contactEmail}`}>
+                {contactEmail}
+              </a>
+              <p className="footer-contact-note">Crafting cinematic wedding stories across India.</p>
+            </div>
+
+            <Link href="/contact-us" className="footer-enquire-button" aria-label="Enquire now - limited slots">
+              Enquire Now - Limited Slots
+            </Link>
           </div>
         </div>
+
+        <div className="footer-bottom-rule" aria-hidden="true" />
 
         {/* ── 3. GRAND FINALE ── */}
         <div>

@@ -57,6 +57,12 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 body {
   margin: 0;
   background:
@@ -66,6 +72,8 @@ body {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.6;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 h1, h2, h3, h4 {
@@ -264,9 +272,7 @@ img, video { display: block; max-width: 100%; }
 .bg-surface    { background: var(--bg-surface); }
 
 /* ── Scrollbar ─────────────────────────────── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); }
+::-webkit-scrollbar { display: none; }
 
 /* ── Selection ─────────────────────────────── */
 ::selection { background: rgba(138, 95, 69, 0.18); }
